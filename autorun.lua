@@ -1,4 +1,3 @@
-local debug = "0000" -- This can be changed to anything you want. If you are going to be using this program to protect a ComputerCraft computer, use this code and don't worry about making the rest of the files.
 local term = require("term")
 local shell = require("shell")
 local keyboard = require("keyboard")
@@ -39,7 +38,7 @@ while true do
     os.sleep(2.5)
     term.clear()
     term.setCursor(1,1)
-    shell.setWorkingDirectory("/usr/home/Shuudoushi/")
+    shell.setWorkingDirectory("/usr/home/" .. textu .. "/")
     shell.setAlias("usage", "/usage")
     break
   else
