@@ -5,7 +5,6 @@ local keyboard = require("keyboard")
 local computer = require("computer")
 local event = require("event")
 local io = require("io")
---local file = require("file")
 
 u = io.open(".userName", "r")
  textu = u:read()
