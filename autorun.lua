@@ -5,11 +5,11 @@ local computer = require("computer")
 local event = require("event")
 local io = require("io")
 
-u = io.open(".userName", "r")
+u = io.open("username.dat", "r")
  textu = u:read()
   u:close()
 
-p = io.open(".passWord", "r")
+p = io.open("password.dat", "r")
  textp = p:read()
   p:close()
 
