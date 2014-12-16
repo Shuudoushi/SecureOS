@@ -1,9 +1,9 @@
-local term = require("term")
-local shell = require("shell")
-local io = require("io")
+local keyboard = require("keyboard")
 local process = require("process")
 local event = require("event")
-local keyboard = require("keyboard")
+local shell = require("shell")
+local term = require("term")
+local io = require("io")
 
 hn = io.open("/tmp/.hostname.dat", "r")
  texthn = hn:read()
@@ -25,10 +25,13 @@ end
 event.listen("key_down", check)
 
 while true do
-  print("User: ")
+  term.clear()
+  term.setCursor(1,1)
+  term.write("User: ")
    username = term.read()
    username = string.gsub(username, "\n", "")
-  print("Password: ")
+  term.setCursor(1,2)
+  term.write("Password: ")
    password = term.read(nil, nil, nil, "")
    password = string.gsub(password, "\n", "")
  if username == textus and password == textps then
@@ -40,11 +43,11 @@ while true do
   term.setCursor(1,1)
    os.setenv("PS1", "root" .. "@" .. texthn .. "$ ")
    shell.setWorkingDirectory("/")
+   event.cancel()
   break
  else
   print("Login failed.")
    shell.setWorkingDirectory("/usr/home/" .. texthn .. "/")
-    process.load("/bin/.root.lua")
   break
  end
 end

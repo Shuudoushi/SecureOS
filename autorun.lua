@@ -1,22 +1,22 @@
-local term = require("term")
-local shell = require("shell")
 local keyboard = require("keyboard")
 local computer = require("computer")
-local event = require("event")
-local io = require("io")
 local process = require("process")
+local event = require("event")
+local shell = require("shell")
+local term = require("term")
+local io = require("io")
 
-u = io.open("/username.dat", "r")
+u = io.open("/username.dat", "r") -- Reads the username file.
  textu = u:read()
   u:close()
 
-p = io.open("/password.dat", "r")
+p = io.open("/password.dat", "r") -- Reads the password file.
  textp = p:read()
   p:close()
 
 function check()
 
- if keyboard.isControlDown() and keyboard.isAltDown() then
+ if keyboard.isControlDown() and keyboard.isAltDown() then -- Prevents "ctrl+alt+c".
   computer.shutdown(true)
  end
 end
@@ -32,8 +32,8 @@ while true do
   term.write("Password: ")
   password = term.read(nil, nil, nil, "")
   password = string.gsub(password, "\n", "")
-  if username == textu and password == textp then
-    hn = io.open("/tmp/.hostname.dat", "w")
+  if username == textu and password == textp then -- Checks to see if the input from the user matches that which is on file.
+    hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
      hn:write(username)
       hn:close()
     term.clear()
@@ -44,9 +44,9 @@ while true do
     term.setCursor(1,1)
     shell.setAlias("usage", "/bin/usage.lua")
     shell.setAlias("logout", "/bin/logout.lua")
-    os.setenv("PS1", textu .. "@" .. textu .. "# ")
+    os.setenv("PS1", textu .. "@" .. textu .. "# ") -- Sets the user environment.
     shell.setWorkingDirectory("/usr/home/" .. textu .. "/")
-    process.load("/bin/.root.lua/")
+    shell.execute("/bin/.root.lua/") -- Starts the root check program.
     break
   else
     term.clear()
