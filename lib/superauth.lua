@@ -1,30 +1,30 @@
 local keyboard = require("keyboard")
-local process = require("process")
 local event = require("event")
 local shell = require("shell")
 local term = require("term")
 local io = require("io")
 
-hn = io.open("/tmp/.hostname.dat", "r")
- texthn = hn:read()
-  hn:close()
-
-us = io.open("/usernames.dat", "r")
- textus = us:read()
-  us:close()
-
-ps = io.open("/passwords.dat", "r")
- textps = ps:read()
-  ps:close()
-
-function check()
+local function check() -- Prevents "ctrl+alt+c".
  if keyboard.isControlDown() and keyboard.isAltDown() then
   computer.shutdown(true)
  end
 end
 event.listen("key_down", check)
 
-while true do
+return function()
+
+hn = io.open("/tmp/.hostname.dat", "r") -- Reads the hostname file.
+ texthn = hn:read()
+  hn:close()
+
+us = io.open("/usernames.dat", "r") -- Reads the root user file.
+ textus = us:read()
+  us:close()
+
+ps = io.open("/passwords.dat", "r") -- Reads the root password file
+ textps = ps:read()
+  ps:close()
+
   term.clear()
   term.setCursor(1,1)
   term.write("User: ")
@@ -43,11 +43,10 @@ while true do
   term.setCursor(1,1)
    os.setenv("PS1", "root" .. "@" .. texthn .. "$ ")
    shell.setWorkingDirectory("/")
-   event.cancel()
-  break
+  return true
  else
   print("Login failed.")
    shell.setWorkingDirectory("/usr/home/" .. texthn .. "/")
-  break
+  return false
  end
 end
