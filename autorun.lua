@@ -16,7 +16,7 @@ p = io.open("/password.dat", "r") -- Reads the password file.
 
 function check()
 
- if keyboard.isControlDown() and keyboard.isAltDown() then -- Prevents "ctrl+alt+c".
+ if keyboard.isControlDown() and keyboard.keys.c then -- Prevents "ctrl+alt+c".
   computer.shutdown(true)
  end
 end
@@ -44,6 +44,7 @@ while true do
     term.setCursor(1,1)
     shell.setAlias("usage", "/bin/usage.lua")
     shell.setAlias("logout", "/bin/logout.lua")
+    shell.setAlias("update", "/bin/update.lua")
     os.setenv("PS1", textu .. "@" .. textu .. "# ") -- Sets the user environment.
     shell.setWorkingDirectory("/usr/home/" .. textu .. "/")
     shell.execute("/bin/.root.lua/") -- Starts the root check program.
