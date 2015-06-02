@@ -21,7 +21,7 @@ if dir ~= userHome and dir <= userHome then
    term.setCursor(1,1)
   superauth()
  end
-if kill == superauth() then
+if superauth() == kill then
  event.cancel(timer_id)
  end
 end
