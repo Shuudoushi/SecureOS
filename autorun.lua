@@ -16,7 +16,7 @@ p = io.open("/password.dat", "r") -- Reads the password file.
 
 function check()
 
- if keyboard.isControlDown() and keyboard.keys.c then -- Prevents "ctrl+alt+c".
+ if keyboard.isControlDown() and keyboard.isAltDown() then -- Prevents "ctrl+alt+c".
   computer.shutdown(true)
  end
 end
