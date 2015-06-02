@@ -6,11 +6,11 @@ local shell = require("shell")
 local term = require("term")
 local io = require("io")
 
-u = io.open("/username.dat", "r") -- Reads the username file.
+u = io.open("/.userName.dat", "r") -- Reads the username file.
  textu = u:read()
   u:close()
 
-p = io.open("/password.dat", "r") -- Reads the password file.
+p = io.open("/.passWord.dat", "r") -- Reads the password file.
  textp = p:read()
   p:close()
 

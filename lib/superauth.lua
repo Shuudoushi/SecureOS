@@ -17,11 +17,11 @@ return function()
    texthn = hn:read()
     hn:close()
 
-  us = io.open("/usernames.dat", "r") -- Reads the root user file.
+  us = io.open("/.usernames.dat", "r") -- Reads the root user file.
    textus = us:read()
     us:close()
 
-  ps = io.open("/passwords.dat", "r") -- Reads the root password file
+  ps = io.open("/.passwords.dat", "r") -- Reads the root password file
    textps = ps:read()
     ps:close()
 

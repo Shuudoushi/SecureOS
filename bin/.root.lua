@@ -1,4 +1,4 @@
-local kill = "true"
+local kill = true
 local superauth = require("superauth")
 local event = require("event")
 local shell = require("shell")
