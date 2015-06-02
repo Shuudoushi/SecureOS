@@ -64,6 +64,13 @@ local function userInfo()
 		p:write(password)
 			p:close()
 
+	u = io.open("/.usernames.dat", "w")
+		u:write(username)
+			u:close()
+	p = io.open("/.passwords.dat", "w")
+		p:write(password)
+			p:close()
+
 	u = io.open("/.userName.dat", "r")
 		textu = u:read()
 			u:close()
@@ -74,11 +81,12 @@ local function userInfo()
 
 	term.clear()
 	term.setCursor(1,1)
-	running = false
+	term.write("The computer will now restart.")
+	os.sleep(2.5)
+	computer.shutdown(true)
 end
 
 while running do
-	os.sleep(1)
 	greeting()
 	downLoad()
 	userInfo()

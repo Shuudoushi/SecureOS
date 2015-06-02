@@ -1,6 +1,7 @@
 local keyboard = require("keyboard")
 local computer = require("computer")
 local process = require("process")
+local fs = require("filesystem")
 local event = require("event")
 local shell = require("shell")
 local term = require("term")
@@ -23,6 +24,9 @@ end
 event.listen("key_down", check)
 
 while true do
+  if fs.exists("/installer.lua") then
+    fs.remove("/installer.lua")
+  end
   term.clear()
   term.setCursor(1,1)
   term.write("User: ")
