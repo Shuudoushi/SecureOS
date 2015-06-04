@@ -81,9 +81,19 @@ local function userInfo()
 
 	term.clear()
 	term.setCursor(1,1)
-	term.write("The computer will now restart.")
-	os.sleep(2.5)
-	computer.shutdown(true)
+	term.write("Would you like to restart now? [Y/n]")
+	term.setCursor(1,2)
+		input = term.read()
+		input = string.gsub(input, "\n", "")
+			if input == "y" or "yes" or "Y" or "Yes" then
+				computer.shutdown(true)
+			end
+
+			if input == "n" or "no" or "N" or "No" then
+				term.clear()
+				term.setCursor(1,1)
+				running = false
+			end
 end
 
 while running do
