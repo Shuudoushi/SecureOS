@@ -1,10 +1,8 @@
-local kill = true
 local superauth = require("superauth")
 local event = require("event")
 local shell = require("shell")
 local term = require("term")
 local io = require("io")
-local timer_id = event.timer(...)
 
 local function root()
  hn = io.open("/tmp/.hostname.dat", "r")
@@ -21,7 +19,7 @@ if dir ~= userHome and dir <= userHome then
    term.setCursor(1,1)
   superauth()
  end
-if superauth() == kill then
+if superauth() == true then
  event.cancel(timer_id)
  end
 end
