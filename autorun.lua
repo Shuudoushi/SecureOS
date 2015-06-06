@@ -15,8 +15,7 @@ p = io.open("/.passWord.dat", "r") -- Reads the password file.
  textp = p:read()
   p:close()
 
-function check()
-
+local function check()
  if keyboard.isControlDown() and keyboard.isAltDown() then -- Prevents "ctrl+alt+c".
   computer.shutdown(true)
  end
@@ -24,9 +23,10 @@ end
 event.listen("key_down", check)
 
 while true do
-  if fs.exists("/installer.lua") then
+  if fs.exists("/installer.lua") then -- Auto deletes the installer at first boot.
     fs.remove("/installer.lua")
   end
+
   term.clear()
   term.setCursor(1,1)
   term.write("User: ")
