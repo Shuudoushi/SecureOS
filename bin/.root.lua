@@ -24,6 +24,4 @@ if superauth() == true then
  end
 end
 
-event.timer(1, root, math.huge)
-
-timer_id = event.timer(...)
+timer_id = event.timer(1, root, math.huge)
