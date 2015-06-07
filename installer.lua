@@ -3,7 +3,6 @@ local fs = require("filesystem")
 local kb = require("keyboard")
 local event = require("event")
 local shell = require("shell")
-local sha = require("sha256")
 local term = require("term")
 local io = require("io")
 
@@ -43,9 +42,13 @@ shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/mas
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/bin/update.lua /bin/update.lua")
 	os.sleep(1)
 	term.setCursor(1,14)
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/lib/sha256.lua /lib/sha256.lua")
+	os.sleep(1)
+	term.setCursor(1,16)
 end
 
 local function userInfo()
+local sha = require("sha256")
 	term.clear()
 	term.setCursor(1,1)
 	term.write("Please enter a username and password. Usernames must be lowercase.")
@@ -67,7 +70,7 @@ local function userInfo()
 	u = io.open("/.usernames.dat", "w")
 		u:write(username .. ":" .. password)
 			u:close()
-			
+
 	if not fs.exists("/usr/home/" .. username .. "/") then
 		fs.makeDirectory("/usr/home/" .. username .. "/")
 	end
@@ -78,11 +81,14 @@ local function userInfo()
 	term.setCursor(1,2)
 		input = term.read()
 		input = string.gsub(input, "\n", "")
-			if input == "y" or "yes" or "Y" or "Yes" then
+
+		input = string.lower(input)
+
+			if input == "y" or "yes" then
 				computer.shutdown(true)
 			end
 
-			if input == "n" or "no" or "N" or "No" then
+			if input == "n" or "no" then
 				term.clear()
 				term.setCursor(1,1)
 				running = false

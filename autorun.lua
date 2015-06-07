@@ -11,7 +11,7 @@ local io = require("io")
 u = io.open("/.userName.dat", "r") -- Reads the username file.
  textu = u:read()
   u:close()
-  
+
 local function check()
  if keyboard.isControlDown() and keyboard.isAltDown() then -- Prevents "ctrl+alt+c".
   computer.shutdown(true)
@@ -52,7 +52,7 @@ while true do
     shell.setAlias("update", "/bin/update.lua")
     os.setenv("PS1", _username .. "@" .. _username .. "# ") -- Sets the user environment.
     shell.setWorkingDirectory("/usr/home/" .. _username .. "/")
-    shell.execute("/bin/.root.lua/") -- Starts the root check program.
+--    shell.execute("/bin/.root.lua/") -- Starts the root check program. --Yeah... it's broke as hell right now... DO NOT UNCOMMENT IT!!!
     event.ignore("key_down", check)
     break
   else
