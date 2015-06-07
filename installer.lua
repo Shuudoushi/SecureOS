@@ -3,6 +3,7 @@ local fs = require("filesystem")
 local kb = require("keyboard")
 local event = require("event")
 local shell = require("shell")
+local sha = require("sha256")
 local term = require("term")
 local io = require("io")
 
@@ -52,31 +53,23 @@ local function userInfo()
 	term.write("Username: ")
 		username = term.read()
 		username = string.gsub(username, "\n", "")
+		username = string.lower(username)
 	term.setCursor(1,3)
 	term.write("Password: ")
 		password = term.read(nil, nil, nil, "")
 		password = string.gsub(password, "\n", "")
+		password = sha.sha256(password)
 
 	u = io.open("/.userName.dat", "w")
-		u:write(username)
+		u:write(username .. ":" .. password)
 			u:close()
-	p = io.open("/.passWord.dat", "w")
-		p:write(password)
-			p:close()
 
 	u = io.open("/.usernames.dat", "w")
-		u:write(username)
+		u:write(username .. ":" .. password)
 			u:close()
-	p = io.open("/.passwords.dat", "w")
-		p:write(password)
-			p:close()
-
-	u = io.open("/.userName.dat", "r")
-		textu = u:read()
-			u:close()
-
-	if not fs.exists("/usr/home/" .. textu .. "/") then
-		fs.makeDirectory("/usr/home/" .. textu .. "/")
+			
+	if not fs.exists("/usr/home/" .. username .. "/") then
+		fs.makeDirectory("/usr/home/" .. username .. "/")
 	end
 
 	term.clear()
