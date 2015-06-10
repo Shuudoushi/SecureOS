@@ -1,7 +1,7 @@
 local sha = require("sha256")
 
 local auth = {}
-users = {}
+local users = {}
 
 local function split(str,sep)
     local array = {}
