@@ -6,7 +6,6 @@ local event = require("event")
 local shell = require("shell")
 local sha = require("sha256")
 local term = require("term")
-local io = require("io")
 
 u = io.open("/.userName.dat", "r") -- Reads the username file.
  textu = u:read()
@@ -52,7 +51,7 @@ while true do
     shell.setAlias("update", "/bin/update.lua")
     os.setenv("PS1", _username .. "@" .. _username .. "# ") -- Sets the user environment.
     shell.setWorkingDirectory("/usr/home/" .. _username .. "/")
---    shell.execute("/bin/.root.lua/") -- Starts the root check program. --Yeah... it's broke as hell right now... DO NOT UNCOMMENT IT!!!
+    shell.execute("/root/.root.lua/") -- Starts the root check program.
     event.ignore("key_down", check)
     break
   else

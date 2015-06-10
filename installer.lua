@@ -4,7 +4,6 @@ local kb = require("keyboard")
 local event = require("event")
 local shell = require("shell")
 local term = require("term")
-local io = require("io")
 
 local running = true
 
@@ -45,6 +44,9 @@ shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/mas
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/lib/sha256.lua /lib/sha256.lua")
 	os.sleep(1)
 	term.setCursor(1,16)
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/lib/auth.lua /lib/auth.lua")
+	os.sleep(1)
+	term.setCursor(1,18)
 end
 
 local function userInfo()
@@ -64,12 +66,12 @@ local sha = require("sha256")
 		password = sha.sha256(password)
 
 	u = io.open("/.userName.dat", "w")
-		u:write(username .. ":" .. password)
-			u:close()
+	 u:write(username .. ":" .. password)
+	  u:close()
 
 	u = io.open("/.usernames.dat", "w")
-		u:write(username .. ":" .. password)
-			u:close()
+	 u:write(username .. ":" .. password)
+	  u:close()
 
 	if not fs.exists("/usr/home/" .. username .. "/") then
 		fs.makeDirectory("/usr/home/" .. username .. "/")
@@ -81,14 +83,11 @@ local sha = require("sha256")
 	term.setCursor(1,2)
 		input = term.read()
 		input = string.gsub(input, "\n", "")
-
 		input = string.lower(input)
 
 			if input == "y" or "yes" then
 				computer.shutdown(true)
-			end
-
-			if input == "n" or "no" then
+			elseif input == "n" or "no" then
 				term.clear()
 				term.setCursor(1,1)
 				running = false
