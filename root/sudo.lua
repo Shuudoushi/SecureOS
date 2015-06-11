@@ -24,7 +24,7 @@ local function suAuth()
    textk = k:read()
     k:close()
 
-    event.cancel(textk)
+    event.cancel(tonumber(textk))
 
    shell.setWorkingDirectory("/usr/home/" .. texthn .. "/")
    term.clear()

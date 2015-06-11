@@ -22,5 +22,5 @@ end
 timer_id = event.timer(1, root, math.huge)
 
  k = io.open("/tmp/.key", "w")
-  textk = k:write(timer_id)
+  k:write(timer_id)
    k:close()
