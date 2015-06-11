@@ -1,4 +1,5 @@
 local keyboard = require("keyboard")
+local computer = require("computer")
 local event = require("event")
 local shell = require("shell")
 local auth = require("auth")
@@ -19,15 +20,11 @@ local function suAuth()
    texthn = hn:read()
     hn:close()
 
-  us = io.open("/etc/passwd", "r") -- Reads the root user file.
-   textus = us:read()
-    us:close()
-
   k = io.open("/tmp/.key", "r")
    textk = k:read()
     k:close()
 
-    event.cancel(textk, root)
+    event.cancel(textk)
 
    shell.setWorkingDirectory("/usr/home/" .. texthn .. "/")
    term.clear()
