@@ -50,7 +50,6 @@ shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/rel
 end
 
 local function userInfo()
-local sha = require("sha256")
 	term.clear()
 	term.setCursor(1,1)
 	term.write("Please enter a username and password. Usernames must be lowercase.")
@@ -63,19 +62,17 @@ local sha = require("sha256")
 	term.write("Password: ")
 		password = term.read(nil, nil, nil, "")
 		password = string.gsub(password, "\n", "")
-		password = sha.sha256(password)
 
-	u = io.open("/.userName.dat", "w")
-	 u:write(username .. ":" .. password)
-	  u:close()
-
-	u = io.open("/.usernames.dat", "w")
-	 u:write(username .. ":" .. password)
-	  u:close()
+	local auth = require("auth").addUser(username, password, true)
 
 	if not fs.exists("/usr/home/" .. username .. "/") then
 		fs.makeDirectory("/usr/home/" .. username .. "/")
 	end
+
+	if not fs.exists("/etc/update.cfg") then
+		c = io.open("/etc/update.cfg", "w")
+		 c:write("release")
+		  c:close()
 
 	term.clear()
 	term.setCursor(1,1)
