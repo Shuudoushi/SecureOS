@@ -31,11 +31,7 @@ local function downLoad()
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/autorun.lua")
 	os.sleep(1)
 	term.setCursor(1,4)
-<<<<<<< HEAD
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/root/sudo.lua /root/sudo.lua")
-=======
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/lib/superauth.lua /lib/superauth.lua")
->>>>>>> origin/release
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/root/sudo.lua /root/sudo.lua")
 	os.sleep(1)
 	term.setCursor(1,6)
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/bin/logout.lua /bin/logout.lua")
@@ -44,11 +40,7 @@ shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/rel
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/bin/usage.lua /bin/usage.lua")
 	os.sleep(1)
 	term.setCursor(1,10)
-<<<<<<< HEAD
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/root/.root.lua /root/.root.lua")
-=======
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/bin/.root.lua /bin/.root.lua")
->>>>>>> origin/release
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/root/.root.lua /root/.root.lua")
 	os.sleep(1)
 	term.setCursor(1,12)
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/bin/update.lua /bin/update.lua")
