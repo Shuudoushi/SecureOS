@@ -28,28 +28,36 @@ local function downLoad()
 
 	term.write("Please wait while the files are downloaded and installed.")
 	term.setCursor(1,2)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/autorun.lua")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/autorun.lua")
 	os.sleep(1)
 	term.setCursor(1,4)
+<<<<<<< HEAD
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/root/sudo.lua /root/sudo.lua")
+=======
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/lib/superauth.lua /lib/superauth.lua")
+>>>>>>> origin/release
 	os.sleep(1)
 	term.setCursor(1,6)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/bin/logout.lua /bin/logout.lua")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/bin/logout.lua /bin/logout.lua")
 	os.sleep(1)
 	term.setCursor(1,8)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/bin/usage.lua /bin/usage.lua")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/bin/usage.lua /bin/usage.lua")
 	os.sleep(1)
 	term.setCursor(1,10)
+<<<<<<< HEAD
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/root/.root.lua /root/.root.lua")
+=======
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/bin/.root.lua /bin/.root.lua")
+>>>>>>> origin/release
 	os.sleep(1)
 	term.setCursor(1,12)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/bin/update.lua /bin/update.lua")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/bin/update.lua /bin/update.lua")
 	os.sleep(1)
 	term.setCursor(1,14)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/lib/sha256.lua /lib/sha256.lua")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/lib/sha256.lua /lib/sha256.lua")
 	os.sleep(1)
 	term.setCursor(1,16)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/master/lib/auth.lua /lib/auth.lua")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/OpenOS_Plus/release/lib/auth.lua /lib/auth.lua")
 	os.sleep(1)
 	term.setCursor(1,18)
 end
@@ -68,16 +76,16 @@ local function userInfo()
 		password = term.read(nil, nil, nil, "")
 		password = string.gsub(password, "\n", "")
 
-	u = io.open("/.userName.dat", "w")
-	 u:write(username .. ":" .. password)
-	  u:close()
-
-	u = io.open("/.usernames.dat", "w")
-	 u:write(username .. ":" .. password)
-	  u:close()
+	local auth = require("auth").addUser(username, password, true)
 
 	if not fs.exists("/usr/home/" .. username .. "/") then
 		fs.makeDirectory("/usr/home/" .. username .. "/")
+	end
+
+	if not fs.exists("/etc/update.cfg") then
+		c = io.open("/etc/update.cfg", "w")
+		 c:write("release")
+		  c:close()
 	end
 
 	term.clear()

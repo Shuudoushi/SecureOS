@@ -3,7 +3,6 @@ local shell = require("shell")
 local term = require("term")
 
 function root()
-
  hn = io.open("/tmp/.hostname.dat", "r")
   texthn = hn:read()
    hn:close()

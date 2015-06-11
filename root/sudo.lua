@@ -1,7 +1,7 @@
 local keyboard = require("keyboard")
 local event = require("event")
 local shell = require("shell")
-local sha = require("sha256")
+local auth = require("auth")
 local term = require("term")
 
 local running = true
@@ -19,9 +19,15 @@ local function suAuth()
    texthn = hn:read()
     hn:close()
 
-  us = io.open("/.userName.dat", "r") -- Reads the root user file.
+  us = io.open("/etc/passwd", "r") -- Reads the root user file.
    textus = us:read()
     us:close()
+
+  k = io.open("/tmp/.key", "r")
+   textk = k:read()
+    k:close()
+
+    event.cancel(textk, root)
 
    shell.setWorkingDirectory("/usr/home/" .. texthn .. "/")
    term.clear()
@@ -33,11 +39,10 @@ local function suAuth()
     term.write("Password: ")
      password = term.read(nil, nil, nil, "")
      password = string.gsub(password, "\n", "")
-     password = sha.sha256(password)
 
-  _username, _password = textus:match("([^:]+):([^:]+)")
+  login, super = auth.validate(username, password)
 
-  if username == _username and password == _password then
+  if login and super then
    print("Logged in as Root.")
     os.sleep(1)
    term.clear()
