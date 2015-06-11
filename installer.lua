@@ -73,6 +73,7 @@ local function userInfo()
 		c = io.open("/etc/update.cfg", "w")
 		 c:write("release")
 		  c:close()
+	end
 
 	term.clear()
 	term.setCursor(1,1)
