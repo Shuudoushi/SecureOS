@@ -12,15 +12,14 @@ function root()
 
 if dir ~= userHome and dir <= userHome then
  print("This action requires root access.")
-  os.sleep(1.5)
-   term.clear()
-   term.setCursor(1,1)
-   shell.execute("/root/sudo.lua")
+  term.clear()
+  term.setCursor(1,1)
+  shell.execute("/root/sudo.lua")
+else
+ k = io.open("/tmp/.key", "w")
+  k:write(timer_id)
+   k:close()
  end
 end
 
 timer_id = event.timer(1, root, math.huge)
-
- k = io.open("/tmp/.key", "w")
-  k:write(timer_id)
-   k:close()
