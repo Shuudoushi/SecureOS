@@ -46,7 +46,7 @@ while true do
     shell.setAlias("update", "/bin/update.lua")
     os.setenv("PS1", username .. "@" .. username .. "# ") -- Sets the user environment.
     shell.setWorkingDirectory("/usr/home/" .. username .. "/")
-  --  shell.execute("/root/.root.lua/") -- Starts the root check program. -- Still broken...
+    shell.execute("/root/.root.lua/") -- Starts the root check program.
     event.ignore("key_down", check)
     break
   else
