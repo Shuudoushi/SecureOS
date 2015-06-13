@@ -1,10 +1,17 @@
 --Some of this was made with the help of SuPeRMiNoR2
 
 local sha = require("sha256")
+local fs = require("filesystem")
 
 local auth = {}
 
 passwdfile = "/etc/passwd"
+
+if not fs.exists(passwdfile) then
+  f = io.open(passwdfile, "w")
+   f:write()
+    f:close()
+end
 
 local function split(str,sep)
     local array = {}

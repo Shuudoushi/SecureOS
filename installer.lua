@@ -28,7 +28,7 @@ local function downLoad()
 
 	term.write("Please wait while the files are downloaded and installed.")
 	term.setCursor(1,2)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/autorun.lua")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/autorun.lua /autorun.lua")
 	os.sleep(1)
 	term.setCursor(1,4)
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/root/sudo.lua /root/sudo.lua")
@@ -58,6 +58,7 @@ shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/releas
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/deluser.lua /bin/deluser.lua")
 	os.sleep(1)
 	term.setCursor(1,22)
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/uninstall.lua /uninstall.lua")
 end
 
 local function userInfo()
