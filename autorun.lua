@@ -7,8 +7,10 @@ local shell = require("shell")
 local auth = require("auth")
 local term = require("term")
 
-local function check()
- if keyboard.isControlDown() and keyboard.isAltDown() then -- Prevents "ctrl+alt+c".
+local function check() -- Prevents "ctrl+alt+c".
+ if keyboard.isControlDown() and keyboard.isAltDown() then
+  print("( ͡° ͜ʖ ͡°)")
+  os.sleep(0.1)
   computer.shutdown(true)
  end
 end

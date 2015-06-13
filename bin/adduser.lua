@@ -28,6 +28,6 @@ end
 
 auth.addUser(username, password, su)
 
-if not fs.exists("/usr/home/ .. username .. /") then
-	fs.makeDirectory("/usr/home/ .. username .. /")
+if not fs.exists("/usr/home/" .. username .. "/") then
+	fs.makeDirectory("/usr/home/" .. username .. "/")
 end

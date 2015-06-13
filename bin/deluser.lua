@@ -13,6 +13,6 @@ term.write("Username: ")
 
 auth.rmUser(username)
 
-if fs.exists("/usr/home/ .. username .. /") then
-	fs.removeDirectory("/usr/home/ .. username .. /")
+if fs.exists("/usr/home/" .. username .. "/") then
+	fs.remove("/usr/home/" .. username .. "/")
 end
