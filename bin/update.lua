@@ -41,6 +41,7 @@ shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/bin/deluser.lua /bin/deluser.lua")
 	os.sleep(1)
 	term.setCursor(1,22)
+shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/uninstall.lua /uninstall.lua")
 term.clear()
 term.setCursor(1,1)
 print("Update complete. System restarting now.")

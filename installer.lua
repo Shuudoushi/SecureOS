@@ -58,6 +58,7 @@ shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/releas
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/deluser.lua /bin/deluser.lua")
 	os.sleep(1)
 	term.setCursor(1,22)
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/uninstall.lua /uninstall.lua")
 end
 
 local function userInfo()

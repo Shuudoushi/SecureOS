@@ -1,6 +1,5 @@
 local keyboard = require("keyboard")
 local computer = require("computer")
-local process = require("process")
 local fs = require("filesystem")
 local event = require("event")
 local shell = require("shell")
