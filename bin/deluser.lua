@@ -1,3 +1,4 @@
+local fs = require("filesystem")
 local term = require("term")
 local auth = require("auth")
 
@@ -11,3 +12,7 @@ term.write("Username: ")
 	username = string.lower(username)
 
 auth.rmUser(username)
+
+if fs.exists("/usr/home/ .. username .. /") then
+	fs.removeDirectory("/usr/home/ .. username .. /")
+end

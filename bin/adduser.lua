@@ -1,3 +1,4 @@
+local fs = require("filesystem")
 local term = require("term")
 local auth = require("auth")
 
@@ -26,3 +27,7 @@ elseif su == "n" then
 end
 
 auth.addUser(username, password, su)
+
+if not fs.exists("/usr/home/ .. username .. /") then
+	fs.makeDirectory("/usr/home/ .. username .. /")
+end
