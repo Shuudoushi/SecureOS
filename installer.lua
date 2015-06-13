@@ -52,6 +52,12 @@ shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/releas
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/lib/auth.lua /lib/auth.lua")
 	os.sleep(1)
 	term.setCursor(1,18)
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/adduser.lua /bin/adduser.lua")
+	os.sleep(1)
+	term.setCursor(1,20)
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/deluser.lua /bin/deluser.lua")
+	os.sleep(1)
+	term.setCursor(1,22)
 end
 
 local function userInfo()
@@ -88,9 +94,10 @@ local function userInfo()
 		input = string.gsub(input, "\n", "")
 		input = string.lower(input)
 
-			if input == "y" or "yes" then
+			if input == "y" then
 				computer.shutdown(true)
-			elseif input == "n" or "no" then
+			elseif input == "n" then
+				print("Dropping to shell.")
 				term.clear()
 				term.setCursor(1,1)
 				running = false
