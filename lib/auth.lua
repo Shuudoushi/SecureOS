@@ -25,7 +25,7 @@ end
 local function buildDB()
     users = {}
     u = io.open(passwdfile, "r")
-    raw = u:read(1000)
+    raw = u:read("*a")
     
     if raw ~= nil then
     
@@ -80,7 +80,7 @@ function auth.validate(username, password)
     if user == username and data["password"] == sha.sha256(password) then
       validated = true
     end
-    if data["su"] == "1" then
+    if data["su"] == "1" and user == username then
       superuser = true
     end
   end
