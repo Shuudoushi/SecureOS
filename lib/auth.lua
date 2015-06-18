@@ -79,12 +79,12 @@ function auth.validate(username, password)
     data = users[user]
 
     if data ~= nil then
-      if data["password"] == sha.sha256(password) then
-        validated = true
-      end
-    if data["su"] == "1" then
-        superuser = true
-    end
+        if data["password"] == sha.sha256(password) then
+            validated = true
+        end
+        if data["su"] == "1" then
+            superuser = true
+        end
     end
     return validated, superuser
 end
