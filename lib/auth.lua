@@ -71,20 +71,22 @@ function auth.rmUser(username)
 end
 
 function auth.validate(username, password) 
-  users = buildDB()
+    users = buildDB()
   
-  validated = false
-  superuser = false
+    validated = false
+    superuser = false
 
-  for user,data in pairs(users) do
-    if user == username and data["password"] == sha.sha256(password) then
-      validated = true
+    data = users[user]
+
+    if data ~= nil then
+      if data["password"] == sha.sha256(password) then
+        validated = true
+      end
+    if data["su"] == "1" then
+        superuser = true
     end
-    if data["su"] == "1" and user == username then
-      superuser = true
     end
-  end
-  return validated, superuser
+    return validated, superuser
 end
 
 return auth
