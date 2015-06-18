@@ -7,8 +7,8 @@ local term = require("term")
 
 local running = true
 
-local function check() -- Prevents "ctrl+alt+c".
- if keyboard.isControlDown() and keyboard.isAltDown() then
+local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
+ if keyboard.isControlDown() then
   print("( ͡° ͜ʖ ͡°)")
   os.sleep(0.1)
   computer.shutdown(true)
@@ -31,10 +31,12 @@ local function suAuth()
    shell.setWorkingDirectory("/usr/home/" .. texthn .. "/")
    term.clear()
    term.setCursor(1,1)
+   print("SecureOS 0.5 " .. os.date("%F %T"))
     term.write("User: ")
      username = term.read()
      username = string.gsub(username, "\n", "")
-   term.setCursor(1,2)
+     username = string.lower(username)
+   term.setCursor(1,3)
     term.write("Password: ")
      password = term.read(nil, nil, nil, "")
      password = string.gsub(password, "\n", "")
