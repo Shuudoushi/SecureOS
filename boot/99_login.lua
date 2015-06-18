@@ -6,8 +6,8 @@ local shell = require("shell")
 local auth = require("auth")
 local term = require("term")
 
-local function check() -- Prevents "ctrl+alt+c".
- if keyboard.isControlDown() and keyboard.isAltDown() then
+local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
+ if keyboard.isControlDown() then
   print("( ͡° ͜ʖ ͡°)")
   os.sleep(0.1)
   computer.shutdown(true)
@@ -22,10 +22,12 @@ while true do
 
   term.clear()
   term.setCursor(1,1)
+  print(_OSVERSION .. " " .. os.date("%F %T"))
   term.write("User: ")
   username = term.read()
   username = string.gsub(username, "\n", "")
-  term.setCursor(1,2)
+  username = string.lower(username)
+  term.setCursor(1,3)
   term.write("Password: ")
   password = term.read(nil, nil, nil, "")
   password = string.gsub(password, "\n", "")
