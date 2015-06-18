@@ -68,6 +68,9 @@ shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/releas
 	os.sleep(1)
 	term.setCursor(1,24)
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/init.lua /init.lua")
+	os.sleep(1)
+	term.setCursor(1,26)
+shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/.osprop /.osprop")
 end
 
 local function userInfo()
