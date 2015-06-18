@@ -26,9 +26,15 @@ local function downLoad()
 		fs.makeDirectory("/root/")
 	end
 
+	if not fs.exists("/etc/update.cfg") then
+		c = io.open("/etc/update.cfg", "w")
+		 c:write("release")
+		  c:close()
+	end
+
 	term.write("Please wait while the files are downloaded and installed.")
 	term.setCursor(1,2)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/autorun.lua /autorun.lua")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/boot/99_login.lua /boot/99_login.lua")
 	os.sleep(1)
 	term.setCursor(1,4)
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/root/sudo.lua /root/sudo.lua")
@@ -58,7 +64,10 @@ shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/releas
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/deluser.lua /bin/deluser.lua")
 	os.sleep(1)
 	term.setCursor(1,22)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/uninstall.lua /uninstall.lua")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/uninstall.lua /bin/uninstall.lua")
+	os.sleep(1)
+	term.setCursor(1,24)
+shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/init.lua /init.lua")
 end
 
 local function userInfo()
@@ -79,12 +88,6 @@ local function userInfo()
 
 	if not fs.exists("/usr/home/" .. username .. "/") then
 		fs.makeDirectory("/usr/home/" .. username .. "/")
-	end
-
-	if not fs.exists("/etc/update.cfg") then
-		c = io.open("/etc/update.cfg", "w")
-		 c:write("release")
-		  c:close()
 	end
 
 	term.clear()
