@@ -9,6 +9,8 @@ local running = true
 
 local function check() -- Prevents "ctrl+alt+c".
  if keyboard.isControlDown() and keyboard.isAltDown() then
+  print("( ͡° ͜ʖ ͡°)")
+  os.sleep(0.1)
   computer.shutdown(true)
  end
 end

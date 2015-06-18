@@ -26,9 +26,15 @@ local function downLoad()
 		fs.makeDirectory("/root/")
 	end
 
+	if not fs.exists("/etc/update.cfg") then
+		c = io.open("/etc/update.cfg", "w")
+		 c:write("release")
+		  c:close()
+	end
+
 	term.write("Please wait while the files are downloaded and installed.")
 	term.setCursor(1,2)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/autorun.lua")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/boot/99_login.lua /boot/99_login.lua")
 	os.sleep(1)
 	term.setCursor(1,4)
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/root/sudo.lua /root/sudo.lua")
@@ -52,6 +58,16 @@ shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/releas
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/lib/auth.lua /lib/auth.lua")
 	os.sleep(1)
 	term.setCursor(1,18)
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/adduser.lua /bin/adduser.lua")
+	os.sleep(1)
+	term.setCursor(1,20)
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/deluser.lua /bin/deluser.lua")
+	os.sleep(1)
+	term.setCursor(1,22)
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/uninstall.lua /bin/uninstall.lua")
+	os.sleep(1)
+	term.setCursor(1,24)
+shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/init.lua /init.lua")
 end
 
 local function userInfo()
@@ -74,12 +90,6 @@ local function userInfo()
 		fs.makeDirectory("/usr/home/" .. username .. "/")
 	end
 
-	if not fs.exists("/etc/update.cfg") then
-		c = io.open("/etc/update.cfg", "w")
-		 c:write("release")
-		  c:close()
-	end
-
 	term.clear()
 	term.setCursor(1,1)
 	term.write("Would you like to restart now? [Y/n]")
@@ -88,9 +98,10 @@ local function userInfo()
 		input = string.gsub(input, "\n", "")
 		input = string.lower(input)
 
-			if input == "y" or "yes" then
+			if input == "y" then
 				computer.shutdown(true)
-			elseif input == "n" or "no" then
+			elseif input == "n" then
+				print("Dropping to shell.")
 				term.clear()
 				term.setCursor(1,1)
 				running = false

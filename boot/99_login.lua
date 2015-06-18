@@ -1,14 +1,15 @@
 local keyboard = require("keyboard")
 local computer = require("computer")
-local process = require("process")
 local fs = require("filesystem")
 local event = require("event")
 local shell = require("shell")
 local auth = require("auth")
 local term = require("term")
 
-local function check()
- if keyboard.isControlDown() and keyboard.isAltDown() then -- Prevents "ctrl+alt+c".
+local function check() -- Prevents "ctrl+alt+c".
+ if keyboard.isControlDown() and keyboard.isAltDown() then
+  print("( ͡° ͜ʖ ͡°)")
+  os.sleep(0.1)
   computer.shutdown(true)
  end
 end
@@ -44,6 +45,8 @@ while true do
     shell.setAlias("usage", "/bin/usage.lua")
     shell.setAlias("logout", "/bin/logout.lua")
     shell.setAlias("update", "/bin/update.lua")
+    shell.setAlias("adduser", "/bin/adduser.lua")
+    shell.setAlias("deluser", "/bin/deluser.lua")
     os.setenv("PS1", username .. "@" .. username .. "# ") -- Sets the user environment.
     shell.setWorkingDirectory("/usr/home/" .. username .. "/")
     shell.execute("/root/.root.lua/") -- Starts the root check program.
