@@ -76,7 +76,7 @@ function auth.validate(username, password)
     validated = false
     superuser = false
 
-    data = users[user]
+    data = users[username]
 
     if data ~= nil then
         if data["password"] == sha.sha256(password) then
