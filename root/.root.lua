@@ -11,7 +11,7 @@ function root()
  local userHome = "/usr/home/" .. texthn .. "/"
 
 if dir ~= userHome and dir <= userHome then
- print("This action requires root access.")
+ io.stderr:write("This action requires root access.")
   term.clear()
   term.setCursor(1,1)
   shell.execute("/root/sudo.lua")

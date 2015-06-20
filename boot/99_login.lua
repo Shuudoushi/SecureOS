@@ -8,7 +8,7 @@ local term = require("term")
 
 local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
  if keyboard.isControlDown() then
-  print("( ͡° ͜ʖ ͡°)")
+  io.stderr:write("( ͡° ͜ʖ ͡°)")
   os.sleep(0.1)
   computer.shutdown(true)
  end
@@ -57,7 +57,7 @@ while true do
   else
     term.clear()
     term.setCursor(1,1)
-    term.write("Password incorrect...")
+    io.stderr:write("Password incorrect...")
     os.sleep(2.5)
   end
 end

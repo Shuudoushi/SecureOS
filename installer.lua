@@ -60,7 +60,7 @@ shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/rel
 	os.sleep(1)
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/.osprop /.osprop \n")
 	os.sleep(1)
-shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/ect/motd /ect/motd \n")
+shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/etc/motd /etc/motd \n")
 	os.sleep(1)
 end
 
@@ -95,7 +95,7 @@ local function userInfo()
 			if input == "y" then
 				computer.shutdown(true)
 			elseif input == "n" then
-				print("Dropping to shell.")
+				io.stderr:write("Dropping to shell.")
 				term.clear()
 				term.setCursor(1,1)
 				running = false

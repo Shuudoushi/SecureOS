@@ -9,7 +9,7 @@ local running = true
 
 local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
  if keyboard.isControlDown() then
-  print("( ͡° ͜ʖ ͡°)")
+  io.stderr:write("( ͡° ͜ʖ ͡°)")
   os.sleep(0.1)
   computer.shutdown(true)
  end
@@ -53,7 +53,7 @@ local function suAuth()
     event.ignore("key_down", check)
    running = false
   else
-   print("Login failed.")
+   io.stderr:write("Login failed.")
     shell.setWorkingDirectory("/usr/home/" .. texthn .. "/")
     shell.execute("/root/.root.lua")
     event.ignore("key_down", check)

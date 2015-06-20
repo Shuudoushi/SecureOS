@@ -14,6 +14,10 @@ local function update(args, options)
 
 	if #args == 1 then
 		textu = args[1]
+		if textu ~= "dev" and textu ~= "release" then
+			io.stderr:write("Not a vaild repo tree.")
+			return
+		end
 	end
 
 	if options.a then
