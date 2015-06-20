@@ -12,17 +12,13 @@ local function update(args, options)
 		  u:close()
 	end
 
-	if args == "dev" then
-		textu = "dev"
-	end
-
-	if args == "release" then
-		textu = "release"
+	if #args == 1 then
+		textu = args[1]
 	end
 
 	if options.a then
 		uw = io.open("/etc/update.cfg", "w")
-		 io.write(tostring(args))
+		 io.write(tostring(args[1]))
 		  uw:close()
 	end
 
