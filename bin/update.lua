@@ -18,7 +18,7 @@ local function update(args, options)
 
 	if options.a then
 		uw = io.open("/etc/update.cfg", "w")
-		 io.write(tostring(args[1]))
+		 uw:write(tostring(args[1]))
 		  uw:close()
 	end
 
