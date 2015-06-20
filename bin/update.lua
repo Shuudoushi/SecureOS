@@ -8,21 +8,26 @@ local args, options = shell.parse(...)
 		u = io.open("/etc/update.cfg", "r")
 		 textu = u:read()
 		  u:close()
+		update()
 	end
 
-	if args == "dev" then
+	if args[0] == "dev" then
 		textu = "dev"
+		update()
 	end
 
-	if args == "release" then
+	if args[0] == "release" then
 		textu = "release"
+		update()
 	end
 
 	if options.a then
 		uw = io.open("/etc/update.cfg", "w")
-		 io.write(tostring(args))
+		 io.write(tostring(args[0]))
 		  uw:close()
 	end
+
+local function update()
 
 term.clear()
 term.setCursor(1,1)
@@ -62,3 +67,4 @@ term.setCursor(1,1)
 print("Update complete. System restarting now.")
 	os.sleep(2.5)
 	computer.shutdown(true)
+end
