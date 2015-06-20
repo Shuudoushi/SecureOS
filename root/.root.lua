@@ -2,7 +2,7 @@ local event = require("event")
 local shell = require("shell")
 local term = require("term")
 
-function root()
+local function root()
  hn = io.open("/tmp/.hostname.dat", "r")
   texthn = hn:read()
    hn:close()
