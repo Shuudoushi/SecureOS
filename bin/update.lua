@@ -1,33 +1,30 @@
 local computer = require("computer")
 local shell = require("shell")
 local term = require("term")
-local textu = "release"
 
 local args, options = shell.parse(...)
+
+local function update(args, options)
+
 	if #args == 0 then
 		u = io.open("/etc/update.cfg", "r")
 		 textu = u:read()
 		  u:close()
-		update()
 	end
 
-	if args[0] == "dev" then
+	if args == "dev" then
 		textu = "dev"
-		update()
 	end
 
-	if args[0] == "release" then
+	if args == "release" then
 		textu = "release"
-		update()
 	end
 
 	if options.a then
 		uw = io.open("/etc/update.cfg", "w")
-		 io.write(tostring(args[0]))
+		 io.write(tostring(args))
 		  uw:close()
 	end
-
-local function update()
 
 term.clear()
 term.setCursor(1,1)
@@ -60,7 +57,7 @@ shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .
 	os.sleep(1)
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/.osprop /.osprop \n")
 	os.sleep(1)
-shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/ect/motd /ect/motd \n")
+shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/etc/motd /etc/motd \n")
 	os.sleep(1)
 term.clear()
 term.setCursor(1,1)
@@ -68,3 +65,5 @@ print("Update complete. System restarting now.")
 	os.sleep(2.5)
 	computer.shutdown(true)
 end
+
+update(args, options)
