@@ -70,9 +70,9 @@ local function userInfo()
 
 	if not fs.exists("/home/" .. username .. "/") then
 		fs.makeDirectory("/home/" .. username .. "/")
-		fs.makeDirectory("/home/" .. username .. "/bin")
-		fs.makeDirectory("/home/" .. username .. "/lib")
-		fs.makeDirectory("/home/" .. username .. "/var")
+		fs.makeDirectory("/home/" .. username .. "/bin/")
+		fs.makeDirectory("/home/" .. username .. "/lib/")
+		fs.makeDirectory("/home/" .. username .. "/var/")
 	end
 
 	term.clear()
