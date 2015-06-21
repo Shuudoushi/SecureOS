@@ -50,7 +50,7 @@ while true do
     shell.setAlias("adduser", "/bin/adduser.lua")
     shell.setAlias("deluser", "/bin/deluser.lua")
     os.setenv("PS1", username .. "@" .. username .. "# ") -- Sets the user environment.
-    shell.setWorkingDirectory("/usr/home/" .. username .. "/")
+    shell.setWorkingDirectory("/home/" .. username .. "/")
     shell.execute("/root/.root.lua/") -- Starts the root check program.
     event.ignore("key_down", check)
     break

@@ -8,7 +8,7 @@ local function root()
    hn:close()
 
  local dir = shell.getWorkingDirectory()
- local userHome = "/usr/home/" .. texthn .. "/"
+ local userHome = "/home/" .. texthn .. "/"
 
 if dir ~= userHome and dir <= userHome then
  io.stderr:write("This action requires root access.")

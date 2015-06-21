@@ -28,7 +28,7 @@ local function suAuth()
 
     event.cancel(tonumber(textk))
 
-   shell.setWorkingDirectory("/usr/home/" .. texthn .. "/")
+   shell.setWorkingDirectory("/home/" .. texthn .. "/")
    term.clear()
    term.setCursor(1,1)
    print(_OSVERSION .. " " .. os.date("%F %T"))
@@ -54,7 +54,7 @@ local function suAuth()
    running = false
   else
    io.stderr:write("Login failed.")
-    shell.setWorkingDirectory("/usr/home/" .. texthn .. "/")
+    shell.setWorkingDirectory("/home/" .. texthn .. "/")
     shell.execute("/root/.root.lua")
     event.ignore("key_down", check)
    running = false

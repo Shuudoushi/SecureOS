@@ -68,8 +68,11 @@ local function userInfo()
 
 	local auth = require("auth").addUser(username, password, true)
 
-	if not fs.exists("/usr/home/" .. username .. "/") then
-		fs.makeDirectory("/usr/home/" .. username .. "/")
+	if not fs.exists("/home/" .. username .. "/") then
+		fs.makeDirectory("/home/" .. username .. "/")
+		fs.makeDirectory("/home/" .. username .. "/bin")
+		fs.makeDirectory("/home/" .. username .. "/lib")
+		fs.makeDirectory("/home/" .. username .. "/var")
 	end
 
 	term.clear()

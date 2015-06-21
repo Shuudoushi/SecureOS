@@ -11,7 +11,7 @@ shell.execute("rm /bin/adduser.lua")
 shell.execute("rm /bin/deluser.lua")
 shell.execute("rm /etc/passwd")
 shell.execute("rm /etc/update.cfg")
-shell.execute("rm /usr/home/")
+shell.execute("rm /home/")
 shell.execute("rm /root/")
 shell.execute("rm /boot/99_login.lua")
 
