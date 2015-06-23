@@ -38,7 +38,7 @@ local function buildDB()
 
     end
     
-    return users  
+    return users
 end
 
 local function saveDB(db)
