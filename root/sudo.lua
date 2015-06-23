@@ -50,6 +50,7 @@ local function suAuth()
    term.setCursor(1,1)
     os.setenv("PS1", "root" .. "@" .. texthn .. "$ ")
     shell.setWorkingDirectory("/")
+    username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     event.ignore("key_down", check)
    running = false
   else

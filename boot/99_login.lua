@@ -52,6 +52,7 @@ while true do
     os.setenv("PS1", username .. "@" .. username .. "# ") -- Sets the user environment.
     shell.setWorkingDirectory("/home/" .. username .. "/")
     shell.execute("/root/.root.lua/") -- Starts the root check program.
+    username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     event.ignore("key_down", check)
     break
   else
