@@ -1,5 +1,15 @@
 local shell = require("shell")
 
+if not fs.exsits("/tmp/update-tmp.cfg") then
+	u = io.open("/etc/update.cfg", "r")
+     textu = u:read()
+      u:close()
+  else
+	u = io.open("/tmp/update-tmp.cfg", "r")
+	 textu = u:read()
+	  u:close()
+end
+
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/boot/99_login.lua /boot/99_login.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/root/sudo.lua /root/sudo.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/root/.root.lua /root/.root.lua \n")
