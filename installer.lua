@@ -49,6 +49,10 @@ shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/releas
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/init.lua /init.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/.osprop /.osprop \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/etc/motd /etc/motd \n")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/usr/man/update /usr/man/update \n")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/usr/man/usage /usr/man/usage \n")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/usr/man/adduser /usr/man/adduser \n")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/usr/man/deluser /usr/man/deluser \n")
     os.sleep(1.5)
 end
 
