@@ -15,6 +15,12 @@ local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
 end
 event.listen("key_down", check)
 
+local function userLog(username, aug)
+  userw = io.open("/etc/userlog", "a")
+   userw:write(username .. "|" .. os.date("%F %T") .. "|" .. aug .. "\n")
+    userw:close()
+end
+
 while true do
   if fs.exists("/installer.lua") then -- Auto deletes the installer at first boot.
     fs.remove("/installer.lua")
@@ -35,6 +41,7 @@ while true do
   login = auth.validate(username, password)
 
   if login then
+    userLog(username, "pass")
     hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
      hn:write(username)
       hn:close()
@@ -56,6 +63,7 @@ while true do
     event.ignore("key_down", check)
     break
   else
+    userLog(username, "fail")
     term.clear()
     term.setCursor(1,1)
     io.stderr:write("Password incorrect...")

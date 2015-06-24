@@ -16,15 +16,15 @@ term.write("Username: ")
 
 auth.rmUser(username)
 
-if fs.exists("/home/" .. username .. "/") then
-    fs.remove("/home/" .. username .. "/")
-end
+    if fs.exists("/home/" .. username .. "/") then
+        fs.remove("/home/" .. username .. "/")
+    end
 end
 
 if #args == 1 then
     username = args[1]
     auth.rmUser(username)
     if fs.exists("/home/" .. username .. "/") then
-    fs.remove("/home/" .. username .. "/")
-end
+        fs.remove("/home/" .. username .. "/")
+    end
 end
