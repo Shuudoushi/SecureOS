@@ -8,12 +8,18 @@ local term = require("term")
 
 local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
  if keyboard.isControlDown() then
-  print("( ͡° ͜ʖ ͡°)")
+  io.stderr:write("( ͡° ͜ʖ ͡°)")
   os.sleep(0.1)
   computer.shutdown(true)
  end
 end
 event.listen("key_down", check)
+
+local function userLog(username, aug)
+  userw = io.open("/etc/userlog", "a")
+   userw:write(username .. "|" .. os.date("%F %T") .. "|" .. aug .. "\n")
+    userw:close()
+end
 
 while true do
   if fs.exists("/installer.lua") then -- Auto deletes the installer at first boot.
@@ -35,6 +41,7 @@ while true do
   login = auth.validate(username, password)
 
   if login then
+    userLog(username, "pass")
     hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
      hn:write(username)
       hn:close()
@@ -50,14 +57,16 @@ while true do
     shell.setAlias("adduser", "/bin/adduser.lua")
     shell.setAlias("deluser", "/bin/deluser.lua")
     os.setenv("PS1", username .. "@" .. username .. "# ") -- Sets the user environment.
-    shell.setWorkingDirectory("/usr/home/" .. username .. "/")
+    shell.setWorkingDirectory("/home/" .. username .. "/")
     shell.execute("/root/.root.lua/") -- Starts the root check program.
+    username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     event.ignore("key_down", check)
     break
   else
+    userLog(username, "fail")
     term.clear()
     term.setCursor(1,1)
-    term.write("Password incorrect...")
+    io.stderr:write("Password incorrect...")
     os.sleep(2.5)
   end
 end

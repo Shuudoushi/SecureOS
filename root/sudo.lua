@@ -9,7 +9,7 @@ local running = true
 
 local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
  if keyboard.isControlDown() then
-  print("( ͡° ͜ʖ ͡°)")
+  io.stderr:write("( ͡° ͜ʖ ͡°)")
   os.sleep(0.1)
   computer.shutdown(true)
  end
@@ -28,7 +28,7 @@ local function suAuth()
 
     event.cancel(tonumber(textk))
 
-   shell.setWorkingDirectory("/usr/home/" .. texthn .. "/")
+   shell.setWorkingDirectory("/home/" .. texthn .. "/")
    term.clear()
    term.setCursor(1,1)
    print(_OSVERSION .. " " .. os.date("%F %T"))
@@ -50,11 +50,12 @@ local function suAuth()
    term.setCursor(1,1)
     os.setenv("PS1", "root" .. "@" .. texthn .. "$ ")
     shell.setWorkingDirectory("/")
+    username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     event.ignore("key_down", check)
    running = false
   else
-   print("Login failed.")
-    shell.setWorkingDirectory("/usr/home/" .. texthn .. "/")
+   io.stderr:write("Login failed.")
+    shell.setWorkingDirectory("/home/" .. texthn .. "/")
     shell.execute("/root/.root.lua")
     event.ignore("key_down", check)
    running = false
