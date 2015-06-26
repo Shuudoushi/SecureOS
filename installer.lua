@@ -14,7 +14,7 @@ term.setCursor(1,1)
     print("This installer will help guide you through setting up and installing SecureOS.")
     print("Press any key to continue.")
 local event = event.pull("key_down")
-    if event then
+    if event and not keyboard.isControlDown() then
         term.clear()
         term.setCursor(1,1)
     end
