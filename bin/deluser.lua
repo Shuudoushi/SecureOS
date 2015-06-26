@@ -19,6 +19,9 @@ auth.rmUser(username)
     if fs.exists("/home/" .. username .. "/") then
         fs.remove("/home/" .. username .. "/")
     end
+
+    username = ""
+
 end
 
 if #args == 1 then
@@ -27,4 +30,5 @@ if #args == 1 then
     if fs.exists("/home/" .. username .. "/") then
         fs.remove("/home/" .. username .. "/")
     end
+    username = ""
 end

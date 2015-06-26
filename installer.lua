@@ -70,7 +70,7 @@ local function userInfo()
         password = term.read(nil, nil, nil, "")
         password = string.gsub(password, "\n", "")
 
-    local auth = require("auth").addUser(username, password, true)
+    require("auth").addUser(username, password, true)
 
     if not fs.exists("/home/" .. username .. "/") then
         fs.makeDirectory("/home/" .. username .. "/")
@@ -87,10 +87,11 @@ local function userInfo()
         input = string.gsub(input, "\n", "")
         input = string.lower(input)
 
-            if input == "y" then
+            if input == "y" or input == "yes" then
                 computer.shutdown(true)
-            elseif input == "n" then
-                io.stderr:write("Dropping to shell.")
+            elseif input == "n" of input == "no" then
+                io.stderr:write("Returning to shell.")
+                os.sleep(1.5)
                 term.clear()
                 term.setCursor(1,1)
                 running = false
