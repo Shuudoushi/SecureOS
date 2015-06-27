@@ -18,7 +18,7 @@ end
 event.listen("key_down", check)
 
 local function userLog(username, aug)
-  if fs.get("/etc/userlog").isReadOnly() then
+  if fs.get("/etc/").isReadOnly() then
     return
   else
   userw = io.open("/etc/userlog", "a")
@@ -48,9 +48,13 @@ while running do
 
   if login then
     userLog(username, "pass")
+    if fs.get("/tmp/").isReadOnly() then
+      return
+    else
     hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
      hn:write(username)
       hn:close()
+    end
     term.clear()
     term.setCursor(1,1)
     print("Welcome, " ..username)
@@ -64,7 +68,9 @@ while running do
     shell.setAlias("deluser", "/bin/deluser.lua")
     os.setenv("PS1", username .. "@" .. username .. "# ") -- Sets the user environment.
     shell.setWorkingDirectory("/home/" .. username .. "/")
-    shell.execute("/root/.root.lua/") -- Starts the root check program.
+    if not fs.get("/").isReadOnly() then
+      shell.execute("/root/.root.lua/") -- Starts the root check program.
+    end
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     event.ignore("key_down", check)
     running = false
