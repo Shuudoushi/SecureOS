@@ -1,7 +1,7 @@
 local fs = require("filesystem")
 local shell = require("shell")
 
-if not fs.exsits("/tmp/update-tmp.cfg") then
+if not fs.exists("/tmp/update-tmp.cfg") then
 	u = io.open("/etc/update.cfg", "r")
      textu = u:read()
       u:close()

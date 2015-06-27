@@ -36,6 +36,7 @@ local function root()
     local r = io.open("/tmp/.root", "r")
      local root = r:read()
       r:close()
+  end
 end
 
 local blacklist = blackList()
