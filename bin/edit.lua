@@ -34,16 +34,20 @@ local function root()
   if not fs.exists("/tmp/.root") then
     root = false
   else
-    local r = io.open("/tmp/.root", "r")
+    r = io.open("/tmp/.root", "r")
      root = r:read()
       r:close()
   end
+  return root
 end
 
 local blacklist = blackList()
+local root = root()
 
 if filename == blacklist and not root then
-  local options = readonly
+  if options == nil then
+    options = options.r
+  end
 end
 
 if not fs.exists(filename) then
