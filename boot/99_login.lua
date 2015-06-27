@@ -6,6 +6,8 @@ local shell = require("shell")
 local auth = require("auth")
 local term = require("term")
 
+local running = true
+
 local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
  if keyboard.isControlDown() then
   io.stderr:write("( ͡° ͜ʖ ͡°)")
@@ -25,7 +27,7 @@ local function userLog(username, aug)
   end
 end
 
-while true do
+while running do
   if fs.exists("/installer.lua") then -- Auto deletes the installer at first boot.
     fs.remove("/installer.lua")
   end
@@ -65,7 +67,7 @@ while true do
     shell.execute("/root/.root.lua/") -- Starts the root check program.
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     event.ignore("key_down", check)
-    break
+    running = false
   else
     userLog(username, "fail")
     term.clear()
