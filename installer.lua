@@ -14,7 +14,7 @@ term.setCursor(1,1)
     print("This installer will help guide you through setting up and installing SecureOS.")
     print("Press any key to continue.")
 local event = event.pull("key_down")
-    if event then
+    if event and not keyboard.isControlDown() then
         term.clear()
         term.setCursor(1,1)
     end
@@ -35,25 +35,10 @@ local function downLoad()
     term.write("Please wait while the files are downloaded and installed.")
     os.sleep(1)
     term.setCursor(1,2)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/boot/99_login.lua /boot/99_login.lua \n")
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/root/sudo.lua /root/sudo.lua \n")
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/logout.lua /bin/logout.lua \n")
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/usage.lua /bin/usage.lua \n")
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/root/.root.lua /root/.root.lua \n")
+
 shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/update.lua /bin/update.lua \n")
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/lib/sha256.lua /lib/sha256.lua \n")
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/lib/auth.lua /lib/auth.lua \n")
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/adduser.lua /bin/adduser.lua \n")
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/deluser.lua /bin/deluser.lua \n")
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/uninstall.lua /bin/uninstall.lua \n")
-shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/init.lua /init.lua \n")
-shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/.osprop /.osprop \n")
-shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/etc/motd /etc/motd \n")
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/usr/man/update /usr/man/update \n")
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/usr/man/usage /usr/man/usage \n")
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/usr/man/adduser /usr/man/adduser \n")
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/usr/man/deluser /usr/man/deluser \n")
-    os.sleep(1.5)
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/tmp/update-tmp.lua /tmp/update-tmp.lua \n")
+shell.execute("/tmp/update-tmp.lua")
 end
 
 local function userInfo()
@@ -70,7 +55,7 @@ local function userInfo()
         password = term.read(nil, nil, nil, "")
         password = string.gsub(password, "\n", "")
 
-    local auth = require("auth").addUser(username, password, true)
+    require("auth").addUser(username, password, true)
 
     if not fs.exists("/home/" .. username .. "/") then
         fs.makeDirectory("/home/" .. username .. "/")
@@ -87,10 +72,11 @@ local function userInfo()
         input = string.gsub(input, "\n", "")
         input = string.lower(input)
 
-            if input == "y" then
+            if input == "y" or input == "yes" then
                 computer.shutdown(true)
-            elseif input == "n" then
-                io.stderr:write("Dropping to shell.")
+            elseif input == "n" of input == "no" then
+                io.stderr:write("Returning to shell.")
+                os.sleep(1.5)
                 term.clear()
                 term.setCursor(1,1)
                 running = false

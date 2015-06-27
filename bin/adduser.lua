@@ -23,9 +23,9 @@ if #args < 2 then
         su = string.gsub(su, "\n", "")
         su = string.lower(su)
 
-    if su == "y" then
+    if su == "y" or su == "yes" then
         su = true
-    elseif su == "n" then
+    elseif su == "n" or su == "no" then
         su = false
     elseif su == nil then
         su = false
@@ -41,6 +41,7 @@ if #args < 2 then
         fs.makeDirectory("/home/" .. username .. "/lib/")
         fs.makeDirectory("/home/" .. username .. "/var/")
     end
+    username, password = ""
 end
 
 if #args >= 2 then
@@ -65,5 +66,6 @@ if #args >= 2 then
         fs.makeDirectory("/home/" .. username .. "/var/")
         fs.makeDirectory("/home/" .. username .. "/lib/")
     end
+    username, password = ""
     return
 end

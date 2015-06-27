@@ -1,5 +1,5 @@
-local shell = require("shell")
 local fs = require("filesystem")
+local shell = require("shell")
 
 if not fs.exsits("/tmp/update-tmp.cfg") then
 	u = io.open("/etc/update.cfg", "r")

@@ -1,5 +1,5 @@
-local shell = require("shell")
 local computer = require("computer")
+local shell = require("shell")
 
 shell.execute("rm /bin/uninstall.lua")
 shell.execute("rm /lib/sha256.lua")
