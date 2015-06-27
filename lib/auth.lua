@@ -1,7 +1,7 @@
 --Some of this was made with the help of SuPeRMiNoR2
 
-local sha = require("sha256")
 local fs = require("filesystem")
+local sha = require("sha256")
 
 local auth = {}
 
