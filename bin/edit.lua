@@ -27,14 +27,15 @@ local function blackList()
   if config then
     pcall(config)
   end
+  return env
 end
 
 local function root()
   if not fs.exists("/tmp/.root") then
-    local root = false
+    root = false
   else
     local r = io.open("/tmp/.root", "r")
-     local root = r:read()
+     root = r:read()
       r:close()
   end
 end
@@ -42,7 +43,7 @@ end
 local blacklist = blackList()
 
 if filename == blacklist and not root then
-  local options = options.r
+  local options = readonly
 end
 
 if not fs.exists(filename) then
