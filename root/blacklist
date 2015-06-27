@@ -1,4 +1,4 @@
-blacklist = {
+blacklist = {{
   "/root/sudo.lua",
   "/boot/99_login.lua",
   "/bin/edit.lua",
@@ -9,4 +9,4 @@ blacklist = {
   "/lib/auth.lua",
   "/root/.root.lua",
   "/root/blacklist"
-}
+}}
