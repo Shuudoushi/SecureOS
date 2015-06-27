@@ -23,13 +23,13 @@ local function split(str,sep)
 end
 
 local function buildDB()
-    users = {}
+    local users = {}
     u = io.open(passwdfile, "r")
     raw = u:read("*a")
     
     if raw ~= nil then
     
-    temp = split(raw, "\n")
+    local temp = split(raw, "\n")
     
     for _,data in pairs(temp) do
       t = split(data, ":")
@@ -42,7 +42,7 @@ local function buildDB()
 end
 
 local function saveDB(db)
-  buff = ""
+  local buff = ""
   for u, d in pairs(db) do
     buff = buff .. u .. ":" .. d["password"].. ":" .. d["su"] .. "\n"
   end
@@ -52,7 +52,7 @@ local function saveDB(db)
 end
 
 function auth.addUser(username, password, su)
-  users = buildDB()
+  local users = buildDB()
   if su == true then sub = "1" end 
   if su == false then sub = "0" end
 
@@ -61,7 +61,7 @@ function auth.addUser(username, password, su)
 end
 
 function auth.rmUser(username)
-  users = buildDB()
+  local users = buildDB()
   for user,_ in pairs(users) do
     if user == username then
       users[username] = nil
@@ -71,12 +71,12 @@ function auth.rmUser(username)
 end
 
 function auth.validate(username, password) 
-    users = buildDB()
+    local users = buildDB()
   
     validated = false
     superuser = false
 
-    data = users[username]
+    local data = users[username]
 
     if data ~= nil then
         if data["password"] == sha.sha256(password) then
