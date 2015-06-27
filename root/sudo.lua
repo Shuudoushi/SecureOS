@@ -44,6 +44,9 @@ local function suAuth()
   login, super = auth.validate(username, password)
 
   if login and super then
+    local r = io.open("/tmp/.root", "w")
+      r:write("true")
+       r:close()
    print("Logged in as Root.")
     os.sleep(1)
    term.clear()

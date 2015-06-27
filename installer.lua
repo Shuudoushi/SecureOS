@@ -14,7 +14,7 @@ term.setCursor(1,1)
     print("This installer will help guide you through setting up and installing SecureOS.")
     print("Press any key to continue.")
 local event = event.pull("key_down")
-    if event and not keyboard.isControlDown() then
+    if event and not kb.isControlDown() then
         term.clear()
         term.setCursor(1,1)
     end
@@ -74,7 +74,7 @@ local function userInfo()
 
             if input == "y" or input == "yes" then
                 computer.shutdown(true)
-            elseif input == "n" of input == "no" then
+            elseif input == "n" or input == "no" then
                 io.stderr:write("Returning to shell.")
                 os.sleep(1.5)
                 term.clear()

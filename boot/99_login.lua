@@ -16,9 +16,13 @@ end
 event.listen("key_down", check)
 
 local function userLog(username, aug)
+  if fs.get("/etc/userlog").isReadOnly() then
+    return
+  else
   userw = io.open("/etc/userlog", "a")
    userw:write(username .. "|" .. os.date("%F %T") .. "|" .. aug .. "\n")
     userw:close()
+  end
 end
 
 while true do
