@@ -66,6 +66,7 @@ while running do
     shell.setAlias("update", "/bin/update.lua")
     shell.setAlias("adduser", "/bin/adduser.lua")
     shell.setAlias("deluser", "/bin/deluser.lua")
+    shell.setAlias("passwd", "/bin/passwd.lua")
     os.setenv("PS1", username .. "@" .. username .. "# ") -- Sets the user environment.
     shell.setWorkingDirectory("/home/" .. username .. "/")
     if not fs.get("/").isReadOnly() then
