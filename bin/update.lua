@@ -1,8 +1,14 @@
+local component = require("component")
 local computer = require("computer")
 local shell = require("shell")
 local term = require("term")
 
 local args, options = shell.parse(...)
+
+if not component.isAvailable("internet") then
+  io.stderr:write("No internet card found.")
+  return
+end
 
 local function update(args, options)
 

@@ -1,6 +1,6 @@
+local string = require("string")
 local auth = require("auth")
 local term = require("term")
-local string = require("string")
 
 hn = io.open("/tmp/.hostname.dat", "r")
  texthn = hn:read()
@@ -35,6 +35,6 @@ if auth.validate(texthn, passwordOld) == true and passwordNew1 == passwordNew2 t
   term.write("passwd: password updated successfully \n")
   return
 else
-  term.write("passwd: password not successfully updated")
+  term.write("passwd: password not successfully updated \n")
   return
 end
