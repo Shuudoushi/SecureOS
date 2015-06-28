@@ -5,7 +5,7 @@ if not fs.exists("/tmp/update-tmp.cfg") then
 	u = io.open("/etc/update.cfg", "r")
      textu = u:read()
       u:close()
-  else
+else
 	u = io.open("/tmp/update-tmp.cfg", "r")
 	 textu = u:read()
 	  u:close()
