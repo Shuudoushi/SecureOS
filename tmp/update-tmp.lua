@@ -33,4 +33,5 @@ shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/root/blacklist /root/blacklist \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/bin/passwd.lua /bin/passwd.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/usr/misc/greetings.txt /usr/misc/greetings.txt \n")
+shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/lib/filesystem.lua /lib/filesystem.lua \n")
 os.sleep(1.5)

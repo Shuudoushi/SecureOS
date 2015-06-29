@@ -1,3 +1,5 @@
+-- Big thanks to gama92 for the help.
+
 local component = require("component")
 local unicode = require("unicode")
 
@@ -89,6 +91,26 @@ local function removeEmptyNodes(node)
   end
 end
 
+local function blackList()
+  local env = {}
+  local config = loadfile("/root/blacklist", nil, env)
+  if config then
+    pcall(config)
+  end
+  return env.blacklist
+end
+
+local function root()
+  if not fs.exists("/tmp/.root") then
+    root = false
+  else
+    r = io.open("/tmp/.root", "r")
+     root = r:read()
+      r:close()
+  end
+  return root
+end
+
 -------------------------------------------------------------------------------
 
 function filesystem.isAutorunEnabled()
@@ -116,7 +138,7 @@ function filesystem.segments(path)
   return segments(path)
 end
 
-function filesystem.canonical(path)
+local function _canonical(path)
   local result = table.concat(segments(path), "/")
   if unicode.sub(path, 1, 1) == "/" then
     return "/" .. result
@@ -124,6 +146,8 @@ function filesystem.canonical(path)
     return result
   end
 end
+
+filesystem.canonical = _canonical
 
 function filesystem.concat(pathA, pathB, ...)
   checkArg(1, pathA, "string")
@@ -376,6 +400,18 @@ function filesystem.makeDirectory(path)
 end
 
 function filesystem.remove(path)
+
+  path = _canonical("/" .. path)
+
+  local blacklist = blackList()
+  local root = root()
+
+  for i = 1,#blacklist do
+    if path == blacklist[i] or path .. "/" == blacklist[i]:sub(1, #path +1) and not root then
+      return nil, "not authorized"
+    end
+  end
+
   local function removeVirtual()
     local node, rest, vnode, vrest = findNode(filesystem.path(path))
     local name = filesystem.name(path)
@@ -501,6 +537,19 @@ function filesystem.open(path, mode)
   local node, rest = findNode(path)
   if not node.fs or not rest then
     return nil, "file not found"
+  end
+
+  path = _canonical("/" .. path)
+
+  local blacklist = blackList()
+  local root = root()
+
+  if ({w=true, wb=true, a=true, ab=true})[mode] then
+    for i = 1,#blacklist do
+      if path == blacklist[i] and not root then
+        return nil, "not authorized"
+      end
+    end
   end
 
   local handle, reason = node.fs.open(rest, mode)
