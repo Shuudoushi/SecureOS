@@ -15,7 +15,7 @@ local freeMem = round(computer.freeMemory() / 1048576, 2)
 print("Date/Time: " .. os.date())
 print("Up Time: " .. round(computer.uptime() / 60, 2) .. " Minutes")
 
-if component.isAvailable("tablet") then
+if component.isAvailable("tablet") or component.isAvailable("robot") then
  print("Power: " .. round(computer.energy(), 2) .. "/" .. round(computer.maxEnergy(), 2))
 end
 
