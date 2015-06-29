@@ -101,18 +101,13 @@ local function blackList()
 end
 
 local function root()
-  if not filesystem.exists("/tmp/.root") then
-    root = false
-  else
-    r = io.open("/tmp/.root", "r")
-     rootr = r:read()
+  local root = false
+  if filesystem.exists("/tmp/.root") then
+    local r = io.open("/tmp/.root", "r")
+     root = r:read()
       r:close()
-    if rootr == "true" then
-      root = true
-    else
-      root = false
-    end
   end
+  return root
 end
 
 -------------------------------------------------------------------------------
