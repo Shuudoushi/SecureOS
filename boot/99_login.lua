@@ -75,8 +75,6 @@ while running do
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     if fs.isAutorunEnabled() == false then
       fs.setAutorunEnabled(true)
-    else
-      return
     end
     event.ignore("key_down", check)
     running = false
