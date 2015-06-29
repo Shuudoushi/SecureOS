@@ -73,13 +73,18 @@ while running do
       shell.execute("/root/.root.lua/") -- Starts the root check program.
     end
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
+    if fs.isAutorunEnabled() == false then
+      fs.setAutorunEnabled(true)
+    else
+      return
+    end
     event.ignore("key_down", check)
     running = false
   else
     userLog(username, "fail")
     term.clear()
     term.setCursor(1,1)
-    io.stderr:write("Password incorrect...")
+    io.stderr:write("Login failed: Invalid information.")
     os.sleep(2.5)
   end
 end
