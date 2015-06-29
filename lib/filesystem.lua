@@ -101,14 +101,18 @@ local function blackList()
 end
 
 local function root()
-  if not fs.exists("/tmp/.root") then
+  if not filesystem.exists("/tmp/.root") then
     root = false
   else
     r = io.open("/tmp/.root", "r")
-     root = r:read()
+     rootr = r:read()
       r:close()
+    if rootr == "true" then
+      root = true
+    else
+      root = false
+    end
   end
-  return root
 end
 
 -------------------------------------------------------------------------------
@@ -404,7 +408,6 @@ function filesystem.remove(path)
   path = _canonical("/" .. path)
 
   local blacklist = blackList()
-  local root = root()
 
   for i = 1,#blacklist do
     if path == blacklist[i] or path .. "/" == blacklist[i]:sub(1, #path +1) and not root then
@@ -541,10 +544,10 @@ function filesystem.open(path, mode)
 
   path = _canonical("/" .. path)
 
-  local blacklist = blackList()
-  local root = root()
-
   if ({w=true, wb=true, a=true, ab=true})[mode] then
+
+    local blacklist = blackList()
+
     for i = 1,#blacklist do
       if path == blacklist[i] and not root then
         return nil, "not authorized"

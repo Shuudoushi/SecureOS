@@ -7,5 +7,6 @@ blacklist = {
   "/bin/rm.lua",
   "/lib/auth.lua",
   "/root/.root.lua",
-  "/root/blacklist"
+  "/root/blacklist",
+  "/lib/sha256.lua"
 }
