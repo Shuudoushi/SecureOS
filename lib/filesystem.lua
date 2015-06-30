@@ -1,4 +1,4 @@
--- Big thanks to gama92 for the help.
+-- Big thanks to gamax92 for the help.
 
 local component = require("component")
 local unicode = require("unicode")
@@ -405,11 +405,13 @@ function filesystem.remove(path)
   local blacklist = blackList()
   local root = root()
 
+if not root then
   for i = 1,#blacklist do
-    if path == blacklist[i] or path .. "/" == blacklist[i]:sub(1, #path +1) and not root then
+    if path == blacklist[i] or path .. "/" == blacklist[i]:sub(1, #path +1) then
       return nil, "not authorized"
     end
   end
+end
 
   local function removeVirtual()
     local node, rest, vnode, vrest = findNode(filesystem.path(path))
@@ -545,9 +547,11 @@ function filesystem.open(path, mode)
     local blacklist = blackList()
     local root = root()
 
-    for i = 1,#blacklist do
-      if path == blacklist[i] and not root then
-        return nil, "not authorized"
+    if not root then
+      for i = 1,#blacklist do
+        if path == blacklist[i] then
+          return nil, "not authorized"
+        end
       end
     end
   end
