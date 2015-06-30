@@ -90,9 +90,7 @@ function auth.validate(username, password)
 end
 
 function auth.userLog(username, arg)
-  if fs.get("/etc/").isReadOnly() then
-    return
-  else
+  if not fs.get("/etc/").isReadOnly() then
   userw = io.open("/etc/userlog", "a")
    userw:write(username .. "|" .. os.date("%F %T") .. "|" .. arg .. "\n")
     userw:close()
