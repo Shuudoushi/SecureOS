@@ -4,7 +4,7 @@ local auth = require("auth")
 
 local function root()
   local root = false
-  if require("filesystem").exists("/tmp/.root") thens
+  if require("filesystem").exists("/tmp/.root") then
     local r = io.open("/tmp/.root", "r")
      root = r:read()
       r:close()

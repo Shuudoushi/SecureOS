@@ -17,16 +17,6 @@ local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
 end
 event.listen("key_down", check)
 
-local function userLog(username, aug)
-  if fs.get("/etc/").isReadOnly() then
-    return
-  else
-  userw = io.open("/etc/userlog", "a")
-   userw:write(username .. "|" .. os.date("%F %T") .. "|" .. aug .. "\n")
-    userw:close()
-  end
-end
-
 while running do
   if fs.exists("/installer.lua") then -- Auto deletes the installer at first boot.
     fs.remove("/installer.lua")
@@ -47,7 +37,7 @@ while running do
   login = auth.validate(username, password)
 
   if login then
-    userLog(username, "pass")
+    auth.userLog(username, "pass")
     if fs.get("/tmp/").isReadOnly() then
       return
     else
@@ -79,7 +69,7 @@ while running do
     event.ignore("key_down", check)
     running = false
   else
-    userLog(username, "fail")
+    auth.userLog(username, "fail")
     term.clear()
     term.setCursor(1,1)
     io.stderr:write("Login failed: Invalid information.")
