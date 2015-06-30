@@ -51,12 +51,6 @@ while running do
     os.sleep(1.5)
     term.clear()
     term.setCursor(1,1)
-    shell.setAlias("usage", "/bin/usage.lua")
-    shell.setAlias("logout", "/bin/logout.lua")
-    shell.setAlias("update", "/bin/update.lua")
-    shell.setAlias("adduser", "/bin/adduser.lua")
-    shell.setAlias("deluser", "/bin/deluser.lua")
-    shell.setAlias("passwd", "/bin/passwd.lua")
     os.setenv("PS1", username .. "@" .. username .. "# ") -- Sets the user environment.
     shell.setWorkingDirectory("/home/" .. username .. "/")
     if not fs.get("/").isReadOnly() then
