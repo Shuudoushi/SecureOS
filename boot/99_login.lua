@@ -24,7 +24,7 @@ while running do
 
   term.clear()
   term.setCursor(1,1)
-  print(_OSVERSION .. " " .. os.date("%F %T"))
+  print(_OSVERSION .. " " .. os.date("%F %X"))
   term.write("User: ")
   username = term.read()
   username = string.gsub(username, "\n", "")
@@ -38,12 +38,10 @@ while running do
 
   if login then
     auth.userLog(username, "pass")
-    if fs.get("/tmp/").isReadOnly() then
-      return
-    else
-    hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
-     hn:write(username)
-      hn:close()
+    if not fs.get("/tmp/").isReadOnly() then
+      hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
+       hn:write(username)
+        hn:close()
     end
     term.clear()
     term.setCursor(1,1)
