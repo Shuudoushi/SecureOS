@@ -2,13 +2,13 @@ local fs = require("filesystem")
 local shell = require("shell")
 
 if not fs.exists("/tmp/update-tmp.cfg") then
-	u = io.open("/etc/update.cfg", "r")
+  u = io.open("/etc/update.cfg", "r")
      textu = u:read()
       u:close()
 else
-	u = io.open("/tmp/update-tmp.cfg", "r")
-	 textu = u:read()
-	  u:close()
+  u = io.open("/tmp/update-tmp.cfg", "r")
+   textu = u:read()
+    u:close()
 end
 
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/boot/99_login.lua /boot/99_login.lua \n")
@@ -34,4 +34,5 @@ shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/usr/misc/greetings.txt /usr/misc/greetings.txt \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/lib/filesystem.lua /lib/filesystem.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/bin/edit.lua /bin/edit.lua \n")
+shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/bin/flash.lua /bin/flash.lua \n")
 os.sleep(1.5)
