@@ -63,7 +63,7 @@ if #args < 2 then
 
   dirTree(username)
 
-  username, password = ""
+  username, password, su = ""
 end
 
 if #args >= 2 then
@@ -84,6 +84,6 @@ if #args >= 2 then
 
   dirTree(username)
 
-  username, password = ""
+  username, password, su = ""
   return
 end
