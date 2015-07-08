@@ -12,13 +12,17 @@ if #args < 1 and not options.l then
   return
 end
 
-local function printRom()
+if not component.isAvailable("os_cardwriter") then
   local eeprom = component.eeprom
+else
+  local eeprom = component.os_cardwriter
+end
+
+local function printRom()
   io.write(eeprom.get())
 end
 
 local function readRom()
-  local eeprom = component.eeprom
   fileName = shell.resolve(args[1])
   if not options.q then
     if fs.exists(fileName) then
@@ -52,8 +56,6 @@ local function writeRom()
     until response and response:lower():sub(1, 1) == "y"
     io.write("Beginning to flash EEPROM.\n")
   end
-
-  local eeprom = component.eeprom
 
   if not options.q then
     io.write("Flashing EEPROM " .. eeprom.address .. ".\n")
