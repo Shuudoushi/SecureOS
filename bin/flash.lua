@@ -2,6 +2,12 @@ local component = require("component")
 local shell = require("shell")
 local fs = require("filesystem")
 
+if not component.isAvailable("os_cardwriter") then
+  local eeprom = component.eeprom
+else
+  local eeprom = component.os_cardwriter
+end
+
 local args, options = shell.parse(...)
 
 if #args < 1 and not options.l then
@@ -10,12 +16,6 @@ if #args < 1 and not options.l then
   io.write(" l: print current contents of installed EEPROM.\n")
   io.write(" r: save the current contents of installed EEPROM to file.")
   return
-end
-
-if not component.isAvailable("os_cardwriter") then
-  local eeprom = component.eeprom
-else
-  local eeprom = component.os_cardwriter
 end
 
 local function printRom()
@@ -62,15 +62,18 @@ local function writeRom()
     io.write("Please do NOT power down or restart your computer during this operation!\n")
   end
 
-  eeprom.set(bios)
-
   local label = args[2]
   if not options.q and not label then
     io.write("Enter new label for this EEPROM. Leave input blank to leave the label unchanged.\n")
     label = io.read()
   end
   if label and #label > 0 then
-    eeprom.setLabel(label)
+    if not component.isAvailable("os_cardwriter") then
+      eeprom.set(bios)
+      eeprom.setLabel(label)
+    else
+      eeprom.flash(bios, label, false)
+    end
     if not options.q then
       io.write("Set label to '" .. eeprom.getLabel() .. "'.\n")
     end
