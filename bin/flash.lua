@@ -1,3 +1,5 @@
+-- Modified to support OpenSecurity card writer.
+
 local component = require("component")
 local shell = require("shell")
 local fs = require("filesystem")
@@ -23,28 +25,29 @@ local function printRom()
     io.write(eeprom.get())
   else
     io.stderr:write("card writer cannot read EEPROM")
+  end
 end
 
 local function readRom()
   fileName = shell.resolve(args[1])
   if not options.q then
     if not component.isAvailable("os_cardwriter") then
-    if fs.exists(fileName) then
-      io.write("Are you sure you want to overwrite " .. fileName .. "?\n")
-      io.write("Type `y` to confirm.\n")
-      repeat
-        local response = io.read()
-      until response and response:lower():sub(1, 1) == "y"
+      if fs.exists(fileName) then
+        io.write("Are you sure you want to overwrite " .. fileName .. "?\n")
+        io.write("Type `y` to confirm.\n")
+        repeat
+          local response = io.read()
+        until response and response:lower():sub(1, 1) == "y"
+      end
+      io.write("Reading EEPROM " .. eeprom.address .. ".\n" )
     end
-    io.write("Reading EEPROM " .. eeprom.address .. ".\n" )
-  end
-  local bios = eeprom.get()
-  local file = assert(io.open(fileName, "wb"))
-  file:write(bios)
-  file:close()
-  if not options.q then
-    io.write("All done!\nThe label is '" .. eeprom.getLabel() .. "'.\n")
-  end
+    local bios = eeprom.get()
+    local file = assert(io.open(fileName, "wb"))
+    file:write(bios)
+    file:close()
+    if not options.q then
+      io.write("All done!\nThe label is '" .. eeprom.getLabel() .. "'.\n")
+    end
     else
       io.stderr:write("card writer cannot read EEPROM")
     end
