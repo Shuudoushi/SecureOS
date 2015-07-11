@@ -3,9 +3,9 @@ local shell = require("shell")
 local fs = require("filesystem")
 
 if not component.isAvailable("os_cardwriter") then
-  local eeprom = component.eeprom
+  eeprom = component.eeprom
 else
-  local eeprom = component.os_cardwriter
+  eeprom = component.os_cardwriter
 end
 
 local args, options = shell.parse(...)
@@ -19,12 +19,16 @@ if #args < 1 and not options.l then
 end
 
 local function printRom()
-  io.write(eeprom.get())
+  if not component.isAvailable("os_cardwriter") then
+    io.write(eeprom.get())
+  else
+    io.stderr:write("card writer cannot read EEPROM")
 end
 
 local function readRom()
   fileName = shell.resolve(args[1])
   if not options.q then
+    if not component.isAvailable("os_cardwriter") then
     if fs.exists(fileName) then
       io.write("Are you sure you want to overwrite " .. fileName .. "?\n")
       io.write("Type `y` to confirm.\n")
@@ -41,6 +45,9 @@ local function readRom()
   if not options.q then
     io.write("All done!\nThe label is '" .. eeprom.getLabel() .. "'.\n")
   end
+    else
+      io.stderr:write("card writer cannot read EEPROM")
+    end
 end
 
 local function writeRom()
@@ -75,7 +82,7 @@ local function writeRom()
       eeprom.flash(bios, label, false)
     end
     if not options.q then
-      io.write("Set label to '" .. eeprom.getLabel() .. "'.\n")
+      io.write("Set label to '" .. label .. "'.\n")
     end
   end
 
