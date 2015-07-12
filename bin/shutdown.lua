@@ -32,6 +32,10 @@ if #args >= 1 then
   end
 else
   print("shutdown [-rs] <time> [reason]")
+  print(" -r reboot")
+  print(" -s seconds")
+  print(" <time> in minutes unless -s or 'now'")
+  print(" [reason] reason for shutdow or reboot")
   return
 end
 
