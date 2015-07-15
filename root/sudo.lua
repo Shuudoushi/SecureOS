@@ -7,6 +7,13 @@ local term = require("term")
 
 local running = true
 
+local args = {...}
+local path = shell.resolve(...)
+
+--[[if not args == "su" then
+  path = shell.resolve(...)
+end]]
+
 local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
   if keyboard.isControlDown() then
     io.stderr:write("( ͡° ͜ʖ ͡°)")
@@ -22,13 +29,13 @@ local function suAuth()
    texthn = hn:read()
     hn:close()
 
-  k = io.open("/tmp/.key", "r")
+--[[  k = io.open("/tmp/.key", "r") -- Depreciated
    textk = k:read()
     k:close()
 
-    event.cancel(tonumber(textk))
+    event.cancel(tonumber(textk))]]
 
-  shell.setWorkingDirectory("/home/" .. texthn .. "/")
+--[[  shell.setWorkingDirectory("/home/" .. texthn .. "/")
   term.clear()
   term.setCursor(1,1)
   print(_OSVERSION .. " " .. os.date("%F %X"))
@@ -37,12 +44,12 @@ local function suAuth()
     username = term.read()
     username = string.gsub(username, "\n", "")
     username = string.lower(username)
-  term.setCursor(1,4)
+  term.write("\n")]]
   term.write("Password: ")
     password = term.read(nil, nil, nil, "")
     password = string.gsub(password, "\n", "")
 
-  login, super = auth.validate(username, password)
+  login, super = auth.validate(texthn, password)
 
   if login and super then
     auth.userLog(username, "root pass")
@@ -54,9 +61,12 @@ local function suAuth()
     term.clear()
     term.setCursor(1,1)
       os.setenv("PS1", "root" .. "@" .. texthn .. "$ ")
-      shell.setWorkingDirectory("/")
+      -- shell.setWorkingDirectory("/")
       username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
       event.ignore("key_down", check)
+      os.sleep(0.1)
+      shell.execute(path)
+      shell.execute("rm /tmp/.root")
     running = false
   else
     auth.userLog(username, "root fail")

@@ -10,6 +10,9 @@ if options.r then
   if args[1] == "now" then
     args[1] = "0"
   end
+  if args[1] == nil then
+    args[1] = "0"
+  end
   time = tonumber(args[1]) * 60
 else
   mode = "shutting down "

@@ -21,6 +21,7 @@ shell.setAlias("adduser", "/bin/adduser.lua")
 shell.setAlias("deluser", "rmuser", "/bin/deluser.lua")
 shell.setAlias("passwd", "/bin/passwd.lua")
 shell.setAlias("reboot", "shutdown -r")
+shell.setAlias("sudo", "/root/sudo.lua")
 
 require("event").listen("init", function()
   local file = io.open("/etc/hostname")
