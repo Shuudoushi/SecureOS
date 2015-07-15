@@ -58,10 +58,10 @@ local function suAuth()
        r:close()
     print("Logged in as Root.")
       os.sleep(1)
-    term.clear()
+    --[[term.clear()
     term.setCursor(1,1)
       os.setenv("PS1", "root" .. "@" .. texthn .. "$ ")
-      -- shell.setWorkingDirectory("/")
+      shell.setWorkingDirectory("/")]]
       username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
       event.ignore("key_down", check)
       os.sleep(0.1)
@@ -71,8 +71,8 @@ local function suAuth()
   else
     auth.userLog(username, "root fail")
     io.stderr:write("Login failed.")
-      shell.setWorkingDirectory("/home/" .. texthn .. "/")
-      shell.execute("/root/.root.lua")
+      --shell.setWorkingDirectory("/home/" .. texthn .. "/")
+      --shell.execute("/root/.root.lua")
       event.ignore("key_down", check)
     running = false
  end

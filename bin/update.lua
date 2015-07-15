@@ -65,6 +65,7 @@ term.clear()
 term.setCursor(1,1)
 print("Update complete. System restarting now.")
     os.sleep(2.5)
+    shell.execute("rm /tmp/.root")
     computer.shutdown(true)
 end
 
