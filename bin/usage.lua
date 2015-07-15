@@ -33,10 +33,10 @@ end
 
 if usedMemory >= 85 then
  component.gpu.setForeground(0xFF0000)
-  print("Used Memory: " .. round(usedMemory, 2) * 100 .. "%")
+  print("Used Memory: " .. round(usedMemory, 2) .. " MB (" .. round(usedMemory, 2) * 100 .. "%)")
  component.gpu.setForeground(0xFFFFFF)
  else
-  print("Used Memory: " .. round(usedMemory, 2) * 100 .. "%")
+  print("Used Memory: " .. round(usedMemory, 2) .. " MB (" .. round(usedMemory, 2) * 100 .. "%)")
 end
 
 local function formatSize(size)
