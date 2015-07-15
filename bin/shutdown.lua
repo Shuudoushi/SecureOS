@@ -47,11 +47,13 @@ local function system()
     print(message)
     os.sleep(time)
     term.clear()
+    shell.execute("rm /tmp/.root")
     computer.shutdown(true)
   else
     print(message)
     os.sleep(time)
     term.clear()
+    shell.execute("rm /tmp/.root")
     computer.shutdown()
   end
 end
