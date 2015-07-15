@@ -38,7 +38,7 @@ else
   print(" -r reboot")
   print(" -s seconds")
   print(" <time> in minutes unless -s or 'now'")
-  print(" [reason] reason for shutdow or reboot")
+  print(" [reason] reason for shutdown or reboot")
   return
 end
 
