@@ -9,13 +9,6 @@ local term = require("term")
 
 local args = {...}
 
-if #args == 0 then
-  path = shell.resolve(...)
-    suAuth()
-elseif #args == 1 and args[1] == "su" then
-  suAuthPerm()
-end
-
 --[[local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
   if keyboard.isControlDown() then
     io.stderr:write("( ͡° ͜ʖ ͡°)")
@@ -54,7 +47,7 @@ local function suAuth()
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
       -- event.ignore("key_down", check)
     -- running = false
- end
+  end
 end
 
 local function suAuthPerm()
@@ -87,7 +80,14 @@ local function suAuthPerm()
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
       -- event.ignore("key_down", check)
     -- running = false
- end
+  end
+end
+
+if #args == 0 then
+  path = shell.resolve(...)
+  suAuth()
+elseif #args == 1 and args[1] == "su" then
+  suAuthPerm()
 end
 
 --[[while running do
