@@ -13,14 +13,14 @@ if not args == "su" then
   path = shell.resolve(...)
 end
 
-local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
+--[[local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
   if keyboard.isControlDown() then
     io.stderr:write("( ͡° ͜ʖ ͡°)")
     os.sleep(0.1)
     computer.shutdown(true)
  end
 end
-event.listen("key_down", check)
+event.listen("key_down", check)]]
 
 local function suAuth()
 
@@ -40,7 +40,7 @@ local function suAuth()
       r:write("true")
        r:close()
       username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
-      event.ignore("key_down", check)
+      -- event.ignore("key_down", check)
       os.sleep(0.1)
       shell.setWorkingDirectory("/bin/")
       shell.execute(path)
@@ -49,7 +49,8 @@ local function suAuth()
   else
     auth.userLog(username, "root fail")
     io.stderr:write("Login failed.")
-      event.ignore("key_down", check)
+    username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
+      -- event.ignore("key_down", check)
     running = false
  end
 end
