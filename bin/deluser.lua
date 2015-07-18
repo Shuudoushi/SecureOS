@@ -47,5 +47,6 @@ if #args == 1 then
   if fs.exists("/home/" .. username .. "/") then
     fs.remove("/home/" .. username .. "/")
   end
+  print(username.. " removed")
   username = ""
 end

@@ -28,7 +28,9 @@ if login and super then
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     os.sleep(0.1)
     shell.execute(path, args[2], args[3], args[4], args[5])
-    shell.execute("rm /tmp/.root")
+    if not args[1] == "su" then
+      shell.execute("rm /tmp/.root")
+    end
 else
   auth.userLog(username, "root fail")
   io.stderr:write("Login failed.")
