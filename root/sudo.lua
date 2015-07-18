@@ -29,7 +29,7 @@ if login and super then
     os.sleep(0.1)
     shell.execute(path, args[2], args[3], args[4], args[5])
     if not args[1] == "su" then
-      shell.execute("rm /tmp/.root")
+      os.remove("/tmp/.root")
     end
 else
   auth.userLog(username, "root fail")
