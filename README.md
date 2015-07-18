@@ -19,4 +19,9 @@ At this time, there is two ways of installing.
 
 [Caitlyn](https://github.com/CaitlynMainer) - Made SOS the 'official' OS of [OpenSecurity](https://github.com/PC-Logix/OpenSecurity) and helped out with making the multi-user system
 
+[fnuecke](https://github.com/fnuecke) (and co) - Provided a great starting point with OpenOS
+
 All the people of #oc on Espernet IRC
+
+# [LICENSE](https://github.com/MightyPirates/OpenComputers/blob/master-MC1.7.10/LICENSE)
+Standard MIT license from [OpenComputers](http://oc.cil.li/index.php?/page/index.html).
