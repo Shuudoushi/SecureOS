@@ -32,6 +32,7 @@ if #args == 0 then
     username = string.lower(username)
 
   auth.rmUser(username)
+  auth.userLog(username, "removed")
 
   if fs.exists("/home/" .. username .. "/") then
       fs.remove("/home/" .. username .. "/")
@@ -47,6 +48,7 @@ if #args == 1 then
   if fs.exists("/home/" .. username .. "/") then
     fs.remove("/home/" .. username .. "/")
   end
+  auth.userLog(username, "removed")
   print(username.. " removed")
   username = ""
 end
