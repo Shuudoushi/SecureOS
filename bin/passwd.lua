@@ -2,7 +2,7 @@ local string = require("string")
 local auth = require("auth")
 local term = require("term")
 
-hn = io.open("/tmp/.hostname.dat", "r")
+local hn = io.open("/tmp/.hostname.dat", "r")
  texthn = hn:read()
   hn:close()
 
