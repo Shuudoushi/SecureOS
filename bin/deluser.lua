@@ -40,6 +40,8 @@ if #args == 0 then
 
   username = ""
 
+else
+  return
 end
 
 if #args == 1 then
@@ -51,4 +53,6 @@ if #args == 1 then
   auth.userLog(username, "removed")
   print(username.. " removed")
   username = ""
+else
+  return
 end

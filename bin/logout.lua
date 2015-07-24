@@ -8,4 +8,4 @@ end
 
 fs.remove("/tmp/.root")
 shell.setWorkingDirectory("/")
-shell.execute("/boot/99_login.lua")
+shell.execute("/boot/z_login.lua")

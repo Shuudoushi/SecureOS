@@ -4,9 +4,9 @@ if not require("filesystem").get("/tmp/").isReadOnly() then
   r = io.open("/tmp/.root", "w")
    r:write("true")
     r:close()
-  else
-    return
-    io.stderr:write("filesystem is readonly")
+else
+  return
+  io.stderr:write("filesystem is readonly")
 end
 
 shell.execute("/bin/adduser.lua")

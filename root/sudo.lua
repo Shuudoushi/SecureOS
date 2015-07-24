@@ -5,14 +5,14 @@ local term = require("term")
 local args = {...}
 
 if #args ~= 0 then
-  path = shell.getAlias(args[1])
+  path = shell.resolve(args[1] .. " ")
 else
   io.stderr:write("error") -- Too lazy to properly do this bit atm...
 end
 
 local hn = io.open("/tmp/.hostname.dat", "r") -- Reads the hostname file.
- texthn = hn:read()
-  hn:close()
+  texthn = hn:read()
+    hn:close()
 
 term.write("Password: ")
   password = term.read(nil, nil, nil, "")
@@ -24,13 +24,13 @@ if login and super then
   auth.userLog(texthn, "root_pass")
   local r = io.open("/tmp/.root", "w")
     r:write("true")
-     r:close()
-    username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
-    os.sleep(0.1)
-    shell.execute(path .." ".., args[2] .." ".., ... .." "..)
-    if not args[1] == "su" then
-      os.remove("/tmp/.root")
-    end
+      r:close()
+  username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
+  os.sleep(0.1)
+  shell.execute(args[1], args[2], args[3], args[4], args[5])
+  if not args[1] == "su" then
+    os.remove("/tmp/.root")
+  end
 else
   auth.userLog(texthn, "root_fail")
   io.stderr:write("Login failed.")
