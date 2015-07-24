@@ -27,7 +27,7 @@ if login and super then
      r:close()
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     os.sleep(0.1)
-    shell.execute(path, args[2], ...)
+    shell.execute(path .." ".., args[2] .." ".., ... .." "..)
     if not args[1] == "su" then
       os.remove("/tmp/.root")
     end
