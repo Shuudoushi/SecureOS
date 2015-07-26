@@ -155,7 +155,6 @@ function shell.resolve(path, ext)
   end
 end
 
-
 function shell.execute(command, env, ...)
   local sh, reason = getShell()
   if not sh then
