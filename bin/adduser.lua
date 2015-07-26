@@ -62,7 +62,7 @@ if #args < 2 then
   auth.addUser(username, password, su)
 
   dirTree(username)
-
+  auth.userLog(username, "added")
   username, password, su = ""
 end
 
@@ -81,9 +81,9 @@ if #args >= 2 then
   end
 
   auth.addUser(args[1], args[2], su)
-
   dirTree(username)
-
+  auth.userLog(username, "added")
+  print(username .. " added")
   username, password, su = ""
   return
 end

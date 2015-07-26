@@ -44,6 +44,7 @@ while running do
         hn:close()
       os.setenv("HOME", "/home/" .. username)
       os.setenv("USER", "/home/" .. username)
+      os.setenv("PATH", "/bin:/usr/bin:/home/".. username .."/bin:.")
     end
     term.clear()
     term.setCursor(1,1)
@@ -53,9 +54,6 @@ while running do
     term.setCursor(1,1)
     os.setenv("PS1", username .. "@" .. username .. "# ") -- Sets the user environment.
     shell.setWorkingDirectory("/home/" .. username .. "/")
-    --[[if not fs.get("/").isReadOnly() then -- Depreciated
-      shell.execute("/root/.root.lua/") -- Starts the root check program.
-    end]]
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     if fs.isAutorunEnabled() == false then
       fs.setAutorunEnabled(true)

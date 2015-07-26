@@ -1,5 +1,5 @@
 do
-  _G._OSVERSION = "SecureOS 0.66"
+  _G._OSVERSION = "SecureOS 0.67"
 
   local component = component
   local computer = computer
@@ -184,7 +184,7 @@ while true do
   motd()
   local result, reason = os.execute(os.getenv("SHELL"))
   if not result then
-    io.stderr:write((tostring(reason) or "unknown error") .. "\n")
+    io.stderr:write((reason ~= nil and tostring(reason) or "unknown error") .. "\n")
     io.write("Press any key to continue.\n")
     os.sleep(0.5)
     require("event").pull("key")
