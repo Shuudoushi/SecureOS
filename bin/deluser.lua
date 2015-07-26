@@ -21,7 +21,17 @@ end
 
 local args = {...}
 
-if #args == 0 then
+if #args ~= 0 then
+  username = args[1]
+  username = string.lower(username)
+  auth.rmUser(username)
+  auth.userLog(username, "removed")
+  if fs.exists("/home/" .. username .. "/") then
+    fs.remove("/home/" .. username .. "/")
+  end
+  print(username.. " removed")
+  username = ""
+elseif #args == 0 then
   term.clear()
   term.setCursor(1,1)
   term.write("Please enter a username to delete from the system.")
@@ -41,20 +51,5 @@ if #args == 0 then
   username = ""
 
 else
-  username = ""
-  return
-end
-
-if #args == 1 then
-  username = args[1]
-  auth.rmUser(username)
-  if fs.exists("/home/" .. username .. "/") then
-    fs.remove("/home/" .. username .. "/")
-  end
-  auth.userLog(username, "removed")
-  print(username.. " removed")
-  username = ""
-else
-  username = ""
   return
 end
