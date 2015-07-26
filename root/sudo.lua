@@ -1,3 +1,5 @@
+-- Fixed with the help of DrHoffman from IRC.
+
 local shell = require("shell")
 local auth = require("auth")
 local term = require("term")
@@ -5,7 +7,7 @@ local term = require("term")
 local args = {...}
 
 if #args ~= 0 then
-  path = shell.resolve(args[1] .. " ")
+  path = args[1]
 else
   io.stderr:write("error") -- Too lazy to properly do this bit atm...
 end
@@ -27,8 +29,14 @@ if login and super then
       r:close()
   username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
   os.sleep(0.1)
-  shell.execute(args[1], args[2], args[3], args[4], args[5])
-  if not args[1] == "su" then
+  local result, reason = shell.execute(path, nil, table.unpack(args,2))
+  if not result then
+    io.stderr:write(reason)
+  end
+  os.sleep(0.1)
+  if args[1] == "su" then
+    return
+  else
     os.remove("/tmp/.root")
   end
 else

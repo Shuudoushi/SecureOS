@@ -41,18 +41,24 @@ if #args == 0 then
   username = ""
 
 else
+  username = ""
   return
 end
 
 if #args == 1 then
   username = args[1]
-  auth.rmUser(username)
-  if fs.exists("/home/" .. username .. "/") then
-    fs.remove("/home/" .. username .. "/")
+  local result, reason = auth.rmUser(username)
+  if not result then
+    io.stderr:write(reason)
+  else
+    if fs.exists("/home/" .. username .. "/") then
+      fs.remove("/home/" .. username .. "/")
+    end
+    auth.userLog(username, "removed")
+    print(username.. " removed")
   end
-  auth.userLog(username, "removed")
-  print(username.. " removed")
   username = ""
 else
+  username = ""
   return
 end
