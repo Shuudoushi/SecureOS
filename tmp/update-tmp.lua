@@ -28,8 +28,8 @@ local depreciated = depreciated()
 if depreciated then
   for i = 1, #depreciated do
     local files = os.remove(shell.resolve(depreciated[i]))
-    if not files == nil then
-      print(files)
+    if files ~= nil then
+      print(depreciated[i])
     end
   end
   print("Finished")
