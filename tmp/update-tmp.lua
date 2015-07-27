@@ -33,6 +33,7 @@ for i = 1, #depreciated do
   end
   for i = 1, #result do
     print(result[i] .. " removed.")
+    return
   end
 end
 
