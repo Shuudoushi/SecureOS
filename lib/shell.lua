@@ -145,7 +145,7 @@ function shell.resolve(path, ext)
     if unicode.sub(path, 1, 1) == "/" then
       return fs.canonical(path)
     elseif unicode.sub(path, 1, 1) == "~" then
-      return fs.concat(os.getenv('HOME'), path)
+      return fs.concat(os.getenv('HOME'), unicode.sub(path, 2))
     else
       return fs.concat(shell.getWorkingDirectory(), path)
     end
