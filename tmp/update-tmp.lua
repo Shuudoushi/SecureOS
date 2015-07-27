@@ -25,8 +25,10 @@ end
 
 local depreciated = depreciated()
 
-for i = 1, #depreciated do
-  print(os.remove(shell.resolve(depreciated[i])))
+if depreciated then
+  for i = 1, #depreciated do
+    print(os.remove(shell.resolve(depreciated[i])))
+  end
   print("Finished")
 end
 
