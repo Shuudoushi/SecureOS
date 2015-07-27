@@ -43,7 +43,7 @@ while running do
        hn:write(username)
         hn:close()
       os.setenv("HOME", "/home/" .. username)
-      os.setenv("USER", "/home/" .. username)
+      os.setenv("USER", username)
       os.setenv("PATH", "/bin:/usr/bin:/home/".. username .."/bin:.")
     end
     term.clear()
