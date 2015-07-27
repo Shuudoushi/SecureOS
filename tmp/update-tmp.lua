@@ -31,8 +31,8 @@ for i = 1, #depreciated do
     io.stderr:write(reason)
     return
   end
-  for i = 1 result do
-    print(result .. " removed.")
+  for i = 1, #result do
+    print(result[i] .. " removed.")
   end
 end
 
