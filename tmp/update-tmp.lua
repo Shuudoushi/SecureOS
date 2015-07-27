@@ -29,11 +29,9 @@ for i = 1, #depreciated do
   local result, reason = os.remove(shell.resolve(depreciated[i]))
   if not result then
     io.stderr:write(reason)
-    return
   end
   for i = 1, #result do
     print(result[i] .. " removed.")
-    return
   end
 end
 
