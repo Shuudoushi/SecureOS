@@ -28,6 +28,7 @@ local depreciated = depreciated()
 if depreciated then
   for i = 1, #depreciated do
     os.remove(shell.resolve(depreciated[i]))
+    return
   end
   return
 end
