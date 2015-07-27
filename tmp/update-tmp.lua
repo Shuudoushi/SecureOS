@@ -26,8 +26,14 @@ end
 local depreciated = depreciated()
 
 for i = 1, #depreciated do
-  os.remove(shell.resolve(depreciated[i]))
-
+  local result, reason = os.remove(shell.resolve(depreciated[i]))
+  if not result then
+    io.stderr:write(reason)
+    return
+  end
+  for i = 1 result do
+    print(result .. " removed.")
+  end
 end
 
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/boot/z_login.lua /boot/z_login.lua \n")
