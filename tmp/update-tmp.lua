@@ -27,7 +27,10 @@ local depreciated = depreciated()
 
 if depreciated then
   for i = 1, #depreciated do
-    print(os.remove(shell.resolve(depreciated[i])))
+    local files = os.remove(shell.resolve(depreciated[i]))
+    if not files == nil then
+      print(files)
+    end
   end
   print("Finished")
 end
