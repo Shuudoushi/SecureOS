@@ -26,7 +26,8 @@ end
 local depreciated = depreciated()
 
 for i = 1, #depreciated do
-  os.remove(shell.resolve(depreciated[i]))
+  print(os.remove(shell.resolve(depreciated[i])))
+  print("Finished")
 end
 
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/boot/z_login.lua /boot/z_login.lua \n")
@@ -55,6 +56,7 @@ shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/bin/shutdown.lua /bin/shutdown.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/root/su.lua /root/su.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/bin/sh.lua /bin/sh.lua \n")
+shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/bin/hostname.lua /bin/hostname.lua \n")
 os.remove("/tmp/depreciated.dat")
 os.sleep(1.5)
 
