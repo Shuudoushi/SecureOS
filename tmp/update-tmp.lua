@@ -29,7 +29,7 @@ if depreciated then
   for i = 1, #depreciated do
     local files = os.remove(shell.resolve(depreciated[i]))
     if files ~= nil then
-      print("Removed " depreciated[i] .. ": a depreciated package")
+      print("Removed " .. depreciated[i] .. ": a depreciated package")
     end
   end
   print("Finished")
