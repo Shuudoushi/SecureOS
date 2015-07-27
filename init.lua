@@ -1,5 +1,5 @@
 do
-  _G._OSVERSION = "SecureOS 0.67"
+  _G._OSVERSION = "SecureOS 0.68"
 
   local component = component
   local computer = computer
