@@ -145,10 +145,7 @@ function shell.resolve(path, ext)
     if unicode.sub(path, 1, 1) == "/" then
       return fs.canonical(path)
     elseif unicode.sub(path, 1, 1) == "~" then
-      local h = io.open('/tmp/.hostname.dat', 'r')
-      local user = h:read('*a');
-      h:close()
-      return fs.concat("/home/", user, path)
+      return fs.concat(os.getenv("HOME"), user, path)
     else
       return fs.concat(shell.getWorkingDirectory(), path)
     end
