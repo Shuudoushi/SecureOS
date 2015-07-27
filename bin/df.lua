@@ -11,7 +11,8 @@ local function round(num, idp)
  return math.floor(num * mult + 0.5) / mult
 end
 
-local usedMemory = round(computer.totalMemory() / 1048576 - computer.freeMemory() / 1048576, 2)
+local totalMemory = computer.totalMemory() / 1048576;
+local usedMemory = round(totalMemory - computer.freeMemory() / 1048576, 2)
 local freeMem = round(computer.freeMemory() / 1048576, 2)
 
 print("Date/Time: " .. os.date("%F %X"))
@@ -21,7 +22,7 @@ if component.isAvailable("tablet") or component.isAvailable("robot") or options.
  print("Power: " .. round(computer.energy(), 2) .. "/" .. round(computer.maxEnergy(), 2))
 end
 
-print("Total Memory: " .. round(computer.totalMemory() / 1048576, 2) .. " MB")
+print("Total Memory: " .. round(totalMemory, 2) .. " MB")
 
 if freeMem * 100 <= 15 then
  component.gpu.setForeground(0xFF0000)
@@ -33,10 +34,10 @@ end
 
 if usedMemory >= 85 then
  component.gpu.setForeground(0xFF0000)
-  print("Used Memory: " .. round(usedMemory, 2) .. " MB (" .. round(usedMemory / (computer.totalMemory() / 1048576), 2) * 100 .. "%)")
+  print("Used Memory: " .. round(usedMemory, 2) .. " MB (" .. round(usedMemory / totalMemory, 2) * 100 .. "%)")
  component.gpu.setForeground(0xFFFFFF)
  else
-  print("Used Memory: " .. round(usedMemory, 2) .. " MB (" .. round(usedMemory / (computer.totalMemory() / 1048576), 2) * 100 .. "%)")
+  print("Used Memory: " .. round(usedMemory, 2) .. " MB (" .. round(usedMemory / totalMemory, 2) * 100 .. "%)")
 end
 
 local function formatSize(size)
