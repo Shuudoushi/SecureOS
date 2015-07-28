@@ -30,3 +30,4 @@ Pressing 'ctrl' during a login prompt will reboot the computer.
 UFCK
 Help! It's dark and I can hear laughing!
 Things may break at random, you have been warned.
+I'm sorry, I can't do that os.getenv('USER').
