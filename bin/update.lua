@@ -3,7 +3,7 @@ local computer = require("computer")
 local shell = require("shell")
 local term = require("term")
 
-if not require("auth").isRoot then
+if not require("auth").isRoot() then
   io.stderr:write("not authorized")
   return
 end
