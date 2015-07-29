@@ -3,19 +3,7 @@ local computer = require("computer")
 local shell = require("shell")
 local term = require("term")
 
-local function root()
-  local root = false
-  if require("filesystem").exists("/tmp/.root") then
-    local r = io.open("/tmp/.root", "r")
-     root = r:read()
-      r:close()
-  end
-  return root
-end
-
-local root = root()
-
-if not root then
+if not require("auth").isRoot then
   io.stderr:write("not authorized")
   return
 end

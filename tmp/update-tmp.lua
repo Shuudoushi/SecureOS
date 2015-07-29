@@ -66,6 +66,8 @@ shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/bin/whoami.lua /bin/whoami.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/bin/uname.lua /bin/uname.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/usr/man/uname /usr/man/uname \n")
+shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/bin/useradd.lua /bin/useradd.lua \n")
+shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/bin/userdel.lua /bin/userdel.lua \n")
 os.remove("/tmp/depreciated.dat")
 os.sleep(1.5)
 

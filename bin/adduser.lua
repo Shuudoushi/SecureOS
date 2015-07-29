@@ -2,19 +2,7 @@ local fs = require("filesystem")
 local term = require("term")
 local auth = require("auth")
 
-local function root()
-  local root = false
-  if require("filesystem").exists("/tmp/.root") then
-    local r = io.open("/tmp/.root", "r")
-     root = r:read()
-      r:close()
-  end
-  return root
-end
-
-local root = root()
-
-if not root then
+if not require("auth").isRoot then
   io.stderr:write("not authorized")
   return
 end
@@ -62,7 +50,7 @@ if #args < 2 then
   auth.addUser(username, password, su)
 
   dirTree(username)
-  auth.userLog(username, "added")
+  auth.userLog("added")
   username, password, su = ""
 end
 
@@ -82,7 +70,7 @@ if #args >= 2 then
 
   auth.addUser(args[1], args[2], su)
   dirTree(username)
-  auth.userLog(username, "added")
+  auth.userLog("added")
   print(username .. " added")
   username, password, su = ""
   return

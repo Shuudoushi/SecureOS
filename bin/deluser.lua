@@ -2,19 +2,7 @@ local fs = require("filesystem")
 local term = require("term")
 local auth = require("auth")
 
-local function root()
-  local root = false
-  if require("filesystem").exists("/tmp/.root") then
-    local r = io.open("/tmp/.root", "r")
-     root = r:read()
-      r:close()
-  end
-  return root
-end
-
-local root = root()
-
-if not root then
+if not require("auth").isRoot then
   io.stderr:write("not authorized")
   return
 end
@@ -25,7 +13,7 @@ if #args ~= 0 then
   username = args[1]
   username = string.lower(username)
   auth.rmUser(username)
-  auth.userLog(username, "removed")
+  auth.userLog("removed")
   if fs.exists("/home/" .. username .. "/") then
     fs.remove("/home/" .. username .. "/")
   end
@@ -42,7 +30,7 @@ elseif #args == 0 then
     username = string.lower(username)
 
   auth.rmUser(username)
-  auth.userLog(username, "removed")
+  auth.userLog("removed")
 
   if fs.exists("/home/" .. username .. "/") then
       fs.remove("/home/" .. username .. "/")
