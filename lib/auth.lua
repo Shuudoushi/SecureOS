@@ -10,7 +10,7 @@ local function dataCardSum(data)
 end
 
 if component.isAvailable("data") then --This should really be cleaned up later
-	data = require("data")
+	data = component.data
 	sha.sha256 = dataCardSum
 end
 
