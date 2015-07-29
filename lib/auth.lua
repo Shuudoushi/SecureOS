@@ -7,6 +7,7 @@ local auth = {}
 local component = require("component")
 local fs = require("filesystem")
 local sha = require("sha256")
+local filesystem = require("filesystem")
 
 local function toHex(data) --All of these checks should be moved to sha.lua
   return (data:gsub('.', function (c)
@@ -105,12 +106,24 @@ function auth.validate(username, password)
   return validated, superuser
 end
 
+--Shection
+
 function auth.userLog(username, arg)
   if not fs.get("/etc/").isReadOnly() then
   userw = io.open("/etc/userlog", "a")
   userw:write(username .. "|" .. os.date("%F %X") .. "|" .. arg .. "\n")
   userw:close()
   end
+end
+
+function auth.isRoot()
+  local root = false
+  if filesystem.exists("/tmp/.root") then
+    local r = io.open("/tmp/.root", "r")
+    root = r:read()
+    r:close()
+  end
+  return root
 end
 
 return auth
