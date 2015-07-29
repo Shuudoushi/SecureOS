@@ -13,5 +13,6 @@ blacklist = {
   "/autorun",
   "/.autorun",
   "/.autorun.lua",
-  "/autorun.lua"
+  "/autorun.lua",
+  "/init.lua"
 }
