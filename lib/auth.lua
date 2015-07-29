@@ -1,7 +1,18 @@
 --Some of this was made with the help of SuPeRMiNoR2
+--Or maybe all of it
 
+local component = require("component")
 local fs = require("filesystem")
 local sha = require("sha256")
+
+local function dataCardSum(data)
+	return data.toHex(data.sha256(data))
+end
+
+if component.isAvailable("data") then --This should really be cleaned up later
+	data = require("data")
+	sha.sha256 = dataCardSum
+end
 
 local auth = {}
 
