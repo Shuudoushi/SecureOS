@@ -9,7 +9,7 @@ local function dataCardSum(data)
 	return data.toHex(data.sha256(data))
 end
 
-if component.isAvailable("data") then
+if component.isAvailable("data") then --This should really be cleaned up later
 	data = require("data")
 	sha.sha256 = dataCardSum
 end
