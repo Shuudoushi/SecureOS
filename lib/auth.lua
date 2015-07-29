@@ -23,7 +23,7 @@ if component.isAvailable("data") then --This should really be cleaned up later
   sha.sha256 = datac256
 end
 
-if not fs.exists(passwdfile) thenroot
+if not fs.exists(passwdfile) then
   f = io.open(passwdfile, "w")
   f:write()
   f:close()
