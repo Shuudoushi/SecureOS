@@ -37,7 +37,7 @@ while running do
   login = auth.validate(username, password)
 
   if login then
-    auth.userLog(username, "pass")
+    auth.userLog(username, "login_pass")
     if not fs.get("/tmp/").isReadOnly() then
       hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
        hn:write(username)
@@ -61,7 +61,7 @@ while running do
     event.ignore("key_down", check)
     running = false
   else
-    auth.userLog(username, "fail")
+    auth.userLog(username, "login_fail")
     term.clear()
     term.setCursor(1,1)
     io.stderr:write("Login failed: Invalid information.")

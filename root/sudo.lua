@@ -23,7 +23,7 @@ term.write("Password: ")
 login, super = auth.validate(texthn, password)
 
 if login and super then
-  auth.userLog("root_pass")
+  auth.userLog(username, "root_pass")
   local r = io.open("/tmp/.root", "w")
     r:write("true")
       r:close()
@@ -40,7 +40,7 @@ if login and super then
     os.remove("/tmp/.root")
   end
 else
-  auth.userLog("root_fail")
+  auth.userLog(username, "root_fail")
   io.stderr:write("Login failed.")
   username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
 end

@@ -1,19 +1,7 @@
 local shell = require("shell")
 local term = require("term")
 
-local function root()
-  local root = false
-  if require("filesystem").exists("/tmp/.root") then
-    local r = io.open("/tmp/.root", "r")
-     root = r:read()
-      r:close()
-  end
-  return root
-end
-
-local root = root()
-
-if not root then
+if not require("auth").isRoot() then
   io.stderr:write("not authorized")
   return
 end
@@ -25,4 +13,4 @@ local hn = io.open("/tmp/.hostname.dat", "r") -- Reads the hostname file.
   os.setenv("PS1", "root@" .. texthn .. "$ ") -- Sets the user environment.
   shell.setWorkingDirectory("/root")
   os.setenv("HOME", "/root")
-  os.setenv("USER", "/root")
+  os.setenv("USER")

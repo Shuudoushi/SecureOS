@@ -113,7 +113,7 @@ function auth.userLog(username, arg)
     fs.makeDirectory("/var/log/")
   end
   userw = io.open("/var/log/auth.log", "a")
-  userw:write(os.getenv("USER") or username .. "|" .. os.date("%F %X") .. "|" .. arg .. "\n")
+  userw:write(username .. "|" .. os.date("%F %X") .. "|" .. arg .. "\n")
   userw:close()
   end
 end

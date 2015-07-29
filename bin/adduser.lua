@@ -18,7 +18,27 @@ end
 
 local args = {...}
 
-if #args < 2 then
+if #args ~= 0 then
+  username = args[1]
+  password = args[2]
+
+  if args[3] == "true" then
+    su = true
+  elseif args[3] == "false" then
+    su = false
+  elseif args[3] == nil then
+    su = false
+  else io.stderr:write("Invalid.")
+    return
+  end
+
+  auth.addUser(args[1], args[2], su)
+  dirTree(username)
+  auth.userLog(username, "added")
+  print(username .. " added")
+  username, password, su = ""
+  return
+else
   term.clear()
   term.setCursor(1,1)
   term.write("Please enter a username and password to add to the system. Usernames must be lowercase.")
@@ -50,28 +70,6 @@ if #args < 2 then
   auth.addUser(username, password, su)
 
   dirTree(username)
-  auth.userLog("added")
+  auth.userLog(username, "added")
   username, password, su = ""
-end
-
-if #args >= 2 then
-  username = args[1]
-  password = args[2]
-
-  if args[3] == "true" then
-    su = true
-  elseif args[3] == "false" then
-    su = false
-  elseif args[3] == nil then
-    su = false
-  else io.stderr:write("Invalid.")
-    return
-  end
-
-  auth.addUser(args[1], args[2], su)
-  dirTree(username)
-  auth.userLog("added")
-  print(username .. " added")
-  username, password, su = ""
-  return
 end
