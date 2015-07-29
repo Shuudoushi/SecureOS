@@ -1,12 +1,11 @@
-local fs = require("filesystem")
 local shell = require("shell")
 local event = require("event")
 
-if fs.isAutorunEnabled() == true then
-  fs.setAutorunEnabled(false)
-end
+k = io.open("/tmp/.key", "r")
+ textk = k:read()
+  k:close()
 
-require("auth").userLog("logout")
-fs.remove("/tmp/.root")
+  event.cancel(tonumber(textk))
+
 shell.setWorkingDirectory("/")
-shell.execute("/boot/z_login.lua")
+shell.execute("/boot/99_login.lua")
