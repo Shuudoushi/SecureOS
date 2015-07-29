@@ -477,7 +477,7 @@ if #args == 0 and (io.input() == io.stdin or options.i) and not options.c then
 
           shell.setWorkingDirectory("/home/" .. texthn .. "/")
           os.setenv("HOME", "/home/" .. texthn)
-          os.setenv("USER", "/home/" .. texthn)
+          os.setenv("USER", texthn)
           if fs.exists("/tmp/.root") then
             fs.remove("/tmp/.root")
             os.setenv("PS1", texthn .. "@" .. texthn .. "# ") -- Sets the user environment.
@@ -509,7 +509,7 @@ elseif #args == 0 and (io.input() ~= io.stdin) then
 
         shell.setWorkingDirectory("/home/" .. texthn .. "/")
         os.setenv("HOME", "/home/" .. texthn)
-        os.setenv("USER", "/home/" .. texthn)
+        os.setenv("USER", texthn)
         if fs.exists("/tmp/.root") then
           fs.remove("/tmp/.root")
           os.setenv("PS1", texthn .. "@" .. texthn .. "# ") -- Sets the user environment.
