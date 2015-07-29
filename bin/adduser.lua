@@ -18,7 +18,7 @@ end
 
 local args = {...}
 
-if #args ~= 0 then
+if #args >= 2 then
   username = args[1]
   password = args[2]
 
