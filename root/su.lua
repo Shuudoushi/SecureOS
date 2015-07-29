@@ -13,4 +13,4 @@ local hn = io.open("/tmp/.hostname.dat", "r") -- Reads the hostname file.
   os.setenv("PS1", "root@" .. texthn .. "$ ") -- Sets the user environment.
   shell.setWorkingDirectory("/root")
   os.setenv("HOME", "/root")
-  os.setenv("USER")
+  os.setenv("USER", "root")

@@ -2,7 +2,7 @@ local fs = require("filesystem")
 local term = require("term")
 local auth = require("auth")
 
-if not require("auth").isRoot then
+if not require("auth").isRoot() then
   io.stderr:write("not authorized")
   return
 end

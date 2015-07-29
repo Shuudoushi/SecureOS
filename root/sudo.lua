@@ -16,7 +16,7 @@ local hn = io.open("/tmp/.hostname.dat", "r") -- Reads the hostname file.
   texthn = hn:read()
     hn:close()
 
-term.write("Password: ")
+term.write("[sudo] password for ".. texthn ..": ")
   password = term.read(nil, nil, nil, "")
   password = string.gsub(password, "\n", "")
 

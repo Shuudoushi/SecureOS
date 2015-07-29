@@ -3,7 +3,7 @@ local computer = require("computer")
 local shell = require("shell")
 local term = require("term")
 
-if not require("auth").isRoot then
+if not require("auth").isRoot() then
   io.stderr:write("not authorized")
   return
 end
@@ -43,7 +43,7 @@ local function update(args, options)
 shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/update-tmp.lua /tmp/update-tmp.lua")
 term.clear()
 term.setCursor(1,1)
-print("SecureOS will now update.")
+print("SecureOS will now update from " .. textu .. ".")
   os.sleep(1)
   term.setCursor(1,2)
 shell.execute("/tmp/update-tmp.lua")
