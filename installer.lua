@@ -10,106 +10,80 @@ local running = true
 local function greeting()
 term.clear()
 term.setCursor(1,1)
-	print("Welcome to the SecureOS installer!")
-	print("This installer will help guide you through setting up and installing SecureOS.")
-	print("Press any key to continue.")
+    print("Welcome to the SecureOS installer!")
+    print("This installer will help guide you through setting up and installing SecureOS.")
+    print("Press any key to continue.")
 local event = event.pull("key_down")
-	if event then
-		term.clear()
-		term.setCursor(1,1)
-	end
+    if event and not kb.isControlDown() then
+        term.clear()
+        term.setCursor(1,1)
+    end
 end
 
 local function downLoad()
 
-	if not fs.exists("/root/") then
-		fs.makeDirectory("/root/")
-	end
+    if not fs.exists("/root/") then
+        fs.makeDirectory("/root/")
+    end
 
-	if not fs.exists("/etc/update.cfg") then
-		c = io.open("/etc/update.cfg", "w")
-		 c:write("release")
-		  c:close()
-	end
+    if not fs.exists("/etc/update.cfg") then
+        c = io.open("/etc/update.cfg", "w")
+         c:write("release")
+          c:close()
+    end
 
-	term.write("Please wait while the files are downloaded and installed.")
-	term.setCursor(1,2)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/boot/99_login.lua /boot/99_login.lua")
-	os.sleep(1)
-	term.setCursor(1,4)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/root/sudo.lua /root/sudo.lua")
-	os.sleep(1)
-	term.setCursor(1,6)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/logout.lua /bin/logout.lua")
-	os.sleep(1)
-	term.setCursor(1,8)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/usage.lua /bin/usage.lua")
-	os.sleep(1)
-	term.setCursor(1,10)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/root/.root.lua /root/.root.lua")
-	os.sleep(1)
-	term.setCursor(1,12)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/update.lua /bin/update.lua")
-	os.sleep(1)
-	term.setCursor(1,14)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/lib/sha256.lua /lib/sha256.lua")
-	os.sleep(1)
-	term.setCursor(1,16)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/lib/auth.lua /lib/auth.lua")
-	os.sleep(1)
-	term.setCursor(1,18)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/adduser.lua /bin/adduser.lua")
-	os.sleep(1)
-	term.setCursor(1,20)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/deluser.lua /bin/deluser.lua")
-	os.sleep(1)
-	term.setCursor(1,22)
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/uninstall.lua /bin/uninstall.lua")
-	os.sleep(1)
-	term.setCursor(1,24)
-shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/init.lua /init.lua")
+    term.write("Please wait while the files are downloaded and installed.")
+    os.sleep(1)
+    term.setCursor(1,2)
+
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/tmp/update-tmp.lua /tmp/update-tmp.lua \n")
+shell.execute("/tmp/update-tmp.lua")
 end
 
 local function userInfo()
-	term.clear()
-	term.setCursor(1,1)
-	term.write("Please enter a username and password. Usernames must be lowercase.")
-	term.setCursor(1,2)
-	term.write("Username: ")
-		username = term.read()
-		username = string.gsub(username, "\n", "")
-		username = string.lower(username)
-	term.setCursor(1,3)
-	term.write("Password: ")
-		password = term.read(nil, nil, nil, "")
-		password = string.gsub(password, "\n", "")
+    term.clear()
+    term.setCursor(1,1)
+    term.write("Please enter a username and password. Usernames must be lowercase.")
+    term.setCursor(1,2)
+    term.write("Username: ")
+        username = term.read()
+        username = string.gsub(username, "\n", "")
+        username = string.lower(username)
+    term.setCursor(1,3)
+    term.write("Password: ")
+        password = term.read(nil, nil, nil, "")
+        password = string.gsub(password, "\n", "")
 
-	local auth = require("auth").addUser(username, password, true)
+    require("auth").addUser(username, password, true)
 
-	if not fs.exists("/usr/home/" .. username .. "/") then
-		fs.makeDirectory("/usr/home/" .. username .. "/")
-	end
+    if not fs.exists("/home/" .. username .. "/") then
+        fs.makeDirectory("/home/" .. username .. "/")
+        fs.makeDirectory("/home/" .. username .. "/bin/")
+        fs.makeDirectory("/home/" .. username .. "/lib/")
+        fs.makeDirectory("/home/" .. username .. "/var/")
+    end
 
-	term.clear()
-	term.setCursor(1,1)
-	term.write("Would you like to restart now? [Y/n]")
-	term.setCursor(1,2)
-		input = term.read()
-		input = string.gsub(input, "\n", "")
-		input = string.lower(input)
+    term.clear()
+    term.setCursor(1,1)
+    term.write("Would you like to restart now? [Y/n]")
+    term.setCursor(1,2)
+        input = term.read()
+        input = string.gsub(input, "\n", "")
+        input = string.lower(input)
 
-			if input == "y" then
-				computer.shutdown(true)
-			elseif input == "n" then
-				print("Dropping to shell.")
-				term.clear()
-				term.setCursor(1,1)
-				running = false
-			end
+            if input == "y" or input == "yes" then
+                computer.shutdown(true)
+            elseif input == "n" or input == "no" then
+                io.stderr:write("Returning to shell.")
+                os.sleep(1.5)
+                term.clear()
+                term.setCursor(1,1)
+                running = false
+            end
 end
 
 while running do
-	greeting()
-	downLoad()
-	userInfo()
+    greeting()
+    downLoad()
+    userInfo()
 end
