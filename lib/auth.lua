@@ -106,7 +106,7 @@ function auth.validate(username, password)
   return validated, superuser
 end
 
---Shection
+--Shection (Shuu+Section)
 
 function auth.userLog(username, arg)
   if not fs.get("/etc/").isReadOnly() then
