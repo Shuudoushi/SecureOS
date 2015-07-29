@@ -5,12 +5,18 @@ local component = require("component")
 local fs = require("filesystem")
 local sha = require("sha256")
 
+local function toHex(data)
+  return (data:gsub('.', function (c)
+    return string.format('%02X', string.byte(c))
+    end))
+end
+
 local function dataCardSum(data)
-	return data.toHex(data.sha256(data))
+	return toHex(datac.sha256(data))
 end
 
 if component.isAvailable("data") then --This should really be cleaned up later
-	data = require("data")
+	datac = component.data
 	sha.sha256 = dataCardSum
 end
 
