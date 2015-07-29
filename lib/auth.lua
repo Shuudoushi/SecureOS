@@ -8,7 +8,7 @@ local component = require("component")
 local fs = require("filesystem")
 local sha = require("sha256")
 
-local function toHex(data)
+local function toHex(data) --All of these checks should be moved to sha.lua
   return (data:gsub('.', function (c)
     return string.format('%02x', string.byte(c))
     end))
@@ -23,7 +23,7 @@ if component.isAvailable("data") then --This should really be cleaned up later
   sha.sha256 = datac256
 end
 
-if not fs.exists(passwdfile) then
+if not fs.exists(passwdfile) thenroot
   f = io.open(passwdfile, "w")
   f:write()
   f:close()
