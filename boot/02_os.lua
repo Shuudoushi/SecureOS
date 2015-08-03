@@ -84,7 +84,7 @@ function os.tmpname()
 end
 
 function os.dateRL(format)
-  if not fs.get("/").isReadonly() then
+  if not fs.get("/").isReadOnly() then
     local time = io.open("/tmp/.time", "w")
       time:write()
         time:close()
