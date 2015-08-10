@@ -1,5 +1,4 @@
 local string = require("string")
-local shell = require("shell")
 
 local debug = {}
 
