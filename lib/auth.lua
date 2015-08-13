@@ -7,6 +7,7 @@ local auth = {}
 local component = require("component")
 local fs = require("filesystem")
 local sha = require("sha256")
+local libarmor = require("libarmor")
 
 
 if not fs.exists(passwdfile) then
@@ -114,4 +115,4 @@ function auth.isRoot()
   return root
 end
 
-return auth
+return libarmor.protect(auth)
