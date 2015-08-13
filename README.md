@@ -12,7 +12,7 @@ At this time, there is three ways of installing.
 
 2.) Using 'wget' to download 'installer.lua' from a computer that already has OpenOS installed. Please note that in this case, there will still be programs/scripts left over from OpenOS that may cause issues, however, you will be prompted to make your own user account and not have to deal with removing the default user from the system.
 
-3.) By running the following command from a computer that already has OpenOS installed. `pastebin run 20EcMQ7C`
+3.) By running `pastebin run 20EcMQ7C` from a computer that already has OpenOS installed.
 
 # People who've lent a hand
 [gamax92](https://github.com/gamax92) - Helped out mainly with the filesystem lib
@@ -22,6 +22,8 @@ At this time, there is three ways of installing.
 [Caitlyn](https://github.com/CaitlynMainer) - Made SOS the 'official' OS of [OpenSecurity](https://github.com/PC-Logix/OpenSecurity) and helped out with making the multi-user system
 
 [fnuecke](https://github.com/fnuecke) (and co) - Provided a great starting point with OpenOS
+
+[mpmxyz](https://github.com/mpmxyz) - Provided 'libarmor.lua'
 
 All the people of #oc on Espernet IRC
 
