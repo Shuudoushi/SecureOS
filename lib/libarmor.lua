@@ -44,4 +44,4 @@ function libarmor.protect(original, whitelist)
   return setmetatable(proxy, meta)
 end
 
-return libarmor
+return libarmor.protect(libarmor)
