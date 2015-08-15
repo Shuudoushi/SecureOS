@@ -11,4 +11,22 @@ function debug.benchmark(amt) -- Not a clue what it could really be used for, bu
     return string.format("elapsed time: %.2f", os.clock() - x)
 end
 
+function debug.coinToss(times)
+  local heads = 0
+  local tails = 0
+    for flips = 1, times do
+      coin = math.random(2)
+      if coin == 1 then
+        heads = heads + 1
+      else
+        tails = tails + 1
+      end
+    end
+      return heads, tails
+end
+
+function debug.diceRoll(amt,sides,mod)
+  return (amt or 1) * (math.random(sides or 6) + (mod or 0))
+end
+
 return debug
