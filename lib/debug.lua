@@ -14,7 +14,7 @@ end
 function debug.coinToss(times)
   local heads = 0
   local tails = 0
-    for flips = 1, times do
+    for flips = 1, (times or 1) do
       coin = math.random(2)
       if coin == 1 then
         heads = heads + 1
