@@ -11,30 +11,6 @@ else
     u:close()
 end
 
-shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/depreciated.dat /tmp/depreciated.dat \n")
-print("Checking for depreciated packages.")
-
-local function depreciated()
-  local env = {}
-  local config = loadfile("/tmp/depreciated.dat", nil, env)
-  if config then
-    pcall(config)
-  end
-  return env.depreciated
-end
-
-local depreciated = depreciated()
-
-if depreciated then
-  for i = 1, #depreciated do
-    local files = os.remove(shell.resolve(depreciated[i]))
-    if files ~= nil then
-      print("Removed " .. depreciated[i] .. ": a depreciated package")
-    end
-  end
-  print("Finished")
-end
-
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/boot/z_login.lua /boot/z_login.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/root/sudo.lua /root/sudo.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/bin/logout.lua /bin/logout.lua \n")
