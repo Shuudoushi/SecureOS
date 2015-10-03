@@ -42,8 +42,8 @@ local function downLoad()
   os.sleep(1)
   term.setCursor(1,2)
 
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/tmp/update-tmp.lua /tmp/update-tmp.lua \n")
-shell.execute("/tmp/update-tmp.lua")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/update.lua /bin/update.lua \n")
+shell.execute("/bin/update.lua")
 end
 
 local function userInfo()
