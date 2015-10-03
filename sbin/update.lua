@@ -15,10 +15,6 @@ if not component.isAvailable("internet") then
   return
 end
 
-if not require("filesystem").exists("/sbin") then
-  require("filesystem").makeDirectory("/sbin")
-end
-
 local function update(args, options)
 
   if #args == 0 then

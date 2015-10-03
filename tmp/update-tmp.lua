@@ -11,6 +11,10 @@ else
     u:close()
 end
 
+if not require("filesystem").exists("/sbin") then
+  require("filesystem").makeDirectory("/sbin")
+end
+
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/boot/z_login.lua /boot/z_login.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/root/sudo.lua /root/sudo.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/sbin/logout.lua /sbin/logout.lua \n")
