@@ -4,4 +4,11 @@ depreciated = {
 "/root/.root.lua",
 "/bin/reboot.lua",
 "/root/blacklist"
+"/bin/adduser.lua"
+"/bin/deluser.lua"
+"/bin/logout.lua"
+"/bin/shutdown.lua"
+"/bin/update.lua"
+"/bin/useradd.lua"
+"/bin/deluser.lua"
 }

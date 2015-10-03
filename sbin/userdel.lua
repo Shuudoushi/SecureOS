@@ -1,4 +1,6 @@
+local computer = require("computer")
 local fs = require("filesystem")
+local shell = require("shell")
 local term = require("term")
 local auth = require("auth")
 
@@ -7,12 +9,13 @@ if not require("auth").isRoot() then
   return
 end
 
-local args = {...}
+local args = shell.parse(...)
 
 if #args ~= 0 then
   username = args[1]
   username = string.lower(username)
   auth.rmUser(username)
+  computer.removeUser(username)
   auth.userLog(username, "removed")
   if fs.exists("/home/" .. username .. "/") then
     fs.remove("/home/" .. username .. "/")
@@ -30,6 +33,7 @@ elseif #args == 0 then
     username = string.lower(username)
 
   auth.rmUser(username)
+  computer.removeUser(username)
   auth.userLog(username, "removed")
 
   if fs.exists("/home/" .. username .. "/") then

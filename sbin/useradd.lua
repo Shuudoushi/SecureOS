@@ -1,4 +1,6 @@
+local computer = require("computer")
 local fs = require("filesystem")
+local shell = require("shell")
 local term = require("term")
 local auth = require("auth")
 
@@ -6,6 +8,8 @@ if not require("auth").isRoot() then
   io.stderr:write("not authorized")
   return
 end
+
+local args, options = shell.parse(...)
 
 local function dirTree(username)
   if not fs.exists("/home/" .. username .. "/") then
@@ -16,9 +20,7 @@ local function dirTree(username)
   end
 end
 
-local args = {...}
-
-if #args >= 2 then
+ #args >= 2 then
   username = args[1]
   password = args[2]
 
@@ -30,6 +32,10 @@ if #args >= 2 then
     su = false
   else io.stderr:write("Invalid.")
     return
+  end
+
+  if options.r then
+    computer.addUser(args[1])
   end
 
   auth.addUser(args[1], args[2], su)
@@ -56,6 +62,11 @@ else
     su = term.read()
     su = string.gsub(su, "\n", "")
     su = string.lower(su)
+  term.setCursor(1,5)
+  term.write("System user (Y/n)")
+    system = term.read()
+    system = string.gsub(system, "\n", "")
+    system = string.lower(system)
 
   if su == "y" or su == "yes" then
     su = true
@@ -65,6 +76,20 @@ else
     su = false
   else io.stderr:write("Invalid.")
     return
+  end
+
+  if system == "y" or system == "yes" then
+    system = true
+  elseif system == "n" or system == "no" then
+    system = false
+  elseif system == nil then
+    system = false
+  else io.stderr:write("Invaild.")
+    return
+  end
+
+  if system == true then
+    computer.addUser(username)
   end
 
   auth.addUser(username, password, su)
