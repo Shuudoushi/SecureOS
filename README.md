@@ -6,11 +6,13 @@ The goal of SecureOS (SOS for short) is too offer a more Unix like and secure ve
 If you find any bugs, issues, or think you can help improve SOS, then please make a new issue.
 
 ## Installing
-At this time, there is two ways of installing.
+At this time, there is three ways of installing.
 
 1.) Installing from the floppy that ships with [OpenSecurity](https://github.com/PC-Logix/OpenSecurity), in which case you'll need the default username and password to login in and run 'install'. Running 'tmpaccount.del' after install with allow you to make a new account on the system and remove the default user 'root' all with little to no hassle or headache. Default user is 'root' default password is 'root'.
 
 2.) Using 'wget' to download 'installer.lua' from a computer that already has OpenOS installed. Please note that in this case, there will still be programs/scripts left over from OpenOS that may cause issues, however, you will be prompted to make your own user account and not have to deal with removing the default user from the system.
+
+3.) By running `pastebin run 20EcMQ7C` from a computer that already has OpenOS installed.
 
 # People who've lent a hand
 [gamax92](https://github.com/gamax92) - Helped out mainly with the filesystem lib
@@ -20,6 +22,8 @@ At this time, there is two ways of installing.
 [Caitlyn](https://github.com/CaitlynMainer) - Made SOS the 'official' OS of [OpenSecurity](https://github.com/PC-Logix/OpenSecurity) and helped out with making the multi-user system
 
 [fnuecke](https://github.com/fnuecke) (and co) - Provided a great starting point with OpenOS
+
+[mpmxyz](https://github.com/mpmxyz) - Provided 'libarmor.lua'
 
 All the people of #oc on Espernet IRC
 

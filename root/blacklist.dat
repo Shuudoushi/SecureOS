@@ -14,5 +14,6 @@ blacklist = {
   "/.autorun",
   "/.autorun.lua",
   "/autorun.lua",
-  "/init.lua"
+  "/init.lua",
+  "/lib/libarmor.lua"
 }

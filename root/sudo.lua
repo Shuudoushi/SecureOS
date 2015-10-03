@@ -4,6 +4,16 @@ local shell = require("shell")
 local auth = require("auth")
 local term = require("term")
 
+local hn = io.open("/tmp/.hostname.dat", "r") -- Reads the hostname file.
+  texthn = hn:read()
+    hn:close()
+
+local function request()
+  term.write("[sudo] password for ".. texthn ..": ")
+    password = term.read(nil, nil, nil, "")
+    password = string.gsub(password, "\n", "")
+end
+
 local args = {...}
 
 if #args ~= 0 then
@@ -12,13 +22,7 @@ else
   io.stderr:write("error") -- Too lazy to properly do this bit atm...
 end
 
-local hn = io.open("/tmp/.hostname.dat", "r") -- Reads the hostname file.
-  texthn = hn:read()
-    hn:close()
-
-term.write("[sudo] password for ".. texthn ..": ")
-  password = term.read(nil, nil, nil, "")
-  password = string.gsub(password, "\n", "")
+request()
 
 login, super = auth.validate(texthn, password)
 
@@ -41,6 +45,6 @@ if login and super then
   end
 else
   auth.userLog(texthn, "root_fail")
-  io.stderr:write("Login failed.")
+  io.write("Sorry, try again. \n")
   username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
 end
