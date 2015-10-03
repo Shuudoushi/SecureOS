@@ -44,7 +44,7 @@ while running do
         hn:close()
       os.setenv("HOME", "/home/" .. username)
       os.setenv("USER", username)
-      os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/".. username .."/bin:.")
+      os.setenv("PATH", "/bin:/sbin:./usr/bin:/home/".. username .."/bin:.")
     end
     term.clear()
     term.setCursor(1,1)
