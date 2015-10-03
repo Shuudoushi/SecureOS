@@ -20,7 +20,7 @@ local function dirTree(username)
   end
 end
 
- #args >= 2 then
+if #args >= 2 then
   username = args[1]
   password = args[2]
 
