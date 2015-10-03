@@ -16,11 +16,15 @@ if #args ~= 0 then
   username = string.lower(username)
   auth.rmUser(username)
   auth.userLog(username, "removed")
+
+  if computer.users(username) == true then
+    computer.removeUser(username)
+  end
+
   if fs.exists("/home/" .. username .. "/") then
     fs.remove("/home/" .. username .. "/")
   end
   print(username.. " removed")
-  computer.removeUser(username)
   username = ""
 elseif #args == 0 then
   term.clear()
@@ -35,11 +39,14 @@ elseif #args == 0 then
   auth.rmUser(username)
   auth.userLog(username, "removed")
 
+  if computer.users(username) == true then
+    computer.removeUser(username)
+  end
+
   if fs.exists("/home/" .. username .. "/") then
       fs.remove("/home/" .. username .. "/")
   end
 
-  computer.removeUser(username)
   username = ""
 
 else
