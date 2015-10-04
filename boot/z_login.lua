@@ -66,8 +66,6 @@ while running do
       shell.execute("/home/"..username.."/autorun")
     elseif fs.exists("/home/"..username.."/.autorun") then
       shell.execute("/home/"..username.."/.autorun")
-    else
-      return
     end
     event.ignore("key_down", check)
     running = false
