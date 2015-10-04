@@ -58,6 +58,21 @@ while running do
     if fs.isAutorunEnabled() == false then
       fs.setAutorunEnabled(true)
     end
+    if fs.isAutorunEnabled() == true then
+      if fs.exists("/home/"..username.."/autorun.lua") then
+        shell.execute("/home/"..username.."/autorun.lua")
+      elseif fs.exists("/home/"..username.."/.autorun.lua") then
+        shell.execute("/home/"..username.."/.autorun.lua")
+      elseif fs.exists("/home/"..username.."/autorun") then
+        shell.execute("/home/"..username.."/autorun")
+      elseif fs.exists("/home/"..username.."/.autorun") then
+        shell.execute("/home/"..username.."/.autorun")
+      else
+        return
+      end
+    else
+      return
+    end
     event.ignore("key_down", check)
     running = false
   else
