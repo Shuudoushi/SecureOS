@@ -33,10 +33,10 @@ if #args >= 2 then
   else io.stderr:write("Invalid.")
     return
   end
-
+--[[
   if options.r then
     computer.addUser(args[1])
-  end
+  end]]
 
   auth.addUser(args[1], args[2], su)
   dirTree(username)
@@ -85,9 +85,9 @@ else
     system = false
   else io.stderr:write("Invaild.")
     return
-  end]]
+  end
 
---[[  if system == true then
+  if system == true then
     computer.addUser(username)
   end]]
 
