@@ -58,17 +58,9 @@ while running do
     if fs.isAutorunEnabled() == false then
       fs.setAutorunEnabled(true)
     end
-    if fs.exists("/home/"..username.."/autorun.lua") then
-      shell.execute("/home/"..username.."/autorun.lua")
-    elseif fs.exists("/home/"..username.."/.autorun.lua") then
-      shell.execute("/home/"..username.."/.autorun.lua")
-    elseif fs.exists("/home/"..username.."/autorun") then
-      shell.execute("/home/"..username.."/autorun")
-    elseif fs.exists("/home/"..username.."/.autorun") then
-      shell.execute("/home/"..username.."/.autorun")
-    end
     event.ignore("key_down", check)
     running = false
+    shell.execute("/.autorun.lua")
   else
     auth.userLog(username, "login_fail")
     term.clear()
