@@ -10,5 +10,5 @@ depreciated = {
 "/bin/shutdown.lua",
 "/bin/update.lua",
 "/bin/useradd.lua",
-"/bin/userdel.lua"
+"/bin/userdel.lua",
 }
