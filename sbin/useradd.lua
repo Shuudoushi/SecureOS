@@ -63,10 +63,9 @@ else
     su = string.gsub(su, "\n", "")
     su = string.lower(su)
   term.setCursor(1,5)
-  term.write("System user (Y/n)")
+--[[  term.write("System user (Y/n)")
     system = term.read()
-    system = string.gsub(system, "\n", "")
-    system = string.lower(system)
+    system = string.gsub(system, "\n", "")]]
 
   if su == "y" or su == "yes" then
     su = true
@@ -78,7 +77,7 @@ else
     return
   end
 
-  if system == "y" or system == "yes" then
+--[[  if system == "y" or system == "yes" then
     system = true
   elseif system == "n" or system == "no" then
     system = false
@@ -86,11 +85,11 @@ else
     system = false
   else io.stderr:write("Invaild.")
     return
-  end
+  end]]
 
-  if system == true then
+--[[  if system == true then
     computer.addUser(username)
-  end
+  end]]
 
   auth.addUser(username, password, su)
 

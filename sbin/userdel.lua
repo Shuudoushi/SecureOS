@@ -17,9 +17,9 @@ if #args ~= 0 then
   auth.rmUser(username)
   auth.userLog(username, "removed")
 
-  if computer.users(username) == true then
+--[[  if computer.users(username) == true then
     computer.removeUser(username)
-  end
+  end]]
 
   if fs.exists("/home/" .. username .. "/") then
     fs.remove("/home/" .. username .. "/")
@@ -39,9 +39,9 @@ elseif #args == 0 then
   auth.rmUser(username)
   auth.userLog(username, "removed")
 
-  if computer.users(username) == true then
+--[[  if computer.users(username) == true then
     computer.removeUser(username)
-  end
+  end]]
 
   if fs.exists("/home/" .. username .. "/") then
       fs.remove("/home/" .. username .. "/")
