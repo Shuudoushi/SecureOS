@@ -55,7 +55,7 @@ while running do
     if os.getenv("HOSTNAME") == nil then -- Sets the user environment.
       os.setenv("PS1", username .. "@" .. username .. "# ")
     else
-      os.setenv("PS1", username .. "@" os.getenv("HOSTNAME") .. "# ")
+      os.setenv("PS1", username .. "@" .. os.getenv("HOSTNAME") .. "# ")
     end
     shell.setWorkingDirectory("/home/" .. username .. "/")
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
