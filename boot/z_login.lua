@@ -52,7 +52,11 @@ while running do
     os.sleep(1.5)
     term.clear()
     term.setCursor(1,1)
-    os.setenv("PS1", username .. "@" .. username .. "# ") -- Sets the user environment.
+    if os.getenv("HOSTNAME") == nil then -- Sets the user environment.
+      os.setenv("PS1", username .. "@" .. username .. "# ")
+    else
+      os.setenv("PS1", username .. "@" os.getenv("HOSTNAME") .. "# ")
+    end
     shell.setWorkingDirectory("/home/" .. username .. "/")
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     if fs.isAutorunEnabled() == false then
