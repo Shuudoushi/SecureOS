@@ -52,11 +52,16 @@ while running do
     os.sleep(1.5)
     term.clear()
     term.setCursor(1,1)
-    if os.getenv("HOSTNAME") == nil then -- Sets the user environment.
-      os.setenv("PS1", username .. "@" .. username .. "# ")
+
+    local file = io.open("/etc/hostname")
+
+    if file then
+      os.setenv("PS1", username .. "@" .. file:read("*l") .. "# ")
+      file:close()
     else
-      os.setenv("PS1", username .. "@" .. os.getenv("HOSTNAME") .. "# ")
+      os.setenv("PS1", username .. "@" .. username .. "# ")
     end
+
     shell.setWorkingDirectory("/home/" .. username .. "/")
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     if fs.isAutorunEnabled() == false then
