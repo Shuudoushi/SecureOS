@@ -8,24 +8,3 @@ myversions = {
 ["usr"] = "1.0.0"
 ["system"] = "0.70"
 }
-
-local function compareVersions(v1,v2)
-  local pat="(%d+)"
-  local iter1,iter2=v1:gmatch(pat),v2:gmatch(pat)
-  while true do
-    local n1,n2=iter1(), iter2()
-    n1,n2=n1 and tonumber(n1),n2 and tonumber(n2)
-    if n1==nil then
-      if n2==nil then
-        return 0
-      else
-        return -1
-      end
-      elseif n2==nil then
-        return 1
-      end
-    if n1~=n2 then
-      return n1-n2
-    end
-  end
-end

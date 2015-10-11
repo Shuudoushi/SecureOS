@@ -102,7 +102,7 @@ print("SecureOS will now update from " .. textu .. ".")
   end
 
 print("Checking bin for updates.")
-if tostring(myversions["bin"]) < tostring(onlineVersions["bin"]) then
+if myversions["bin"] < onlineVersions["bin"] then
   local function downloadBin()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/bin.dat /tmp/bin.dat")
     local env = {}
@@ -126,7 +126,7 @@ if downloadBin then
 end
 
 print("Checking boot for updates.")
-if tostring(myversions["boot"]) < tostring(onlineVersions["boot"]) then
+if myversions["boot"] < onlineVersions["boot"] then
   local function downloadBoot()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/boot.dat /tmp/boot.dat")
     local env = {}
@@ -150,7 +150,7 @@ if downloadBoot then
 end
 
 print("Checking etc for updates.")
-if tostring(myversions["etc"]) < tostring(onlineVersions["etc"]) then
+if myversions["etc"] < onlineVersions["etc"] then
   local function downloadEtc()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/etc.dat /tmp/etc.dat")
     local env = {}
@@ -174,7 +174,7 @@ if downloadEtc then
 end
 
 print("Checking lib for updates.")
-if tostring(myversions["lib"]) < tostring(onlineVersions["lib"]) then
+if myversions["lib"] < onlineVersions["lib"] then
   local function downloadLib()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/lib.dat /tmp/lib.dat")
     local env = {}
@@ -198,7 +198,7 @@ if downloadLib then
 end
 
 print("Checking root for updates.")
-if tostring(myversions["root"]) < tostring(onlineVersions["root"]) then
+if myversions["root"] < onlineVersions["root"] then
   local function downloadRoot()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/root.dat /tmp/root.dat")
     local env = {}
@@ -222,7 +222,7 @@ if downloadRoot then
 end
 
 print("Checking sbin for updates.")
-if tostring(myversions["sbin"]) < tostring(onlineVersions["sbin"]) then
+if myversions["sbin"] < onlineVersions["sbin"] then
   local function downloadsBin()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/sbin.dat /tmp/sbin.dat")
     local env = {}
@@ -246,7 +246,7 @@ if downloadsBin then
 end
 
 print("Checking system for updates.")
-if tostring(myversions["system"]) < tostring(onlineVersions["system"]) then
+if myversions["system"] < onlineVersions["system"] then
   local function downloadSystem()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/system.dat /tmp/system.dat")
     local env = {}
@@ -270,7 +270,7 @@ if downloadSystem then
 end
 
 print("Checking usr for updates.")
-if tostring(myversions["usr"]) < tostring(onlineVersions["usr"]) then
+if myversions["usr"] < onlineVersions["usr"] then
   local function downloadUsr()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/usr.dat /tmp/usr.dat")
     local env = {}
