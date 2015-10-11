@@ -70,8 +70,8 @@ local function onlineVersions()
   return env.myversions
 end
 
-local myversions = myversions()
-local onlineVersions = onlineVersions()
+myversions = myversions()
+onlineVersions = onlineVersions()
 
 term.clear()
 term.setCursor(1,1)
