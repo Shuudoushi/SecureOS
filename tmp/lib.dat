@@ -1,0 +1,10 @@
+lib = {
+"/lib/sha256.lua /lib/sha256.lua",
+"/lib/auth.lua /lib/auth.lua",
+"/lib/filesystem.lua /lib/filesystem.lua",
+"/lib/shell.lua /lib/shell.lua",
+"/lib/debug.lua /lib/debug.lua",
+"/lib/libarmor.lua /lib/libarmor.lua",
+"/lib/bit32.lua /lib/bit32.lua",
+"/lib/term.lua /lib/term.lua"
+}

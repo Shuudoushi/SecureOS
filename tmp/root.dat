@@ -1,0 +1,5 @@
+root = {
+"/root/sudo.lua /root/sudo.lua",
+"/root/blacklist.dat /root/blacklist.dat",
+"/root/su.lua /root/su.lua"
+}

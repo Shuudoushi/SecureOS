@@ -1,0 +1,7 @@
+sbin = {
+"/sbin/logout.lua /sbin/logout.lua",
+"/sbin/useradd.lua /sbin/useradd.lua",
+"/sbin/userdel.lua /sbin/userdel.lua",
+"/sbin/update.lua /sbin/update.lua",
+"/sbin/shutdown.lua /sbin/shutdown.lua"
+}

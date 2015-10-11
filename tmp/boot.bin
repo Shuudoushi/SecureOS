@@ -1,0 +1,5 @@
+boot = {
+"/boot/z_login.lua /boot/z_login.lua",
+"/boot/94_shell.lua /boot/94_shell.lua",
+"/boot/02_os.lua /boot/02_os.lua"
+}

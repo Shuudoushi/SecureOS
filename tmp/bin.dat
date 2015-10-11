@@ -1,0 +1,11 @@
+bin = {
+"/bin/df.lua /bin/df.lua",
+"/bin/passwd.lua /bin/passwd.lua",
+"/bin/edit.lua /bin/edit.lua",
+"/bin/flash.lua /bin/flash.lua",
+"/bin/sh.lua /bin/sh.lua",
+"/bin/hostname.lua /bin/hostname.lua",
+"/bin/whoami.lua /bin/whoami.lua",
+"/bin/uname.lua /bin/uname.lua",
+"/bin/cd.lua /bin/cd.lua"
+}
