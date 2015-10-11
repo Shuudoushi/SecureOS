@@ -52,7 +52,7 @@ shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" 
 shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/usr.dat /tmp/usr.dat")
 shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/versions.dat /tmp/versions.dat")
 
-local function myversions()
+function myversions()
   local env = {}
   local config = loadfile("/.version", nil, env)
   if config then
@@ -61,7 +61,7 @@ local function myversions()
   return env.myversions
 end
 
-local function onlineVersions()
+function onlineVersions()
   local env = {}
   local config = loadfile("/tmp/versions.dat", nil, env)
   if config then
