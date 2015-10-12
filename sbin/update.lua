@@ -102,7 +102,7 @@ print("SecureOS will now update from " .. textu .. ".")
   end
 
   for _,k in pairs(myversions) do
-    package = k
+    k = package
   end
 
   print("Checking "..package.." for updates.")
