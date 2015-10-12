@@ -111,17 +111,18 @@ if myversions["bin"] < onlineVersions["bin"] then
     end
     return env.bin
   end
-else
-  print("Package Bin up to date")
-end
 
-local downloadBin = downloadBin()
+  local downloadBin = downloadBin()
 
-if downloadBin then
-  for i = 1, #downloadBin do
-    shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadBin[i])
+  if downloadBin then
+    for i = 1, #downloadBin do
+      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadBin[i])
+    end
+    print("Package Bin up-to-date")
   end
-  print("Package Bin up to date")
+
+else
+  print("Package Bin up-to-date")
 end
 
 print("Checking boot for updates.")
@@ -135,17 +136,18 @@ if myversions["boot"] < onlineVersions["boot"] then
     end
     return env.boot
   end
-else
-  print("Package Boot up to date")
-end
 
-local downloadBoot = downloadBoot()
+  local downloadBoot = downloadBoot()
 
-if downloadBoot then
-  for i = 1, #downloadBoot do
-    shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadBoot[i])
+  if downloadBoot then
+    for i = 1, #downloadBoot do
+      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadBoot[i])
+    end
+    print("Package Boot up-to-date")
   end
-  print("Package Boot up to date")
+
+else
+  print("Package Boot up-to-date")
 end
 
 print("Checking etc for updates.")
@@ -159,17 +161,18 @@ if myversions["etc"] < onlineVersions["etc"] then
     end
     return env.etc
   end
-else
-  print("Package Etc up to date")
-end
 
-local downloadEtc = downloadEtc()
+  local downloadEtc = downloadEtc()
 
-if downloadEtc then
-  for i = 1, #downloadEtc do
-    shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadEtc[i])
+  if downloadEtc then
+    for i = 1, #downloadEtc do
+      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadEtc[i])
+    end
+    print("Package Etc up-to-date")
   end
-  print("Package Etc up to date")
+
+else
+  print("Package Etc up-to-date")
 end
 
 print("Checking lib for updates.")
@@ -183,17 +186,18 @@ if myversions["lib"] < onlineVersions["lib"] then
     end
     return env.lib
   end
-else
-  print("Package Lib up to date")
-end
 
-local downloadLib = downloadLib()
+  local downloadLib = downloadLib()
 
-if downloadLib then
-  for i = 1, #downloadLib do
-    shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadLib[i])
+  if downloadLib then
+    for i = 1, #downloadLib do
+      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadLib[i])
+    end
+    print("Package Lib up-to-date")
   end
-  print("Package Lib up to date")
+
+else
+  print("Package Lib up-to-date")
 end
 
 print("Checking root for updates.")
@@ -207,17 +211,18 @@ if myversions["root"] < onlineVersions["root"] then
     end
     return env.root
   end
-else
-  print("Package Root up to date")
-end
 
-local downloadRoot = downloadRoot()
+  local downloadRoot = downloadRoot()
 
-if downloadRoot then
-  for i = 1, #downloadRoot do
-    shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadRoot[i])
+  if downloadRoot then
+    for i = 1, #downloadRoot do
+      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadRoot[i])
+    end
+    print("Package Root up-to-date")
   end
-  print("Package Root up to date")
+
+else
+  print("Package Root up-to-date")
 end
 
 print("Checking sbin for updates.")
@@ -231,17 +236,18 @@ if myversions["sbin"] < onlineVersions["sbin"] then
     end
     return env.sbin
   end
-else
-  print("Package sBin up to date")
-end
 
-local downloadsBin = downloadsBin()
+  local downloadsBin = downloadsBin()
 
-if downloadsBin then
-  for i = 1, #downloadsBin do
-    shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadsBin[i])
+  if downloadsBin then
+    for i = 1, #downloadsBin do
+      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadsBin[i])
+    end
+    print("Package sBin up-to-date")
   end
-  print("Package sBin up to date")
+
+else
+  print("Package sBin up-to-date")
 end
 
 print("Checking system for updates.")
@@ -255,17 +261,18 @@ if myversions["system"] < onlineVersions["system"] then
     end
     return env.system
   end
-else
-  print("Package System up to date")
-end
 
-local downloadSystem = downloadSystem()
+  local downloadSystem = downloadSystem()
 
-if downloadSystem then
-  for i = 1, #downloadSystem do
-    shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadSystem[i])
+  if downloadSystem then
+    for i = 1, #downloadSystem do
+      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadSystem[i])
+    end
+    print("Package System up-to-date")
   end
-  print("Package System up to date")
+
+else
+  print("Package System up-to-date")
 end
 
 print("Checking usr for updates.")
@@ -279,20 +286,21 @@ if myversions["usr"] < onlineVersions["usr"] then
     end
     return env.usr
   end
-else
-  print("Package Usr up to date")
-end
 
-local downloadUsr = downloadUsr()
+  local downloadUsr = downloadUsr()
 
-if downloadUsr then
-  for i = 1, #downloadUsr do
-    shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadUsr[i])
+  if downloadUsr then
+    for i = 1, #downloadUsr do
+      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadUsr[i])
+    end
+    print("Package Usr up-to-date")
   end
-  print("Package Usr up to date")
+
+else
+  print("Package Usr up-to-date")
 end
 
-shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/versions.dat /.version")
+shell.execute("mv /tmp/versions.dat /.version")
 os.remove("/tmp/bin.dat")
 os.remove("/tmp/boot.dat")
 os.remove("/tmp/etc.dat")
