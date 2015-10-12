@@ -101,6 +101,35 @@ print("SecureOS will now update from " .. textu .. ".")
     print("Finished")
   end
 
+  for _,k in pairs(myversions) do
+    package = k
+  end
+
+  print("Checking "..package.." for updates.")
+  if myversions[package] < onlineVersions[package] then
+    function downloadPackage()
+      shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/"..package..".dat /tmp/"..package..".dat")
+      local env = {}
+      local config = loadfile("/tmp/"..package..".dat", nil, env)
+      if config then
+        pcall(config)
+      end
+      return env.package
+    end
+
+    local downloadPackage = downloadPackage()
+
+    if downloadPackage then
+      for i = 1, #downloadPackage do
+        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadPackage[i])
+      end
+      print("Package "..package.." up-to-date")
+    end
+
+  else
+    print("Package "..package.." up-to-date")
+  end
+--[[
 print("Checking bin for updates.")
 if myversions["bin"] < onlineVersions["bin"] then
   function downloadBin()
@@ -300,7 +329,7 @@ if myversions["usr"] < onlineVersions["usr"] then
 else
   print("Package Usr up-to-date")
 end
-
+]]
 shell.execute("mv -f /tmp/versions.dat /.version")
 os.remove("/tmp/bin.dat")
 os.remove("/tmp/boot.dat")
