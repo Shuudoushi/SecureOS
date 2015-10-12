@@ -300,7 +300,7 @@ else
   print("Package Usr up-to-date")
 end
 
-shell.execute("mv /tmp/versions.dat /.version")
+shell.execute("mv -f /tmp/versions.dat /.version")
 os.remove("/tmp/bin.dat")
 os.remove("/tmp/boot.dat")
 os.remove("/tmp/etc.dat")
