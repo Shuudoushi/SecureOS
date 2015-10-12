@@ -9,28 +9,6 @@ if not require("auth").isRoot() then
   return
 end
 
-local function myversions()
-  local env = {}
-  local config = loadfile("/.version", nil, env)
-  if config then
-    pcall(config)
-  end
-  return env.myversions
-end
-
-local function onlineVersions()
-  shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/versions.dat /tmp/versions.dat")
-  local env = {}
-  local config = loadfile("/tmp/versions.dat", nil, env)
-  if config then
-    pcall(config)
-  end
-  return env.myversions
-end
-
-local myversions = myversions()
-local onlineVersions = onlineVersions()
-
 local args, options = shell.parse(...)
 
 if not component.isAvailable("internet") then
@@ -63,6 +41,29 @@ local function update(args, options)
   if not fs.exists("/sbin") then
     fs.makeDirectory("/sbin")
   end
+
+  local function myversions()
+    local env = {}
+    local config = loadfile("/.version", nil, env)
+    if config then
+      pcall(config)
+    end
+    return env.myversions
+  end
+
+  local function onlineVersions()
+    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/versions.dat /tmp/versions.dat")
+    local env = {}
+    local config = loadfile("/tmp/versions.dat", nil, env)
+    if config then
+      pcall(config)
+    end
+    return env.myversions
+  end
+
+  local myversions = myversions()
+  local onlineVersions = onlineVersions()
+
 --[[
 shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/boot.dat /tmp/boot.dat")
 shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/etc.dat /tmp/etc.dat")
