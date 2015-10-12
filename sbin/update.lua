@@ -52,7 +52,7 @@ local function update(args, options)
   end
 
   local function onlineVersions()
-    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/versions.dat /tmp/versions.dat")
+    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/.version /tmp/versions.dat")
     local env = {}
     local config = loadfile("/tmp/versions.dat", nil, env)
     if config then
@@ -101,8 +101,10 @@ print("SecureOS will now update from " .. textu .. ".")
     print("Finished")
   end
 
-  for _,k in pairs(myversions) do
-    local k = packages
+  if myversions then
+    for k,_ in pairs(myversions) do
+      k = packages
+    end
   end
 
   print("Checking "..packages.." for updates.")
