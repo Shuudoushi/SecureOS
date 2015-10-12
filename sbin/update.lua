@@ -102,7 +102,7 @@ print("SecureOS will now update from " .. textu .. ".")
 
 print("Checking bin for updates.")
 if myversions["bin"] < onlineVersions["bin"] then
-  local function downloadBin()
+  function downloadBin()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/bin.dat /tmp/bin.dat")
     local env = {}
     local config = loadfile("/tmp/bin.dat", nil, env)
@@ -126,7 +126,7 @@ end
 
 print("Checking boot for updates.")
 if myversions["boot"] < onlineVersions["boot"] then
-  local function downloadBoot()
+  function downloadBoot()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/boot.dat /tmp/boot.dat")
     local env = {}
     local config = loadfile("/tmp/boot.dat", nil, env)
@@ -150,7 +150,7 @@ end
 
 print("Checking etc for updates.")
 if myversions["etc"] < onlineVersions["etc"] then
-  local function downloadEtc()
+  function downloadEtc()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/etc.dat /tmp/etc.dat")
     local env = {}
     local config = loadfile("/tmp/etc.dat", nil, env)
@@ -174,7 +174,7 @@ end
 
 print("Checking lib for updates.")
 if myversions["lib"] < onlineVersions["lib"] then
-  local function downloadLib()
+  function downloadLib()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/lib.dat /tmp/lib.dat")
     local env = {}
     local config = loadfile("/tmp/lib.dat", nil, env)
@@ -198,7 +198,7 @@ end
 
 print("Checking root for updates.")
 if myversions["root"] < onlineVersions["root"] then
-  local function downloadRoot()
+  function downloadRoot()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/root.dat /tmp/root.dat")
     local env = {}
     local config = loadfile("/tmp/root.dat", nil, env)
@@ -222,7 +222,7 @@ end
 
 print("Checking sbin for updates.")
 if myversions["sbin"] < onlineVersions["sbin"] then
-  local function downloadsBin()
+  function downloadsBin()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/sbin.dat /tmp/sbin.dat")
     local env = {}
     local config = loadfile("/tmp/sbin.dat", nil, env)
@@ -246,7 +246,7 @@ end
 
 print("Checking system for updates.")
 if myversions["system"] < onlineVersions["system"] then
-  local function downloadSystem()
+  function downloadSystem()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/system.dat /tmp/system.dat")
     local env = {}
     local config = loadfile("/tmp/system.dat", nil, env)
@@ -270,7 +270,7 @@ end
 
 print("Checking usr for updates.")
 if myversions["usr"] < onlineVersions["usr"] then
-  local function downloadUsr()
+  function downloadUsr()
     shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/usr.dat /tmp/usr.dat")
     local env = {}
     local config = loadfile("/tmp/usr.dat", nil, env)
