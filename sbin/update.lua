@@ -19,6 +19,7 @@ local function myversions()
 end
 
 local function onlineVersions()
+  shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/versions.dat /tmp/versions.dat")
   local env = {}
   local config = loadfile("/tmp/versions.dat", nil, env)
   if config then
@@ -70,7 +71,6 @@ shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" 
 shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/sbin.dat /tmp/sbin.dat")
 shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/system.dat /tmp/system.dat")
 shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/usr.dat /tmp/usr.dat")]]
-shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/versions.dat /tmp/versions.dat")
 
 term.clear()
 term.setCursor(1,1)
