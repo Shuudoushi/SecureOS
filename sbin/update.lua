@@ -102,32 +102,32 @@ print("SecureOS will now update from " .. textu .. ".")
   end
 
   for _,k in pairs(myversions) do
-    k = package
+    local k = packages
   end
 
-  print("Checking "..package.." for updates.")
-  if myversions[package] < onlineVersions[package] then
-    function downloadPackage()
-      shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/"..package..".dat /tmp/"..package..".dat")
+  print("Checking "..packages.." for updates.")
+  if myversions[packages] < onlineVersions[packages] then
+    function downloadPackages()
+      shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/"..packages..".dat /tmp/"..packages..".dat")
       local env = {}
-      local config = loadfile("/tmp/"..package..".dat", nil, env)
+      local config = loadfile("/tmp/"..packages..".dat", nil, env)
       if config then
         pcall(config)
       end
-      return env.package
+      return env.packages
     end
 
-    local downloadPackage = downloadPackage()
+    local downloadPackages = downloadPackages()
 
-    if downloadPackage then
-      for i = 1, #downloadPackage do
-        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadPackage[i])
+    if downloadPackages then
+      for i = 1, #downloadPackages do
+        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadPackages[i])
       end
-      print("Package "..package.." up-to-date")
+      print("Package "..packages.." up-to-date")
     end
 
   else
-    print("Package "..package.." up-to-date")
+    print("Package "..packages.." up-to-date")
   end
 --[[
 print("Checking bin for updates.")
