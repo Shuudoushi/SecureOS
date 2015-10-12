@@ -64,15 +64,6 @@ local function update(args, options)
   local myversions = myversions()
   local onlineVersions = onlineVersions()
 
---[[
-shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/boot.dat /tmp/boot.dat")
-shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/etc.dat /tmp/etc.dat")
-shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/lib.dat /tmp/lib.dat")
-shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/root.dat /tmp/root.dat")
-shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/sbin.dat /tmp/sbin.dat")
-shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/system.dat /tmp/system.dat")
-shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/usr.dat /tmp/usr.dat")]]
-
 term.clear()
 term.setCursor(1,1)
 print("SecureOS will now update from " .. textu .. ".")
@@ -103,235 +94,35 @@ print("SecureOS will now update from " .. textu .. ".")
 
   if myversions then
     for k,_ in pairs(myversions) do
-      k = packages
-    end
-  end
+      k = updatePackage
 
-  print("Checking "..packages.." for updates.")
-  if myversions[packages] < onlineVersions[packages] then
-    function downloadPackages()
-      shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/"..packages..".dat /tmp/"..packages..".dat")
-      local env = {}
-      local config = loadfile("/tmp/"..packages..".dat", nil, env)
-      if config then
-        pcall(config)
+      print("Checking "..updatePackage.." for updates.")
+      if myversions[updatePackage] < onlineVersions[updatePackage] then
+        function downloadupdatePackage()
+          shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/"..updatePackage..".dat /tmp/"..updatePackage..".dat")
+          local env = {}
+          local config = loadfile("/tmp/"..updatePackage..".dat", nil, env)
+          if config then
+            pcall(config)
+          end
+          return env.updatePackage
+        end
+
+        local downloadupdatePackage = downloadupdatePackage()
+
+        if downloadupdatePackage then
+          for i = 1, #downloadupdatePackage do
+            shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadupdatePackage[i])
+          end
+          print("Package "..updatePackage.." up-to-date")
+        end
+
+      else
+        print("Package "..updatePackage.." up-to-date")
       end
-      return env.packages
     end
-
-    local downloadPackages = downloadPackages()
-
-    if downloadPackages then
-      for i = 1, #downloadPackages do
-        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadPackages[i])
-      end
-      print("Package "..packages.." up-to-date")
-    end
-
-  else
-    print("Package "..packages.." up-to-date")
-  end
---[[
-print("Checking bin for updates.")
-if myversions["bin"] < onlineVersions["bin"] then
-  function downloadBin()
-    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/bin.dat /tmp/bin.dat")
-    local env = {}
-    local config = loadfile("/tmp/bin.dat", nil, env)
-    if config then
-      pcall(config)
-    end
-    return env.bin
   end
 
-  local downloadBin = downloadBin()
-
-  if downloadBin then
-    for i = 1, #downloadBin do
-      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadBin[i])
-    end
-    print("Package Bin up-to-date")
-  end
-
-else
-  print("Package Bin up-to-date")
-end
-
-print("Checking boot for updates.")
-if myversions["boot"] < onlineVersions["boot"] then
-  function downloadBoot()
-    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/boot.dat /tmp/boot.dat")
-    local env = {}
-    local config = loadfile("/tmp/boot.dat", nil, env)
-    if config then
-      pcall(config)
-    end
-    return env.boot
-  end
-
-  local downloadBoot = downloadBoot()
-
-  if downloadBoot then
-    for i = 1, #downloadBoot do
-      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadBoot[i])
-    end
-    print("Package Boot up-to-date")
-  end
-
-else
-  print("Package Boot up-to-date")
-end
-
-print("Checking etc for updates.")
-if myversions["etc"] < onlineVersions["etc"] then
-  function downloadEtc()
-    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/etc.dat /tmp/etc.dat")
-    local env = {}
-    local config = loadfile("/tmp/etc.dat", nil, env)
-    if config then
-      pcall(config)
-    end
-    return env.etc
-  end
-
-  local downloadEtc = downloadEtc()
-
-  if downloadEtc then
-    for i = 1, #downloadEtc do
-      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadEtc[i])
-    end
-    print("Package Etc up-to-date")
-  end
-
-else
-  print("Package Etc up-to-date")
-end
-
-print("Checking lib for updates.")
-if myversions["lib"] < onlineVersions["lib"] then
-  function downloadLib()
-    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/lib.dat /tmp/lib.dat")
-    local env = {}
-    local config = loadfile("/tmp/lib.dat", nil, env)
-    if config then
-      pcall(config)
-    end
-    return env.lib
-  end
-
-  local downloadLib = downloadLib()
-
-  if downloadLib then
-    for i = 1, #downloadLib do
-      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadLib[i])
-    end
-    print("Package Lib up-to-date")
-  end
-
-else
-  print("Package Lib up-to-date")
-end
-
-print("Checking root for updates.")
-if myversions["root"] < onlineVersions["root"] then
-  function downloadRoot()
-    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/root.dat /tmp/root.dat")
-    local env = {}
-    local config = loadfile("/tmp/root.dat", nil, env)
-    if config then
-      pcall(config)
-    end
-    return env.root
-  end
-
-  local downloadRoot = downloadRoot()
-
-  if downloadRoot then
-    for i = 1, #downloadRoot do
-      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadRoot[i])
-    end
-    print("Package Root up-to-date")
-  end
-
-else
-  print("Package Root up-to-date")
-end
-
-print("Checking sbin for updates.")
-if myversions["sbin"] < onlineVersions["sbin"] then
-  function downloadsBin()
-    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/sbin.dat /tmp/sbin.dat")
-    local env = {}
-    local config = loadfile("/tmp/sbin.dat", nil, env)
-    if config then
-      pcall(config)
-    end
-    return env.sbin
-  end
-
-  local downloadsBin = downloadsBin()
-
-  if downloadsBin then
-    for i = 1, #downloadsBin do
-      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadsBin[i])
-    end
-    print("Package sBin up-to-date")
-  end
-
-else
-  print("Package sBin up-to-date")
-end
-
-print("Checking system for updates.")
-if myversions["system"] < onlineVersions["system"] then
-  function downloadSystem()
-    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/system.dat /tmp/system.dat")
-    local env = {}
-    local config = loadfile("/tmp/system.dat", nil, env)
-    if config then
-      pcall(config)
-    end
-    return env.system
-  end
-
-  local downloadSystem = downloadSystem()
-
-  if downloadSystem then
-    for i = 1, #downloadSystem do
-      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadSystem[i])
-    end
-    print("Package System up-to-date")
-  end
-
-else
-  print("Package System up-to-date")
-end
-
-print("Checking usr for updates.")
-if myversions["usr"] < onlineVersions["usr"] then
-  function downloadUsr()
-    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/usr.dat /tmp/usr.dat")
-    local env = {}
-    local config = loadfile("/tmp/usr.dat", nil, env)
-    if config then
-      pcall(config)
-    end
-    return env.usr
-  end
-
-  local downloadUsr = downloadUsr()
-
-  if downloadUsr then
-    for i = 1, #downloadUsr do
-      shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadUsr[i])
-    end
-    print("Package Usr up-to-date")
-  end
-
-else
-  print("Package Usr up-to-date")
-end
-]]
 shell.execute("mv -f /tmp/versions.dat /.version")
 os.remove("/tmp/bin.dat")
 os.remove("/tmp/boot.dat")
