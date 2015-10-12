@@ -105,12 +105,12 @@ print("SecureOS will now update from " .. textu .. ".")
     k = package
   end
 
-  print("Checking "package" for updates.")
+  print("Checking "..package.." for updates.")
   if myversions[package] < onlineVersions[package] then
     function downloadPackage()
-      shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/"package".dat /tmp/"package".dat")
+      shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/"..package..".dat /tmp/"..package..".dat")
       local env = {}
-      local config = loadfile("/tmp/"package".dat", nil, env)
+      local config = loadfile("/tmp/"..package..".dat", nil, env)
       if config then
         pcall(config)
       end
@@ -123,11 +123,11 @@ print("SecureOS will now update from " .. textu .. ".")
       for i = 1, #downloadPackage do
         shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadPackage[i])
       end
-      print("Package "package" up-to-date")
+      print("Package "..package.." up-to-date")
     end
 
   else
-    print("Package "package" up-to-date")
+    print("Package "..package.." up-to-date")
   end
 --[[
 print("Checking bin for updates.")
