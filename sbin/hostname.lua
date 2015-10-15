@@ -1,3 +1,8 @@
+if not require("auth").isRoot() then
+  io.stderr:write("not authorized")
+  return
+end
+
 local args = {...}
 if args[1] then
   local file, reason = io.open("/etc/hostname", "w")
