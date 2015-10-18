@@ -11,4 +11,5 @@ depreciated = {
 "/bin/update.lua",
 "/bin/useradd.lua",
 "/bin/userdel.lua",
+"/bin/hostname.lua",
 }
