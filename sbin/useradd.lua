@@ -47,7 +47,7 @@ if #args >= 2 then
 else
   term.clear()
   term.setCursor(1,1)
-  term.write("Please enter a username and password to add to the system. Usernames must be lowercase.")
+  term.write("Please enter a username and password to add to the system.")
   term.setCursor(1,2)
   term.write("Username: ")
     username = term.read()

@@ -4,7 +4,7 @@ blacklist = {
   "/lib/filesystem.lua",
   "/sbin/useradd.lua",
   "/sbin/userdel.lua",
-  "/bin/update.lua",
+  "/sbin/update.lua",
   "/lib/auth.lua",
   "/root/blacklist.dat",
   "/lib/sha256.lua",
