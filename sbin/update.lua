@@ -38,6 +38,12 @@ local function update(args, options)
         uw:close()
   end
 
+  if not fs.exists("/tmp/.hold") then
+    hd = io.open("/tmp/.hold", "w")
+      hd:write(os.date())
+        hd:close()
+  end
+
   if not fs.exists("/sbin") then
     fs.makeDirectory("/sbin")
   end
@@ -136,6 +142,9 @@ print("SecureOS will now update from " .. textu .. ".")
         shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadBoot[i])
       end
       print("Package Boot up-to-date")
+      if fs.exists("/tmp/.hold") then
+        os.remove("/tmp/.hold")
+      end
     end
 
   else
@@ -186,6 +195,9 @@ print("SecureOS will now update from " .. textu .. ".")
         shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadLib[i])
       end
       print("Package Lib up-to-date")
+      if fs.exists("/tmp/.hold") then
+        os.remove("/tmp/.hold")
+      end
     end
 
   else
@@ -261,6 +273,9 @@ print("SecureOS will now update from " .. textu .. ".")
         shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadSystem[i])
       end
       print("Package System up-to-date")
+      if fs.exists("/tmp/.hold") then
+        os.remove("/tmp/.hold")
+      end
     end
 
   else
@@ -305,10 +320,17 @@ os.remove("/tmp/depreciated.dat")
 require("auth").userLog(os.getenv("USER"), "update")
 term.clear()
 term.setCursor(1,1)
-print("Update complete. System restarting now.")
-  os.sleep(2.5)
-  os.remove("/tmp/.root")
-  computer.shutdown(true)
+  if not fs.exists("/tmp/.hold") and not fs.exists("/tmp/.install") then
+    print("Update complete. System restarting now.")
+      os.sleep(2.5)
+      os.remove("/tmp/.root")
+      computer.shutdown(true)
+  else
+    print("Update complete. Returning to shell.")
+      os.remove("/tmp/.root")
+      os.remove("/tmp/.hold")
+      os.sleep(2.5)
+  end
 end
 
 update(args, options)

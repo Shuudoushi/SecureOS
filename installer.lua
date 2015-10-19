@@ -32,6 +32,16 @@ local function downLoad()
     fs.makeDirectory("/root/")
   end
 
+  if not fs.exists("/sbin/") then
+    fs.makeDirectory("/sbin/")
+  end
+
+  if not fs.exists("/tmp/.install") then
+    in = io.open("/tmp/.install", "w")
+      in:write(os.date())
+        in:close()
+  end
+
   if not fs.exists("/etc/update.cfg") then
     c = io.open("/etc/update.cfg", "w")
      c:write("release")
@@ -42,14 +52,14 @@ local function downLoad()
   os.sleep(1)
   term.setCursor(1,2)
 
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/bin/update.lua /bin/update.lua \n")
-shell.execute("/bin/update.lua")
+shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/sbin/update.lua /sbin/update.lua \n")
+shell.execute("/sbin/update.lua")
 end
 
 local function userInfo()
   term.clear()
   term.setCursor(1,1)
-  term.write("Please enter a username and password. Usernames must be lowercase.")
+  term.write("Please enter a username and password.")
   term.setCursor(1,2)
   term.write("Username: ")
     username = term.read()
