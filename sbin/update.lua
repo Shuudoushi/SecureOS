@@ -330,6 +330,8 @@ term.setCursor(1,1)
       os.remove("/tmp/.root")
       os.remove("/tmp/.hold")
       os.sleep(2.5)
+      term.clear()
+      term.setCursor(1,1)
   end
 end
 
