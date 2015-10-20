@@ -12,4 +12,6 @@ depreciated = {
 "/bin/useradd.lua",
 "/bin/userdel.lua",
 "/bin/hostname.lua",
+"/usr/man/adduser",
+"/usr/man/deluser"
 }

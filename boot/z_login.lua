@@ -26,13 +26,10 @@ while running do
   term.setCursor(1,1)
   print(_OSVERSION .. " " .. os.date("%F %X"))
   term.write("User: ")
-  username = term.read()
-  username = string.gsub(username, "\n", "")
-  username = string.lower(username)
+  username = string.lower(io.read())
   term.setCursor(1,3)
   term.write("Password: ")
-  password = term.read(nil, nil, nil, "")
-  password = string.gsub(password, "\n", "")
+  password = string.gsub(term.read(nil, nil, nil, ""), "\n", "")
 
   login = auth.validate(username, password)
 

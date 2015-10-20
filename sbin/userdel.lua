@@ -12,8 +12,7 @@ end
 local args = shell.parse(...)
 
 if #args ~= 0 then
-  username = args[1]
-  username = string.lower(username)
+  username = string.lower(args[1])
   auth.rmUser(username)
   auth.userLog(username, "removed")
 
@@ -32,9 +31,7 @@ elseif #args == 0 then
   term.write("Please enter a username to delete from the system.")
   term.setCursor(1,2)
   term.write("Username: ")
-    username = term.read()
-    username = string.gsub(username, "\n", "")
-    username = string.lower(username)
+    username = string.lower(io.read())
 
   auth.rmUser(username)
   auth.userLog(username, "removed")
