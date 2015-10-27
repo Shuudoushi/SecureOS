@@ -44,7 +44,7 @@ return timeformat
 end
 
 function util.formatSize(size)
-  local sizes = {"", "K", "M", "G"}
+  local sizes = {"", "Kb", "Mb", "Gb", "Tb"}
   local unit = 1
   local power = 1024
   while size > power and unit < #sizes do
