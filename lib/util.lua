@@ -1,3 +1,5 @@
+local internet = require("internet")
+
 local util = {}
 
 function util.readableNumber(num, places)
@@ -22,6 +24,23 @@ end
 function util.round(num, idp)
   local mult = 10^(idp or 0)
   return math.floor(num * mult + 0.5) / mult
+end
+
+function util.time()
+local timestamp = ""
+for data in internet.request("http://www.timeapi.org/utc/now?\\s") do
+timestamp = timestamp .. data
+end
+return tonumber(timestamp)
+end
+
+function util.date(format, tz)
+tz = tz or "utc"
+local timeformat = ""
+for data in internet.request("http://www.timeapi.org/" .. tz .. "/now?" .. format:gsub(".", function(a) return "%" .. string.format("%02X",a:byte()) end)) do
+timeformat = timeformat .. data
+end
+return timeformat
 end
 
 return util
