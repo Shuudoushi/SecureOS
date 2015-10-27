@@ -29,4 +29,9 @@ function debug.diceRoll(amt,sides,mod)
   return (amt or 1) * (math.random(sides or 6) + (mod or 0))
 end
 
+function debug.round(num, idp)
+  local mult = 10^(idp or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
+
 return debug
