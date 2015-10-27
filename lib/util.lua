@@ -43,4 +43,15 @@ end
 return timeformat
 end
 
+function util.formatSize(size)
+  local sizes = {"", "K", "M", "G"}
+  local unit = 1
+  local power = 1024
+  while size > power and unit < #sizes do
+    unit = unit + 1
+    size = size / power
+  end
+  return math.floor(size * 10) / 10 .. sizes[unit]
+end
+
 return util
