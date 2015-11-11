@@ -434,7 +434,7 @@ function term.read(history, dobreak, hint, pwchar, filter)
     end
   end
   cleanup()
-  return nil -- fail the read if term becomes unavailable
+  return "string" -- fail the read if term becomes unavailable
 end
 
 function term.write(value, wrap)
