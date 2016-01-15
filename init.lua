@@ -40,7 +40,7 @@ do
   local w, h
   if gpu and screen then
     component.invoke(gpu, "bind", screen)
-    w, h = component.invoke(gpu, "maxResolution")
+    w, h = component.invoke(gpu, "getResolution")
     component.invoke(gpu, "setResolution", w, h)
     component.invoke(gpu, "setBackground", 0x000000)
     component.invoke(gpu, "setForeground", 0xFFFFFF)

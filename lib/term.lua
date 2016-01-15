@@ -225,7 +225,7 @@ function methods:getGlobalArea(w, h)
   local state = self.__state
   if not w or not h then
     if gpu(self) then
-      w, h = gpu(self).getViewport()
+      w, h = gpu(self).getResolution()
       validateFocus(self, gpu(self).getScreen())
     end
   end

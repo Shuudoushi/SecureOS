@@ -75,7 +75,7 @@ local function onTouch(event, screenAddress, x, y)
   if list[1] then
     local _, gpu = list[1]:getGPU()
     if gpu and gpu.getScreen() == screenAddress then
-      local w, h = gpu.getViewport()
+      local w, h = gpu.getResolution()
       if w then
         local nextWindow
         for _, window in ipairs(list) do
