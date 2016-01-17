@@ -31,18 +31,6 @@ function term.clear()
   cursorX, cursorY = 1, 1
 end
 
-function methods:getGlobalArea(w, h)
-  checkArg(1, w, "number", "nil")
-  checkArg(2, h, "number", "nil")
-  local state = self.__state
-  if not w or not h then
-    if gpu(self) then
-      w, h = gpu(self).getResolution()
-      validateFocus(self, gpu(self).getScreen())
-    end
-  end
-  if not w then
-    return
 function term.reset()
   if term.isAvailable() then
     local maxw, maxh = component.gpu.maxResolution()
@@ -52,6 +40,7 @@ function term.reset()
     term.clear()
   end
 end
+
 function term.clearLine()
   if term.isAvailable() then
     local w = component.gpu.getResolution()
