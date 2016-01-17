@@ -1,8 +1,5 @@
-local component = require("component")
 local computer = require("computer")
 local event = require("event")
-local keyboard = require("keyboard")
-local term = require("term")
 
 local gpuAvailable, screenAvailable = false, false
 
@@ -95,8 +92,3 @@ end
 
 event.listen("component_available", onComponentAvailable)
 event.listen("component_unavailable", onComponentUnavailable)
-event.listen("component_added", updateKeyboards)
-event.listen("component_removed", updateKeyboards)
-event.listen("term_focus", onTermFocus)
-event.listen("key_down", onKeyDown)
-event.listen("touch", onTouch)

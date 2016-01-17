@@ -1,3 +1,4 @@
+local component = require("component")
 local computer = require("computer")
 local event = require("event")
 local fs = require("filesystem")
@@ -8,10 +9,6 @@ local text = require("text")
 local unicode = require("unicode")
 
 -------------------------------------------------------------------------------
-
-local function gpu()
-  return select(2, term.getGPU())
-end
 
 local memoryStream = {}
 
@@ -461,9 +458,9 @@ if #args == 0 and (io.input() == io.stdin or options.i) and not options.c then
       term.clear()
     end
     while term.isAvailable() do
-      local foreground = gpu().setForeground(0xFF0000)
+      local foreground = component.gpu.setForeground(0xFF0000)
       term.write(expand(os.getenv("PS1") or "$ "))
-      gpu().setForeground(foreground)
+      component.gpu.setForeground(foreground)
       local command = term.read(history, nil, hintHandler)
       if not command then
         term.write("exit\n")

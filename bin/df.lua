@@ -6,10 +6,6 @@ local text = require("text")
 
 local args, options = shell.parse(...)
 
-local function gpu()
-  return select(2, term.getGPU())
-end
-
 local function round(num, idp)
  local mult = 10^(idp or 0)
  return math.floor(num * mult + 0.5) / mult
@@ -29,17 +25,17 @@ end
 print("Total Memory: " .. round(totalMemory, 2) .. " MB")
 
 if freeMem * 100 <= 15 then
- gpu().setForeground(0xFF0000)
+ component.gpu.setForeground(0xFF0000)
   print("Free Memory: " .. round(freeMem, 2) .. " MB")
- gpu().setForeground(0xFFFFFF)
+ component.gpu.setForeground(0xFFFFFF)
  else
   print("Free Memory: " .. round(freeMem, 2) .. " MB")
 end
 
 if usedMemory >= 85 then
- gpu().setForeground(0xFF0000)
+ component.gpu.setForeground(0xFF0000)
   print("Used Memory: " .. round(usedMemory, 2) .. " MB (" .. round(usedMemory / totalMemory, 2) * 100 .. "%)")
- gpu().setForeground(0xFFFFFF)
+ component.gpu.setForeground(0xFFFFFF)
  else
   print("Used Memory: " .. round(usedMemory, 2) .. " MB (" .. round(usedMemory / totalMemory, 2) * 100 .. "%)")
 end

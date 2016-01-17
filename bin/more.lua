@@ -1,3 +1,4 @@
+local component = require("component")
 local event = require("event")
 local keyboard = require("keyboard")
 local shell = require("shell")
@@ -19,7 +20,7 @@ end
 
 local line = nil
 local function readlines(num)
-  local x, y, w, h = term.getGlobalArea()
+  local w, h = component.gpu.getResolution()
   num = num or (h - 1)
   term.setCursorBlink(false)
   for _ = 1, num do
@@ -46,8 +47,7 @@ while true do
   end
   while true do
     local event, address, char, code = event.pull("key_down")
-    local hasFocus, screenAddress, keyboardAddress = term.hasFocus()
-    if hasFocus and address == keyboardAddress then
+    if component.isPrimary(address) then
       if code == keyboard.keys.q then
         term.setCursorBlink(false)
         term.clearLine()
