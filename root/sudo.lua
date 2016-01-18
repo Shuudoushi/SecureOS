@@ -23,7 +23,7 @@ end
 
 request()
 
-login, super = auth.validate(texthn, password)
+local login, super = auth.validate(texthn, password)
 
 if login and super then
   auth.userLog(texthn, "root_pass")
