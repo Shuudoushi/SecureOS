@@ -1,6 +1,6 @@
 myversions = {
 bin = "1.0.4",
-boot = "1.0.4",
+boot = "1.0.5",
 etc = "1.0.2",
 lib = "1.1.1",
 root = "1.0.4",
