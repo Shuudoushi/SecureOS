@@ -119,6 +119,7 @@ do
     -- Inject the package and io modules into the global namespace, as in Lua.
     _G.package = package
     _G.io = require("io")
+    _G.bit32 = require("bit32")
   end
 
   status("Initializing file system...")
