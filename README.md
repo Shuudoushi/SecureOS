@@ -27,6 +27,8 @@ At this time, there is three ways of installing.
 
 [Gopher](https://github.com/OpenPrograms/Gopher-Programs/tree/master/gml) - Using his 'gml' GUI libs (check out his wiki page for GML to use it)
 
+[Sora](https://github.com/RobertCochran) - Supplied a much cleaner util.readableNumber
+
 All the people of #oc on Espernet IRC
 
 # [LICENSE](https://github.com/MightyPirates/OpenComputers/blob/master-MC1.7.10/LICENSE)

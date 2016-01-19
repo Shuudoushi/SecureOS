@@ -2,23 +2,29 @@ local internet = require("internet")
 
 local util = {}
 
-function util.readableNumber(num, places)
-    local ret
-    local placeValue = ("%%.%df"):format(places or 0)
-    if not num then
-        return 0
-    elseif num >= 1000000000000 then
-        ret = placeValue:format(num / 1000000000000) .. " T" -- trillion
-    elseif num >= 1000000000 then
-        ret = placeValue:format(num / 1000000000) .. " B" -- billion
-    elseif num >= 1000000 then
-        ret = placeValue:format(num / 1000000) .. " M" -- million
-    elseif num >= 1000 then
-        ret = placeValue:format(num / 1000) .. "k" -- thousand
-    else
-        ret = num -- hundreds
-    end
-    return ret
+local prefixes = {
+        [0] = "",
+        [3] = "K",
+        [6] = "M",
+        [9] = "G",
+        [12] = "T",
+        [15] = "P",
+}
+
+local function round(n)
+        return string.format("%.1f", n)
+end
+
+function util.readableNumber(n)
+        local n = tonumber(n)
+
+        if not n then error("Not a number", 2) end
+        -- Get the log
+        local l = ((n == 0) and 0) or math.floor(math.log(n, 10))
+        -- Make it a multiple of 3, rounding down
+        l = l - (l % 3)
+
+        return round(n / math.pow(10, l))..prefixes[l]
 end
 
 function util.round(num, idp)
