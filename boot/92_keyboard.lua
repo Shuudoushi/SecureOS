@@ -33,7 +33,7 @@ end
 for address in component.list("keyboard", true) do
   onComponentAdded("component_added", address, "keyboard")
 end
-+
+
 event.listen("key_down", onKeyDown)
 event.listen("key_up", onKeyUp)
 event.listen("component_added", onComponentAdded)
