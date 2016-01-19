@@ -16,5 +16,5 @@ blacklist = {
   "/autorun.lua",
   "/init.lua",
   "/lib/libarmor.lua",
-  "/boot/kernel/secureos.lua"
+  "/boot/kernel/SecureOS"
 }

@@ -6,5 +6,11 @@ bin = {
 "/bin/sh.lua /bin/sh.lua",
 "/bin/whoami.lua /bin/whoami.lua",
 "/bin/uname.lua /bin/uname.lua",
-"/bin/cd.lua /bin/cd.lua"
+"/bin/cd.lua /bin/cd.lua",
+"/bin/rm.lua /bin/rm.lua",
+"bin/dmesg.lua /bin/dmesg.lua",
+"/bin/ls.lua /bin/ls.lua",
+"/bin/lua.lua /bin/lua.lua",
+"/bin/more.lua /bin/more.lua",
+"/bin/resolution.lua /bin/resolution.lua"
 }
