@@ -15,6 +15,10 @@ if not require("filesystem").exists("/sbin") then
   require("filesystem").makeDirectory("/sbin")
 end
 
+if not fs.exists("/boot/kernel") then
+  fs.makeDirectory("/boot/kernel")
+end
+
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/sbin/update.lua /sbin/update.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/root/login.lua /root/login.lua \n")
 local v = io.open("/.version", "w")
