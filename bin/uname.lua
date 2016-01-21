@@ -12,7 +12,7 @@ end
 local myversions = myversions()
 
 if options.a then
-  io.write(_OSVERSION .. " " .. _VERSION)
+  io.write(_OSVERSION .. " " .. _VERSION .. "\n")
   for k,v in pairs(myversions) do
     print(k .. " = " .. v)
   end
