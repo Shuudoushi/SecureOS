@@ -24,9 +24,11 @@ local computer=require("computer")
 local shell=require("shell")
 local filesystem=require("filesystem")
 local keyboard=require("keyboard")
-local len=require("unicode").len
+local unicode=require("unicode")
 local gfxbuffer=require("gfxbuffer")
 local process = require("process")
+
+local len = unicode.len
 
 local doubleClickThreshold=.25
 
