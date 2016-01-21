@@ -743,7 +743,7 @@ function methods:write(value, wrap)
   if not self:isAvailable() then
     return
   end
-  value = text:gsub("\0", "")
+--  value = text:gsub("\0", "") -- It's broken, I don't know how it's broken, but it is...
   value = text.detab(tostring(value))
   if unicode.wlen(value) == 0 then
     return

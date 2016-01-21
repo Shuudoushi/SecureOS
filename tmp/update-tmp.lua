@@ -16,7 +16,7 @@ if not require("filesystem").exists("/sbin") then
 end
 
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/sbin/update.lua /sbin/update.lua \n")
-shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/boot/z_login.lua /boot/z_login.lua \n")
+shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/root/login.lua /root/login.lua \n")
 local v = io.open("/.version", "w")
 v:write("myversions = { bin = '0', boot = '0', etc = '0', lib = '0', root = '0', sbin = '0', system = '0', usr = '0' }")
 v:close()

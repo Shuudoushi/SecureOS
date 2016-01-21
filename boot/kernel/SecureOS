@@ -183,6 +183,7 @@ local function motd()
 end
 
 while true do
+  os.execute("/root/login.lua")
   motd()
   local result, reason = os.execute(os.getenv("SHELL"))
   if not result then

@@ -1,6 +1,6 @@
 blacklist = {
   "/root/sudo.lua",
-  "/boot/z_login.lua",
+  "/root/login.lua",
   "/lib/filesystem.lua",
   "/sbin/useradd.lua",
   "/sbin/userdel.lua",

@@ -142,35 +142,34 @@ local function setStatus(value)
     end
 end
 
-local function getSize()
-  local function lengthToChars(line, length)
-    if length > unicode.wlen(line) then
-      return unicode.len(line) + 1
-    else
-      local prefix = unicode.wtrunc(line, length)
-      return unicode.len(prefix) + 1
-    end
+local function lengthToChars(line, length)
+  if length > unicode.wlen(line) then
+    return unicode.len(line) + 1
+  else
+    local prefix = unicode.wtrunc(line, length)
+    return unicode.len(prefix) + 1
   end
+end
 
-  local function isWideAtPosition(line, x)
-    local index = lengthToChars(line, x)
-    if index > unicode.len(line) then
-      return false, false
-    end
-    local prefix = unicode.sub(line, 1, index)
-    local char = unicode.sub(line, index, index)
-    --isWide, isRight
-    return unicode.isWide(char), unicode.wlen(prefix) == x
+local function isWideAtPosition(line, x)
+  local index = lengthToChars(line, x)
+  if index > unicode.len(line) then
+    return false, false
   end
+  local prefix = unicode.sub(line, 1, index)
+  local char = unicode.sub(line, index, index)
+  --isWide, isRight
+  return unicode.isWide(char), unicode.wlen(prefix) == x
+end
 
-  local function drawLine(x, y, w, h, lineNr)
-    local yLocal = lineNr - scrollY
-    if yLocal > 0 and yLocal <= h then
-      local str = removePrefix(buffer[lineNr] or "", scrollX)
-      str = unicode.wlen(str) > w and unicode.wtrunc(str, w + 1) or str
-      str = text.padRight(str, w)
-      gpu().set(x, y - 1 + lineNr - scrollY, str)
-    end
+local function drawLine(x, y, w, h, lineNr)
+  local yLocal = lineNr - scrollY
+  if yLocal > 0 and yLocal <= h then
+    local str = removePrefix(buffer[lineNr] or "", scrollX)
+    str = unicode.wlen(str) > w and unicode.wtrunc(str, w + 1) or str
+    str = text.padRight(str, w)
+    gpu().set(x, y - 1 + lineNr - scrollY, str)
+  end
 end
 
 local function getCursor()
