@@ -26,13 +26,10 @@ while running do
   term.setCursor(1,1)
   print(_OSVERSION .. " " .. os.date("%F %X"))
   term.write("User: ")
-  username = term.read()
-  username = string.gsub(username, "\n", "")
-  username = string.lower(username)
+  username = string.lower(io.read())
   term.setCursor(1,3)
   term.write("Password: ")
-  password = term.read(nil, nil, nil, "")
-  password = string.gsub(password, "\n", "")
+  password = string.gsub(term.read(nil, nil, nil, ""), "\n", "")
 
   login = auth.validate(username, password)
 
@@ -44,7 +41,7 @@ while running do
         hn:close()
       os.setenv("HOME", "/home/" .. username)
       os.setenv("USER", username)
-      os.setenv("PATH", "/bin:/usr/bin:/home/".. username .."/bin:.")
+      os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/".. username .."/bin:.")
     end
     term.clear()
     term.setCursor(1,1)
@@ -52,7 +49,16 @@ while running do
     os.sleep(1.5)
     term.clear()
     term.setCursor(1,1)
-    os.setenv("PS1", username .. "@" .. username .. "# ") -- Sets the user environment.
+
+    local file = io.open("/etc/hostname")
+
+    if file then
+      os.setenv("PS1", username .. "@" .. file:read("*l") .. "# ")
+      file:close()
+    else
+      os.setenv("PS1", username .. "@" .. username .. "# ")
+    end
+
     shell.setWorkingDirectory("/home/" .. username .. "/")
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     if fs.isAutorunEnabled() == false then
@@ -60,6 +66,7 @@ while running do
     end
     event.ignore("key_down", check)
     running = false
+    shell.execute("/.autorun.lua")
   else
     auth.userLog(username, "login_fail")
     term.clear()

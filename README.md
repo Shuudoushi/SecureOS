@@ -1,7 +1,7 @@
 # SecureOS
 Hello and thank you for looking into this little project of mine and 'official' operating system of [OpenSecurity](https://github.com/PC-Logix/OpenSecurity).
 
-The goal of SecureOS (SOS for short) is too offer a more Unix like and secure version of the default OS - OpenOS - for [OpenComputers](http://oc.cil.li/index.php?/page/index.html) that isn't too off-putting to OpenOS users or non-Unix users.
+The goal of SecureOS (SOS for short) is to offer a more Unix like and secure version of the default OS - OpenOS - for [OpenComputers](http://oc.cil.li/index.php?/page/index.html) that isn't too off-putting to OpenOS users or non-Unix users.
 
 If you find any bugs, issues, or think you can help improve SOS, then please make a new issue.
 
@@ -25,7 +25,11 @@ At this time, there is three ways of installing.
 
 [mpmxyz](https://github.com/mpmxyz) - Provided 'libarmor.lua'
 
-All the people of #oc on Espernet IRC
+[Gopher](https://github.com/OpenPrograms/Gopher-Programs/tree/master/gml) - Using his 'gml' GUI libs (check out his wiki page for GML to use it)
+
+[Sora](https://github.com/RobertCochran) - Supplied a much cleaner util.readableNumber
+
+All the people of [#oc on Espernet IRC](http://webchat.esper.net/?channels=#oc)
 
 # [LICENSE](https://github.com/MightyPirates/OpenComputers/blob/master-MC1.7.10/LICENSE)
 Standard MIT license from [OpenComputers](http://oc.cil.li/index.php?/page/index.html).

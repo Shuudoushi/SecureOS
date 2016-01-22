@@ -1,4 +1,6 @@
+local computer = require("computer")
 local fs = require("filesystem")
+local shell = require("shell")
 local term = require("term")
 local auth = require("auth")
 
@@ -7,13 +9,17 @@ if not require("auth").isRoot() then
   return
 end
 
-local args = {...}
+local args = shell.parse(...)
 
 if #args ~= 0 then
-  username = args[1]
-  username = string.lower(username)
+  username = string.lower(args[1])
   auth.rmUser(username)
   auth.userLog(username, "removed")
+
+--[[  if computer.users(username) == true then
+    computer.removeUser(username)
+  end]]
+
   if fs.exists("/home/" .. username .. "/") then
     fs.remove("/home/" .. username .. "/")
   end
@@ -25,12 +31,14 @@ elseif #args == 0 then
   term.write("Please enter a username to delete from the system.")
   term.setCursor(1,2)
   term.write("Username: ")
-    username = term.read()
-    username = string.gsub(username, "\n", "")
-    username = string.lower(username)
+    username = string.lower(io.read())
 
   auth.rmUser(username)
   auth.userLog(username, "removed")
+
+--[[  if computer.users(username) == true then
+    computer.removeUser(username)
+  end]]
 
   if fs.exists("/home/" .. username .. "/") then
       fs.remove("/home/" .. username .. "/")

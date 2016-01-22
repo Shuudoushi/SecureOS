@@ -1,4 +1,6 @@
+local computer = require("computer")
 local fs = require("filesystem")
+local shell = require("shell")
 local term = require("term")
 local auth = require("auth")
 
@@ -6,6 +8,8 @@ if not require("auth").isRoot() then
   io.stderr:write("not authorized")
   return
 end
+
+local args, options = shell.parse(...)
 
 local function dirTree(username)
   if not fs.exists("/home/" .. username .. "/") then
@@ -15,8 +19,6 @@ local function dirTree(username)
     fs.makeDirectory("/home/" .. username .. "/var/")
   end
 end
-
-local args = {...}
 
 if #args >= 2 then
   username = args[1]
@@ -31,6 +33,10 @@ if #args >= 2 then
   else io.stderr:write("Invalid.")
     return
   end
+--[[
+  if options.r then
+    computer.addUser(args[1])
+  end]]
 
   auth.addUser(args[1], args[2], su)
   dirTree(username)
@@ -41,21 +47,20 @@ if #args >= 2 then
 else
   term.clear()
   term.setCursor(1,1)
-  term.write("Please enter a username and password to add to the system. Usernames must be lowercase.")
+  term.write("Please enter a username and password to add to the system.")
   term.setCursor(1,2)
   term.write("Username: ")
-    username = term.read()
-    username = string.gsub(username, "\n", "")
-    username = string.lower(username)
+    username = string.lower(io.read())
   term.setCursor(1,3)
   term.write("Password: ")
-    password = term.read(nil, nil, nil, "")
-    password = string.gsub(password, "\n", "")
+    password = string.gsub(term.read(nil, nil, nil, ""), "\n", "")
   term.setCursor(1,4)
   term.write("Root rights (Y/n): ")
-    su = term.read()
-    su = string.gsub(su, "\n", "")
-    su = string.lower(su)
+    su = string.lower(io.read())
+  term.setCursor(1,5)
+--[[  term.write("System user (Y/n)")
+    system = term.read()
+    system = string.gsub(system, "\n", "")]]
 
   if su == "y" or su == "yes" then
     su = true
@@ -66,6 +71,20 @@ else
   else io.stderr:write("Invalid.")
     return
   end
+
+--[[  if system == "y" or system == "yes" then
+    system = true
+  elseif system == "n" or system == "no" then
+    system = false
+  elseif system == nil then
+    system = false
+  else io.stderr:write("Invaild.")
+    return
+  end
+
+  if system == true then
+    computer.addUser(username)
+  end]]
 
   auth.addUser(username, password, su)
 

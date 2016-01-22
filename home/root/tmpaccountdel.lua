@@ -9,8 +9,8 @@ else
   io.stderr:write("filesystem is readonly")
 end
 
-shell.execute("/bin/adduser.lua")
-shell.execute("/bin/deluser.lua root")
+shell.execute("/sbin/useradd.lua")
+shell.execute("/sbin/userdel.lua root")
 print("User root has been removed from the system, logging out.")
 os.sleep(2.5)
-shell.execute("/bin/logout.lua")
+shell.execute("logout")

@@ -1,10 +1,10 @@
 blacklist = {
   "/root/sudo.lua",
-  "/boot/z_login.lua",
+  "/root/login.lua",
   "/lib/filesystem.lua",
-  "/bin/adduser.lua",
-  "/bin/deluser.lua",
-  "/bin/update.lua",
+  "/sbin/useradd.lua",
+  "/sbin/userdel.lua",
+  "/sbin/update.lua",
   "/lib/auth.lua",
   "/root/blacklist.dat",
   "/lib/sha256.lua",
@@ -15,5 +15,6 @@ blacklist = {
   "/.autorun.lua",
   "/autorun.lua",
   "/init.lua",
-  "/lib/libarmor.lua"
+  "/lib/libarmor.lua",
+  "/boot/kernel/SecureOS"
 }
