@@ -25,5 +25,6 @@ local v = io.open("/.version", "w")
 v:write("myversions = { bin = '0', boot = '0', etc = '0', lib = '0', root = '0', sbin = '0', system = '0', usr = '0' }")
 v:close()
 print("The updater has changed, please run it again after reboot")
+if not require("event").pull() == "key_down" then os.sleep(30) end
 os.remove("/tmp/depreciated.dat")
 os.sleep(1.5)
