@@ -9,7 +9,6 @@ blacklist = {
   "/root/blacklist.dat",
   "/lib/sha256.lua",
   "/root/su.lua",
-  "/etc/passwd",
   "/autorun",
   "/.autorun",
   "/.autorun.lua",

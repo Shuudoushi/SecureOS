@@ -2,10 +2,6 @@ local string = require("string")
 local auth = require("auth")
 local term = require("term")
 
-local root = io.open("/tmp/.root", "w")
- root:write("true")
-  root:close()
-
 local hn = io.open("/tmp/.hostname.dat", "r")
  texthn = hn:read()
   hn:close()
@@ -35,10 +31,8 @@ if auth.validate(texthn, passwordOld) == true and passwordNew1 == passwordNew2 t
   auth.addUser(texthn, passwordNew2, su)
   term.write("passwd: password updated successfully \n")
   auth.userLog(username, "pw_change")
-  os.remove("/tmp/.root")
   return
 else
   term.write("passwd: password not successfully updated \n")
-  os.remove("/tmp/.root")
   return
 end
