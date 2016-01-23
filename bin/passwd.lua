@@ -2,15 +2,12 @@ local string = require("string")
 local auth = require("auth")
 local term = require("term")
 
-local hn = io.open("/tmp/.hostname.dat", "r")
- texthn = hn:read()
-  hn:close()
-
-local _, super = auth.validate(texthn, "*****")
+local user = os.getenv("USER")
+local _, super = auth.validate(user, "*****")
 
 term.clear()
 term.setCursor(1,1)
-term.write("Changing password for ".. texthn ..". \n")
+term.write("Changing password for ".. user ..". \n")
 term.write("Current password: ")
 passwordOld = string.gsub(term.read(nil, nil, nil, ""), "\n", "")
 term.setCursor(1,3)
@@ -27,10 +24,10 @@ term.setCursor(1,5)
     su = false
   end
 
-if auth.validate(texthn, passwordOld) == true and passwordNew1 == passwordNew2 then
-  auth.addUser(texthn, passwordNew2, su)
+if auth.validate(user, passwordOld) == true and passwordNew1 == passwordNew2 then
+  auth.addUser(user, passwordNew2, su)
   term.write("passwd: password updated successfully \n")
-  auth.userLog(username, "pw_change")
+  auth.userLog(user, "pw_change")
   return
 else
   term.write("passwd: password not successfully updated \n")
