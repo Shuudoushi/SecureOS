@@ -3,5 +3,6 @@ boot = {
 "/boot/02_os.lua /boot/02_os.lua",
 "/boot/kernel/SecureOS /boot/kernel/SecureOS",
 "/boot/92_keyboard.lua /boot/92_keyboard.lua",
-"/boot/93_term.lua /boot/93_term.lua"
+"/boot/93_term.lua /boot/93_term.lua",
+"/boot/90_filesystem.lua /boot/90_filesystem.lua"
 }
