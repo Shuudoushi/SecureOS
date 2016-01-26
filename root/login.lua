@@ -18,8 +18,13 @@ end
 event.listen("key_down", check)
 
 while running do
-  if fs.exists("/installer.lua") then -- Auto deletes the installer at first boot.
-    fs.remove("/installer.lua")
+  if not fs.get("/").isReadOnly() then
+    if fs.exists("/installer.lua") then -- Auto deletes the installer at first boot.
+      fs.remove("/installer.lua")
+    end
+    if fs.exists("/README.md") then
+      os.remove("/README.md")
+    end
   end
 
   term.clear()
@@ -35,7 +40,7 @@ while running do
 
   if login then
     auth.userLog(username, "login_pass")
-    if not fs.get("/tmp/").isReadOnly() then
+    if not fs.get("/").isReadOnly() then
       hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
        hn:write(username)
         hn:close()

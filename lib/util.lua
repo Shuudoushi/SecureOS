@@ -1,4 +1,5 @@
 local internet = require("internet")
+local fs = require("filesystem")
 
 local util = {}
 
@@ -58,6 +59,14 @@ function util.formatSize(size)
     size = size / power
   end
   return math.floor(size * 10) / 10 .. sizes[unit]
+end
+
+function utli.realTime(format)
+  if not format then format = "%F %X" end
+  local x = io.open("/tmp/.time", "w")
+  x:write("a")
+  x:close()
+  return os.date(format, fs.lastModified("/tmp/.time") / 1000)
 end
 
 return util
