@@ -51,6 +51,10 @@ At this time, there is three ways of installing.
 
 [Sora](https://github.com/RobertCochran) - Supplied a much cleaner util.readableNumber
 
+[SpiritedDusty](https://github.com/SpiritedDusty) - Added things like `cd ~` taking a user to their home dir
+
+[Kodos](https://github.com/MyNameIsKodos) - Supplied ideas and helped with getting GitHub to stop being a git
+
 All the people of [#oc on Espernet IRC](http://webchat.esper.net/?channels=#oc)
 
 # [LICENSE](https://github.com/MightyPirates/OpenComputers/blob/master-MC1.7.10/LICENSE)
