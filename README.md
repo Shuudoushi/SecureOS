@@ -9,7 +9,7 @@ If you find any bugs, issues, or think you can help improve SOS, then please mak
 SecureOS is tested, in game, on a "maxed out" T3 server. However, it can run on the following specs:
 
 #### Minimum:
-* T3 Case
+* T3 Case (T2 if using APU.)
 * T1 CPU or T2 APU (Set to Lua 5.2)
 * T2 Graphics Card (Not required if using an APU.)
 * x2 T2 RAM
