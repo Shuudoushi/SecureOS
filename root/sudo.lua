@@ -10,7 +10,19 @@ local hn = io.open("/tmp/.hostname.dat", "r") -- Reads the hostname file.
 
 local function request()
   term.write("[sudo] password for ".. texthn ..": ")
-    password = string.gsub(term.read(nil, nil, nil, ""), "\n", "")
+    local password = string.gsub(term.read(nil, nil, nil, ""), "\n", "")
+end
+
+local history = history or {}
+table.insert(history, "")
+local historyIndex = #history
+
+local function getHistoryIndex()
+  return historyIndex
+end
+
+local function setHistoryIndex(newIndex)
+  historyIndex = newIndex
 end
 
 local args = {...}
@@ -19,6 +31,11 @@ if #args ~= 0 then
   path = args[1]
 else
   io.stderr:write("error") -- Too lazy to properly do this bit atm...
+end
+
+if args[1] == "!!" then
+  local index = getHistoryIndex()
+  os.execute("/root/sudo.lua " .. setHistoryIndex(index - 1))
 end
 
 request()
@@ -30,7 +47,6 @@ if login and super then
   local r = io.open("/tmp/.root", "w")
     r:write("true")
       r:close()
-  username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
   os.sleep(0.1)
   local result, reason = shell.execute(path, nil, table.unpack(args,2))
   if not result then
@@ -38,6 +54,14 @@ if login and super then
   end
   os.sleep(0.1)
   if args[1] == "su" then
+    if os.getenv("HOSTNAME") == nil then -- Sets the user environment.
+      os.setenv("PS1", "root@" .. texthn .. "$ ")
+    else
+      os.setenv("PS1", "root@" .. os.getenv("HOSTNAME") .. "$ ")
+    end
+    shell.setWorkingDirectory("/root")
+    os.setenv("HOME", "/root")
+    os.setenv("USER", "root")
     return
   else
     os.remove("/tmp/.root")
@@ -45,5 +69,4 @@ if login and super then
 else
   auth.userLog(texthn, "root_fail")
   io.write("Sorry, try again. \n")
-  username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
 end

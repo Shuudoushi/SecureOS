@@ -18,7 +18,6 @@ shell.setAlias("usage", "df")
 shell.setAlias("rmuser", "deluser")
 shell.setAlias("reboot", "shutdown -r")
 shell.setAlias("sudo", "/root/sudo.lua")
-shell.setAlias("su", "/root/su.lua")
 
 require("event").listen("init", function()
   local file = io.open("/etc/hostname")
