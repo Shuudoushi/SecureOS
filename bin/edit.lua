@@ -9,11 +9,7 @@ local unicode = require("unicode")
 if not term.isAvailable() then
   return
 end
-
-local function gpu()
-  return select(2, term.getGPU())
-end
-
+local gpu = term.gpu()
 local args, options = shell.parse(...)
 if #args == 0 then
   io.write("Usage: edit <filename>")
@@ -26,11 +22,11 @@ local readonly = options.r or fs.get(filename) == nil or fs.get(filename).isRead
 
 if not fs.exists(filename) then
   if fs.isDirectory(filename) then
-    io.stderr:write("file is a directory")
-    return
+    io.stderr:write("file is a directory\n")
+    return 1
   elseif readonly then
-    io.stderr:write("file system is read only")
-    return
+    io.stderr:write("file system is read only\n")
+    return 1
   end
 end
 
@@ -117,29 +113,29 @@ end
 -------------------------------------------------------------------------------
 
 local function setStatus(value)
-    local x, y, w, h = term.getGlobalArea()
-    value = unicode.wlen(value) > w - 10 and unicode.wtrunc(value, w - 9) or value
-    value = text.padRight(value, w - 10)
-    gpu().set(x, y + h - 1, value)
-  end
+  local x, y, w, h = term.getGlobalArea()
+  value = unicode.wlen(value) > w - 10 and unicode.wtrunc(value, w - 9) or value
+  value = text.padRight(value, w - 10)
+  gpu.set(x, y + h - 1, value)
+end
 
-  local function getArea()
-    local x, y, w, h = term.getGlobalArea()
-    return x, y, w, h - 1
-  end
+local function getArea()
+  local x, y, w, h = term.getGlobalArea()
+  return x, y, w, h - 1
+end
 
-  local function removePrefix(line, length)
-    if length >= unicode.wlen(line) then
-      return ""
-    else
-      local prefix = unicode.wtrunc(line, length + 1)
-      local suffix = unicode.sub(line, unicode.len(prefix) + 1)
-      length = length - unicode.wlen(prefix)
-      if length > 0 then
-        suffix = (" "):rep(unicode.charWidth(suffix) - length) .. unicode.sub(suffix, 2)
-      end
-      return suffix
+local function removePrefix(line, length)
+  if length >= unicode.wlen(line) then
+    return ""
+  else
+    local prefix = unicode.wtrunc(line, length + 1)
+    local suffix = unicode.sub(line, unicode.len(prefix) + 1)
+    length = length - unicode.wlen(prefix)
+    if length > 0 then
+      suffix = (" "):rep(unicode.charWidth(suffix) - length) .. unicode.sub(suffix, 2)
     end
+    return suffix
+  end
 end
 
 local function lengthToChars(line, length)
@@ -150,6 +146,7 @@ local function lengthToChars(line, length)
     return unicode.len(prefix) + 1
   end
 end
+
 
 local function isWideAtPosition(line, x)
   local index = lengthToChars(line, x)
@@ -168,7 +165,7 @@ local function drawLine(x, y, w, h, lineNr)
     local str = removePrefix(buffer[lineNr] or "", scrollX)
     str = unicode.wlen(str) > w and unicode.wtrunc(str, w + 1) or str
     str = text.padRight(str, w)
-    gpu().set(x, y - 1 + lineNr - scrollY, str)
+    gpu.set(x, y - 1 + lineNr - scrollY, str)
   end
 end
 
@@ -202,7 +199,7 @@ local function setCursor(nbx, nby)
     local dy = math.abs(scrollY - sy)
     scrollY = sy
     if h > dy then
-      gpu().copy(x, y + dy, w, h - dy, 0, -dy)
+      gpu.copy(x, y + dy, w, h - dy, 0, -dy)
     end
     for lineNr = nby - (math.min(dy, h) - 1), nby do
       drawLine(x, y, w, h, lineNr)
@@ -213,7 +210,7 @@ local function setCursor(nbx, nby)
     local dy = math.abs(scrollY - sy)
     scrollY = sy
     if h > dy then
-      gpu().copy(x, y, w, h - dy, 0, dy)
+      gpu.copy(x, y, w, h - dy, 0, dy)
     end
     for lineNr = nby, nby + (math.min(dy, h) - 1) do
       drawLine(x, y, w, h, lineNr)
@@ -234,13 +231,13 @@ local function setCursor(nbx, nby)
     term.setCursorBlink(false)
     scrollX = nbx - 1 - ((wide and right) and 1 or 0)
     for lineNr = 1 + scrollY, math.min(h + scrollY, #buffer) do
-     drawLine(x, y, w, h, lineNr)
+      drawLine(x, y, w, h, lineNr)
     end
   end
   term.setCursor(nbx - scrollX, nby - scrollY)
   --update with term lib
   nbx, nby = getCursor()
-  gpu().set(x + w - 10, y + h, text.padLeft(string.format("%d,%d", nby, nbx), 10))
+  gpu.set(x + w - 10, y + h, text.padLeft(string.format("%d,%d", nby, nbx), 10))
 end
 
 local function highlight(bx, by, length, enabled)
@@ -250,21 +247,21 @@ local function highlight(bx, by, length, enabled)
   cy = math.max(1, math.min(h, cy))
   length = math.max(1, math.min(w - cx, length))
 
-  local fg, fgp = gpu().getForeground()
-  local bg, bgp = gpu().getBackground()
+  local fg, fgp = gpu.getForeground()
+  local bg, bgp = gpu.getBackground()
   if enabled then
-    gpu().setForeground(bg, bgp)
-    gpu().setBackground(fg, fgp)
+    gpu.setForeground(bg, bgp)
+    gpu.setBackground(fg, fgp)
   end
   local indexFrom = lengthToChars(buffer[by], bx)
-   local value = unicode.sub(buffer[by], indexFrom)
-   if unicode.wlen(value) > length then
-     value = unicode.wtrunc(value, length + 1)
+  local value = unicode.sub(buffer[by], indexFrom)
+  if unicode.wlen(value) > length then
+    value = unicode.wtrunc(value, length + 1)
   end
-  gpu().set(cx, cy, value)
+  gpu.set(x - 1 + cx, y - 1 + cy, value)
   if enabled then
-    gpu().setForeground(fg, fgp)
-    gpu().setBackground(bg, bgp)
+    gpu.setForeground(fg, fgp)
+    gpu.setBackground(bg, bgp)
   end
 end
 
@@ -301,7 +298,7 @@ local function right(n)
   local be = unicode.wlen(line()) + 1
   local wide, right = isWideAtPosition(line(), cbx + n)
   if wide and right then
-   n = n + 1
+    n = n + 1
   end
   if cbx + n <= be then
     setCursor(cbx + n, cby)
@@ -334,7 +331,7 @@ local function delete(fullRow)
     local content = table.remove(buffer, row)
     local rcy = cy + (row - cby)
     if rcy <= h then
-      gpu().copy(1, rcy + 1, w, h - rcy, 0, -1)
+      gpu.copy(x, y + rcy, w, h - rcy, 0, -1)
       drawLine(x, y, w, h, row + (h - rcy))
     end
     return content
@@ -345,14 +342,14 @@ local function delete(fullRow)
       deleteRow(cby)
     else
       buffer[cby] = ""
-      gpu().fill(x, y - 1 + cy, w, 1, " ")
+      gpu.fill(x, y - 1 + cy, w, 1, " ")
     end
     setCursor(1, cby)
   elseif cbx <= unicode.wlen(line()) then
     term.setCursorBlink(false)
     local index = lengthToChars(line(), cbx)
     buffer[cby] = unicode.sub(line(), 1, index - 1) ..
-                     unicode.sub(line(), index + 1)
+                  unicode.sub(line(), index + 1)
     drawLine(x, y, w, h, cby)
   elseif cby < #buffer then
     term.setCursorBlink(false)
@@ -375,8 +372,8 @@ local function insert(value)
   local x, y, w, h = getArea()
   local index = lengthToChars(line(), cbx)
   buffer[cby] = unicode.sub(line(), 1, index - 1) ..
-                   value ..
-                   unicode.sub(line(), index)
+                value ..
+                unicode.sub(line(), index)
   drawLine(x, y, w, h, cby)
   right(unicode.wlen(value))
   setStatus(helpStatusText())
@@ -393,7 +390,7 @@ local function enter()
   drawLine(x, y, w, h, cby)
   if cy < h then
     if cy < h - 1 then
-      gpu().copy(x, y + cy, w, h - (cy + 1), 0, 1)
+      gpu.copy(x, y + cy, w, h - (cy + 1), 0, 1)
     end
     drawLine(x, y, w, h, cby + 1)
   end
@@ -413,29 +410,28 @@ local function find()
       local sx, sy
       for syo = 1, #buffer do -- iterate lines with wraparound
         sy = (iby + syo - 1 + #buffer - 1) % #buffer + 1
-        sx = string.find(buffer[sy], findText, syo == 1 and ibx or 1)
+        sx = string.find(buffer[sy], findText, syo == 1 and ibx or 1, true)
         if sx and (sx >= ibx or syo > 1) then
           break
         end
       end
       if not sx then -- special case for single matches
         sy = iby
-        sx = string.find(buffer[sy], findText)
+        sx = string.find(buffer[sy], findText, nil, true)
       end
       if sx then
         sx = unicode.wlen(string.sub(buffer[sy], 1, sx - 1)) + 1
         cbx, cby = sx, sy
         setCursor(cbx, cby)
-        highlight(cbx, cby, unicode.wn(findText), true)
+        highlight(cbx, cby, unicode.wlen(findText), true)
       end
     end
     term.setCursor(7 + unicode.wlen(findText), h + 1)
     setStatus("Find: " .. findText)
 
-    local _, address, char, code = event.pull("key_down")
-    local inFocus, screenAddress, keyboardAddress = term.hasFocus()
-    if inFocus and address == keyboardAddress then
-      local handler, name = getKeyBindHandler(code, keyboardAddress)
+    local _, address, char, code = term.pull("key_down")
+    if address == term.keyboard().address then
+      local handler, name = getKeyBindHandler(code)
       highlight(cbx, cby, unicode.wlen(findText), false)
       if name == "newline" then
         break
@@ -536,7 +532,6 @@ local keyBindHandlers = {
   end,
   close = function()
     -- TODO ask to save if changed
-    gpu().setForeground(0xFFFFFF)
     running = false
   end,
   find = function()
@@ -546,7 +541,7 @@ local keyBindHandlers = {
   findnext = find
 }
 
-getKeyBindHandler = function(code, keyboardAddress)
+getKeyBindHandler = function(code)
   if type(config.keybinds) ~= "table" then return end
   -- Look for matches, prefer more 'precise' keybinds, e.g. prefer
   -- ctrl+del over del.
@@ -562,6 +557,7 @@ getKeyBindHandler = function(code, keyboardAddress)
             elseif value == "shift" then shift = true
             else key = value end
           end
+          local keyboardAddress = term.keyboard().address
           if (not alt or keyboard.isAltDown(keyboardAddress)) and
              (not control or keyboard.isControlDown(keyboardAddress)) and
              (not shift or keyboard.isShiftDown(keyboardAddress)) and
@@ -581,12 +577,11 @@ end
 
 -------------------------------------------------------------------------------
 
-local function onKeyDown(char, code, keyboardAddress)
-  local handler = getKeyBindHandler(code, keyboardAddress)
+local function onKeyDown(char, code)
+  local handler = getKeyBindHandler(code)
   if handler then
     handler()
   elseif readonly and code == keyboard.keys.q then
-    gpu().setForeground(0xFFFFFF)
     running = false
   elseif not readonly then
     if not keyboard.isControl(char) then
@@ -629,7 +624,6 @@ end
 do
   local f = io.open(filename)
   if f then
-    gpu().setForeground(0x66CCFF)
     local x, y, w, h = getArea()
     local chars = 0
     for line in f:lines() do
@@ -661,12 +655,11 @@ do
 end
 
 while running do
-  local event, address, arg1, arg2, arg3 = event.pull()
-  local inFocus, screenAddress, keyboardAddress = term.hasFocus()
-  if inFocus and (address == screenAddress or address == keyboardAddress) then
+  local event, address, arg1, arg2, arg3 = term.pull()
+  if address == term.keyboard().address or address == term.screen().address then
     local blink = true
     if event == "key_down" then
-      onKeyDown(arg1, arg2, keyboardAddress)
+      onKeyDown(arg1, arg2)
     elseif event == "clipboard" and not readonly then
       onClipboard(arg1)
     elseif event == "touch" or event == "drag" then
@@ -683,7 +676,6 @@ while running do
     end
     if blink then
       term.setCursorBlink(true)
-      term.setCursorBlink(true) -- force toggle to caret
     end
   end
 end

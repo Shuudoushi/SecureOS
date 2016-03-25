@@ -92,8 +92,6 @@ local function createMultipleFilter(...)
 end
 -------------------------------------------------------------------------------
 
-event.push = computer.pushSignal
-
 function event.cancel(timerId)
   checkArg(1, timerId, "number")
   if timers[timerId] then
@@ -244,7 +242,8 @@ function event.timer(interval, callback, times)
   }
   return id
 end
-
+-- users may expect to find event.push to exist
+event.push = computer.pushSignal
 -------------------------------------------------------------------------------
 
 return event

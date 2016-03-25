@@ -1,5 +1,6 @@
 system = {
 "/init.lua /init.lua",
 "/.osprop /.osprop",
-"/.autorun.lua /.autorun.lua"
+"/.autorun.lua /.autorun.lua",
+"/home/.shrc /home/.shrc"
 }

@@ -1,8 +1,14 @@
 boot = {
-"/boot/94_shell.lua /boot/94_shell.lua",
-"/boot/02_os.lua /boot/02_os.lua",
 "/boot/kernel/SecureOS /boot/kernel/SecureOS",
+"/boot/00_base.lua /boot/00_base.lua",
+"/boot/01_process.lua /boot/01_process.lua",
+"/boot/02_os.lua /boot/02_os.lua",
+"/boot/03_io.lua /boot/03_io.lua",
+"/boot/04_component.lua /boot/04_component.lua",
+"/boot/90_filesystem.lua /boot/90_filesystem.lua",
+"/boot/91_gpu.lua /boot/91_gpu.lua",
 "/boot/92_keyboard.lua /boot/92_keyboard.lua",
 "/boot/93_term.lua /boot/93_term.lua",
-"/boot/90_filesystem.lua /boot/90_filesystem.lua"
+"/boot/94_shell.lua /boot/94_shell.lua",
+"/boot/rc.lua /boot/rc.lua"
 }

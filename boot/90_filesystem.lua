@@ -5,24 +5,6 @@ local shell = require("shell")
 
 local isInitialized, pendingAutoruns = false, {}
 
-local function list()
-  for k,_ in component.list("filesystem", true) do
-    local proxy, reason = fs.proxy(k)
-    if proxy then
-      address = k
-      if proxy.getLabel() == nil then
-        short = address:sub(1, 4)
-        name = "filesystem" .. "-" .. short
-        fs.mount(short, "/media/" .. name)
-      else
-        short = address:sub(1, 4)
-        name = proxy.getLabel() .. "-" .. short
-        fs.mount(short, "/media/" .. name)
-      end
-    end
-  end
-end
-
 local function onInit()
   isInitialized = true
   for _, run in ipairs(pendingAutoruns) do
@@ -51,7 +33,6 @@ local function onComponentAdded(_, address, componentType)
       end
       name = fs.concat("/mnt", name)
       fs.mount(proxy, name)
-      list()
       if fs.isAutorunEnabled() then
         local function run()
           local file = shell.resolve(fs.concat(name, "autorun"), "lua") or

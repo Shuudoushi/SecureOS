@@ -114,12 +114,10 @@ do
     package.loaded.unicode = unicode
     package.preload["buffer"] = loadfile("/lib/buffer.lua")
     package.preload["filesystem"] = loadfile("/lib/filesystem.lua")
-    package.preload["bit32"] = loadfile("lib/bit32.lua")
 
     -- Inject the package and io modules into the global namespace, as in Lua.
     _G.package = package
-    _G.io = require("io")
-    _G.bit32 = require("bit32")
+    _G.io = loadfile("/lib/io.lua")()
 
     --mark modules for delay loaded api
     package.delayed["text"] = true

@@ -1,5 +1,5 @@
 --[[ Backwards compat for Lua 5.3; only loaded in 5.3 because package.loaded is
-+     prepopulated with the existing global bit32 in 5.2. ]]
+     prepopulated with the existing global bit32 in 5.2. ]]
 
 local bit32 = {}
 

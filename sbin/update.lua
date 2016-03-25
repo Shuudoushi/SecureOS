@@ -52,6 +52,10 @@ local function update(args, options)
     fs.makeDirectory("/boot/kernel")
   end
 
+  if not fs.exists("/lib/tools") then
+    fs.makeDirectory("/lib/tools")
+  end
+
   local function myversions()
     local env = {}
     local config = loadfile("/.version", nil, env)
