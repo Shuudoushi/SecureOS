@@ -91,7 +91,7 @@ print("SecureOS will now update from " .. textu .. ".")
         print("Removed " .. depreciated[i] .. ": a depreciated package")
       end
     end
-    print("Finished")
+    print("Finished\n")
   end
 
   print("Checking for missing directories")
@@ -115,7 +115,7 @@ print("SecureOS will now update from " .. textu .. ".")
         print("Made missing directory: " .. dirs[i])
       end
     end
-    print("Finished")
+    print("Finished\n")
   end
 
   print("Checking bin for updates.") -- I know, I know... But it'll work till I fix the 'compact' code...
@@ -136,11 +136,11 @@ print("SecureOS will now update from " .. textu .. ".")
       for i = 1, #downloadBin do
         shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadBin[i])
       end
-      print("Package Bin up-to-date")
+      print("Package Bin up-to-date\n")
     end
 
   else
-    print("Package Bin up-to-date")
+    print("Package Bin up-to-date\n")
   end
 
   print("Checking boot for updates.")
@@ -161,14 +161,14 @@ print("SecureOS will now update from " .. textu .. ".")
       for i = 1, #downloadBoot do
         shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadBoot[i])
       end
-      print("Package Boot up-to-date")
+      print("Package Boot up-to-date\n")
       if fs.exists("/tmp/.hold") then
         os.remove("/tmp/.hold")
       end
     end
 
   else
-    print("Package Boot up-to-date")
+    print("Package Boot up-to-date\n")
   end
 
   print("Checking etc for updates.")
@@ -189,11 +189,11 @@ print("SecureOS will now update from " .. textu .. ".")
       for i = 1, #downloadEtc do
         shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadEtc[i])
       end
-      print("Package Etc up-to-date")
+      print("Package Etc up-to-date\n")
     end
 
   else
-    print("Package Etc up-to-date")
+    print("Package Etc up-to-date\n")
   end
 
   print("Checking lib for updates.")
@@ -214,14 +214,14 @@ print("SecureOS will now update from " .. textu .. ".")
       for i = 1, #downloadLib do
         shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadLib[i])
       end
-      print("Package Lib up-to-date")
+      print("Package Lib up-to-date\n")
       if fs.exists("/tmp/.hold") then
         os.remove("/tmp/.hold")
       end
     end
 
   else
-    print("Package Lib up-to-date")
+    print("Package Lib up-to-date\n")
   end
 
   print("Checking root for updates.")
@@ -242,11 +242,11 @@ print("SecureOS will now update from " .. textu .. ".")
       for i = 1, #downloadRoot do
         shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadRoot[i])
       end
-      print("Package Root up-to-date")
+      print("Package Root up-to-date\n")
     end
 
   else
-    print("Package Root up-to-date")
+    print("Package Root up-to-date\n")
   end
 
   print("Checking sbin for updates.")
@@ -267,11 +267,11 @@ print("SecureOS will now update from " .. textu .. ".")
       for i = 1, #downloadsBin do
         shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadsBin[i])
       end
-      print("Package sBin up-to-date")
+      print("Package sBin up-to-date\n")
     end
 
   else
-    print("Package sBin up-to-date")
+    print("Package sBin up-to-date\n")
   end
 
   print("Checking system for updates.")
@@ -292,14 +292,14 @@ print("SecureOS will now update from " .. textu .. ".")
       for i = 1, #downloadSystem do
         shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadSystem[i])
       end
-      print("Package System up-to-date")
+      print("Package System up-to-date\n")
       if fs.exists("/tmp/.hold") then
         os.remove("/tmp/.hold")
       end
     end
 
   else
-    print("Package System up-to-date")
+    print("Package System up-to-date\n")
   end
 
   print("Checking usr for updates.")
@@ -320,11 +320,11 @@ print("SecureOS will now update from " .. textu .. ".")
       for i = 1, #downloadUsr do
         shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadUsr[i])
       end
-      print("Package Usr up-to-date")
+      print("Package Usr up-to-date\n")
     end
 
   else
-    print("Package Usr up-to-date")
+    print("Package Usr up-to-date\n")
   end
 
 shell.execute("mv -f /tmp/versions.dat /.version")

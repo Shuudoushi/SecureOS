@@ -1,6 +1,6 @@
 lib = {
-"/lib/tools/delayParse.lua /lib/tools/delayParse.lua"
-"/lib/tools/keyboard_full.lua /lib/tools/keyboard_full.lua"
+"/lib/tools/delayParse.lua /lib/tools/delayParse.lua",
+"/lib/tools/keyboard_full.lua /lib/tools/keyboard_full.lua",
 "/lib/sha256.lua /lib/sha256.lua",
 "/lib/auth.lua /lib/auth.lua",
 "/lib/filesystem.lua /lib/filesystem.lua",

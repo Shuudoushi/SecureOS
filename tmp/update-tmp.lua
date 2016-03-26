@@ -11,13 +11,26 @@ else
     u:close()
 end
 
-if not require("filesystem").exists("/sbin") then
-  require("filesystem").makeDirectory("/sbin")
-end
+  local function dirs()
+    local env = {}
+    local config = loadfile("/tmp/dirs.dat", nil, env)
+    if config then
+      pcall(config)
+    end
+    return env.dirs
+  end
 
-if not fs.exists("/boot/kernel") then
-  fs.makeDirectory("/boot/kernel")
-end
+  local dirs = dirs()
+
+  if dirs then
+    for i = 1, #dirs do
+      local files = fs.makeDirectory(shell.resolve(dirs[i]))
+      if files ~= nil then
+        print("Made missing directory: " .. dirs[i])
+      end
+    end
+    print("Finished\n")
+  end
 
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/sbin/update.lua /sbin/update.lua \n")
 shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/root/login.lua /root/login.lua \n")
