@@ -54,7 +54,7 @@ local function update(args, options)
   end
 
   local function onlineVersions()
-    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "SecureOS/.version /tmp/versions.dat")
+    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/SecureOS/.version /tmp/versions.dat")
     local env = {}
     local config = loadfile("/tmp/versions.dat", nil, env)
     if config then
