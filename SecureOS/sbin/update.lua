@@ -54,7 +54,7 @@ local function update(args, options)
   end
 
   local function onlineVersions()
-    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/.version /tmp/versions.dat")
+    shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "SecureOS/.version /tmp/versions.dat")
     local env = {}
     local config = loadfile("/tmp/versions.dat", nil, env)
     if config then
@@ -134,7 +134,7 @@ print("SecureOS will now update from " .. textu .. ".\n")
 
     if downloadBin then
       for i = 1, #downloadBin do
-        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadBin[i])
+        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/SecureOS" .. downloadBin[i])
       end
       print("Package Bin up-to-date\n")
     end
@@ -159,7 +159,7 @@ print("SecureOS will now update from " .. textu .. ".\n")
 
     if downloadBoot then
       for i = 1, #downloadBoot do
-        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadBoot[i])
+        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/SecureOS" .. downloadBoot[i])
       end
       print("Package Boot up-to-date\n")
       if fs.exists("/tmp/.hold") then
@@ -187,7 +187,7 @@ print("SecureOS will now update from " .. textu .. ".\n")
 
     if downloadEtc then
       for i = 1, #downloadEtc do
-        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadEtc[i])
+        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/SecureOS" .. downloadEtc[i])
       end
       print("Package Etc up-to-date\n")
     end
@@ -212,7 +212,7 @@ print("SecureOS will now update from " .. textu .. ".\n")
 
     if downloadLib then
       for i = 1, #downloadLib do
-        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadLib[i])
+        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/SecureOS" .. downloadLib[i])
       end
       print("Package Lib up-to-date\n")
       if fs.exists("/tmp/.hold") then
@@ -240,7 +240,7 @@ print("SecureOS will now update from " .. textu .. ".\n")
 
     if downloadRoot then
       for i = 1, #downloadRoot do
-        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadRoot[i])
+        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/SecureOS" .. downloadRoot[i])
       end
       print("Package Root up-to-date\n")
     end
@@ -265,7 +265,7 @@ print("SecureOS will now update from " .. textu .. ".\n")
 
     if downloadsBin then
       for i = 1, #downloadsBin do
-        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadsBin[i])
+        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/SecureOS" .. downloadsBin[i])
       end
       print("Package sBin up-to-date\n")
     end
@@ -290,7 +290,7 @@ print("SecureOS will now update from " .. textu .. ".\n")
 
     if downloadSystem then
       for i = 1, #downloadSystem do
-        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadSystem[i])
+        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/SecureOS" .. downloadSystem[i])
       end
       print("Package System up-to-date\n")
       if fs.exists("/tmp/.hold") then
@@ -318,7 +318,7 @@ print("SecureOS will now update from " .. textu .. ".\n")
 
     if downloadUsr then
       for i = 1, #downloadUsr do
-        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. downloadUsr[i])
+        shell.execute("wget -f https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/SecureOS" .. downloadUsr[i])
       end
       print("Package Usr up-to-date\n")
     end
