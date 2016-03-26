@@ -1,10 +1,10 @@
 --  
 --  Adaptation of the Secure Hashing Algorithm (SHA-244/256)
 --  Found Here: http://lua-users.org/wiki/SecureHashAlgorithm
---  
+--
 --  Using an adapted version of the bit library
 --  Found Here: https://bitbucket.org/Boolsheet/bslf/src/1ee664885805/bit.lua
---  
+--
 --Data card support added by https://github.com/SuPeRMiNoR2
 
 local MOD = 2^32
@@ -85,7 +85,7 @@ local function rshift(x, disp)
 end
 
 local function lshift(a, disp)
-  if disp < 0 then return rshift(a,-disp) end 
+  if disp < 0 then return rshift(a,-disp) end
   return (a * 2 ^ disp) % 2 ^ 32
 end
 

@@ -171,7 +171,6 @@ do
 end
 
 while true do
-  os.execute("/root/login.lua")
   local result, reason = xpcall(require("shell").getShell(), function(msg)
     return tostring(msg).."\n"..debug.traceback()
   end)

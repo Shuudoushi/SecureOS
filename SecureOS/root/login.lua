@@ -22,10 +22,10 @@ while running do
     if fs.exists("/installer.lua") then -- Auto deletes the installer at first boot.
       fs.remove("/installer.lua")
     end
-    if fs.exists("/README.md") then
-      os.remove("/README.md")
-    end
   end
+
+  os.setenv("HOME", nil)
+  os.setenv("USER", nil)
 
   term.clear()
   term.setCursor(1,1)
@@ -46,7 +46,7 @@ while running do
         hn:close()
       os.setenv("HOME", "/home/" .. username)
       os.setenv("USER", username)
-      os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/".. username .."/bin:.")
+      os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/".. username .."/bin:/root:.")
     end
     term.clear()
     term.setCursor(1,1)

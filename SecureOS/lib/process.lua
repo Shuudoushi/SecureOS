@@ -73,7 +73,7 @@ function process.load(path, env, init, name)
       init()
     end
     -- pcall code so that we can remove it from the process list on exit
-    local result = 
+    local result =
     {
       xpcall(code, function(msg)
         if type(msg) == 'table' then return msg end
