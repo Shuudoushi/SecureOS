@@ -68,7 +68,7 @@ local function update(args, options)
 
 term.clear()
 term.setCursor(1,1)
-print("SecureOS will now update from " .. textu .. ".")
+print("SecureOS will now update from " .. textu .. ".\n")
   os.sleep(1)
   print("Checking for depreciated packages.")
   shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/depreciated.dat /tmp/depreciated.dat")
