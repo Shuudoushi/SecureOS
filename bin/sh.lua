@@ -3,6 +3,7 @@ local shell = require("shell")
 local term = require("term")
 local text = require("text")
 local sh = require("sh")
+local fs = require("filesystem")
 
 local input = table.pack(...)
 local args, options = shell.parse(select(3,table.unpack(input)))
