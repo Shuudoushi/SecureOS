@@ -44,18 +44,6 @@ local function update(args, options)
         hd:close()
   end
 
-  if not fs.exists("/sbin") then
-    fs.makeDirectory("/sbin")
-  end
-
-  if not fs.exists("/boot/kernel") then
-    fs.makeDirectory("/boot/kernel")
-  end
-
-  if not fs.exists("/lib/tools") then
-    fs.makeDirectory("/lib/tools")
-  end
-
   local function myversions()
     local env = {}
     local config = loadfile("/.version", nil, env)
@@ -101,6 +89,30 @@ print("SecureOS will now update from " .. textu .. ".")
       local files = os.remove(shell.resolve(depreciated[i]))
       if files ~= nil then
         print("Removed " .. depreciated[i] .. ": a depreciated package")
+      end
+    end
+    print("Finished")
+  end
+
+  print("Checking for missing directories")
+  shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/dirs.dat /tmp/dirs.dat")
+
+  local function dirs()
+    local env = {}
+    local config = loadfile("/tmp/dirs.dat", nil, env)
+    if config then
+      pcall(config)
+    end
+    return env.dirs
+  end
+
+  local dirs = dirs()
+
+  if dirs then
+    for i = 1, #dirs do
+      local files = fs.makeDirectory(shell.resolve(dirs[i]))
+      if files ~= nil then
+        print("Made missing directory: " .. dirs[i])
       end
     end
     print("Finished")
@@ -325,6 +337,7 @@ os.remove("/tmp/sbin.dat")
 os.remove("/tmp/system.dat")
 os.remove("/tmp/usr.dat")
 os.remove("/tmp/depreciated.dat")
+os.remove("/tmp/dirs.dat")
 require("auth").userLog(os.getenv("USER"), "update")
 term.clear()
 term.setCursor(1,1)
