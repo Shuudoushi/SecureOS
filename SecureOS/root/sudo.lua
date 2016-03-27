@@ -10,7 +10,7 @@ local hn = io.open("/tmp/.hostname.dat", "r") -- Reads the hostname file.
 
 local function request()
   term.write("[sudo] password for ".. texthn ..": ")
-    local password = string.gsub(term.read(nil, nil, nil, ""), "\n", "")
+    local password = string.gsub(term.read({pwchar=""}), "\n", "")
 end
 
 local history = history or {}
