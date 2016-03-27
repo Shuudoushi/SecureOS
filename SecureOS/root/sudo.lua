@@ -8,11 +8,6 @@ local hn = io.open("/tmp/.hostname.dat", "r") -- Reads the hostname file.
   texthn = hn:read()
     hn:close()
 
-local function request()
-  term.write("[sudo] password for ".. texthn ..": ")
-    local password = string.gsub(term.read({pwchar=""}), "\n", "")
-end
-
 local history = history or {}
 table.insert(history, "")
 local historyIndex = #history
@@ -30,7 +25,7 @@ local args = {...}
 if #args ~= 0 then
   path = args[1]
 else
-  io.stderr:write("error") -- Too lazy to properly do this bit atm...
+  return 1 -- Too lazy to properly do this bit atm...
 end
 
 if args[1] == "!!" then
@@ -38,7 +33,10 @@ if args[1] == "!!" then
   os.execute("/root/sudo.lua " .. setHistoryIndex(index - 1))
 end
 
-request()
+term.write("[sudo] password for ".. texthn ..": ")
+local password = string.gsub(term.read({pwchar=""}), "\n", "")
+
+if password == nil then return 1 end
 
 local login, super = auth.validate(texthn, password)
 
