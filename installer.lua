@@ -28,14 +28,6 @@ local function downLoad()
       r:close()
   end
 
-  if not fs.exists("/root/") then
-    fs.makeDirectory("/root/")
-  end
-
-  if not fs.exists("/sbin/") then
-    fs.makeDirectory("/sbin/")
-  end
-
   if not fs.exists("/tmp/.install") then
     in = io.open("/tmp/.install", "w")
       in:write(os.date())
@@ -52,7 +44,7 @@ local function downLoad()
   os.sleep(1)
   term.setCursor(1,2)
 
-shell.execute("wget https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/sbin/update.lua /sbin/update.lua \n")
+shell.execute("wget -q https://raw.githubusercontent.com/Shuudoushi/SecureOS/release/sbin/update.lua /sbin/update.lua \n")
 shell.execute("/sbin/update.lua")
 end
 

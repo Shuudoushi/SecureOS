@@ -1,3 +1,4 @@
 etc = {
-"/etc/motd /etc/motd"
+"/etc/motd /etc/motd",
+"/etc/profile /etc/profile"
 }
