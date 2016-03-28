@@ -33,17 +33,10 @@ while running do
   term.write("User: ")
   username = string.lower(io.read())
   term.setCursor(1,3)
-
-  if term.getCursorBlink() == true then
-    term.setCursorBlink(false)
-  end
-
+  term.setCursorBlink(false)
   term.write("Password: ")
   password = string.gsub(term.read({pwchar=""}), "\n", "")
-
-  if term.getCursorBlink() == false then
-    term.setCursorBlink(true)
-  end
+  term.setCursorBlink(true)
 
   login = auth.validate(username, password)
 

@@ -33,16 +33,10 @@ if args[1] == "!!" then
   os.execute("/root/sudo.lua " .. setHistoryIndex(index - 1))
 end
 
-if term.getCursorBlink() == true then
-  term.setCursorBlink(false)
-end
-
+term.setCursorBlink(false)
 term.write("[sudo] password for ".. texthn ..": ")
 local password = string.gsub(term.read({pwchar=""}), "\n", "")
-
-if term.getCursorBlink() == false then
-  term.setCursorBlink(true)
-end
+term.setCursorBlink(true)
 
 if password == nil then return 1 end
 
