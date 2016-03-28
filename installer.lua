@@ -57,7 +57,7 @@ local function userInfo()
     username = string.lower(io.read())
   term.setCursor(1,3)
   term.write("Password: ")
-    password = string.gsub(term.read(nil, nil, nil, ""), "\n", "")
+    password = string.gsub(term.read({pwchar=""}), "\n", "")
 
   require("auth").addUser(username, password, true)
 

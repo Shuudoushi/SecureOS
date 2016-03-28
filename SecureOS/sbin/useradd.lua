@@ -53,7 +53,7 @@ else
     username = string.lower(io.read())
   term.setCursor(1,3)
   term.write("Password: ")
-    password = string.gsub(term.read(nil, nil, nil, ""), "\n", "")
+    password = string.gsub(term.read({pwchar=""}), "\n", "")
   term.setCursor(1,4)
   term.write("Root rights (Y/n): ")
     su = string.lower(io.read())
