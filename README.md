@@ -28,7 +28,7 @@ SecureOS is tested, in game, on a "maxed out" T3 server. However, it can run on 
 * x1 T3 Data Card
 
 ## Installing
-At this time, there is three ways of installing.
+At this time, there are three ways of installing.
 
 1.) Installing from the floppy that ships with [OpenSecurity](https://github.com/PC-Logix/OpenSecurity), in which case you'll need the default username and password to login in and run 'install'. Running 'tmpaccountdel.lua' after install with allow you to make a new account on the system and remove the default user 'root' all with little to no hassle or headache. Default user is `root` default password is `root`.
 
@@ -54,6 +54,8 @@ At this time, there is three ways of installing.
 [SpiritedDusty](https://github.com/SpiritedDusty) - Added things like `cd ~` taking a user to their home dir
 
 [Kodos](https://github.com/MyNameIsKodos) - Supplied ideas and helped with getting GitHub to stop being a git
+
+[payonel](https://github.com/payonel) - Helped with fixing SOS after merging changes to OpenOS into SOS.
 
 All the people of [#oc on Espernet IRC](http://webchat.esper.net/?channels=#oc)
 
