@@ -2,7 +2,6 @@ local keyboard = require("keyboard")
 local computer = require("computer")
 local fs = require("filesystem")
 local event = require("event")
-local shell = require("shell")
 local auth = require("auth")
 local term = require("term")
 
@@ -26,6 +25,7 @@ while running do
 
   os.setenv("HOME", nil)
   os.setenv("USER", nil)
+  os.setenv("PATH", nil)
 
   term.clear()
   term.setCursor(1,1)
@@ -66,14 +66,13 @@ while running do
       os.setenv("PS1", username .. "@" .. username .. "# ")
     end
 
-    shell.setWorkingDirectory("/home/" .. username .. "/")
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
     if fs.isAutorunEnabled() == false then
       fs.setAutorunEnabled(true)
     end
     event.ignore("key_down", check)
     running = false
-    shell.execute("/.autorun.lua")
+    os.execute("/.autorun.lua")
   else
     auth.userLog(username, "login_fail")
     term.clear()

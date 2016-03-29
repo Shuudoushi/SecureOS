@@ -1,7 +1,7 @@
 local fs = require("filesystem")
 local shell = require("shell")
 
-if not fs.exists("/home/"..os.getenv("USER")) then
+if not fs.exists("/home/" .. os.getenv("USER")) then
   io.stderr:write("error: no such user")
   return
 end

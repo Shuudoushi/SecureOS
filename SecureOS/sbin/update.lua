@@ -6,14 +6,14 @@ local term = require("term")
 
 if not require("auth").isRoot() then
   io.stderr:write("not authorized")
-  return
+  return 1
 end
 
 local args, options = shell.parse(...)
 
 if not component.isAvailable("internet") then
   io.stderr:write("No internet card found.")
-  return
+  return 1
 end
 
 local function update(args, options)
@@ -28,7 +28,7 @@ local function update(args, options)
     textu = args[1]
     if textu ~= "dev" and textu ~= "release" then
       io.stderr:write("Not a vaild repo tree.")
-      return
+      return 1
     end
   end
 
