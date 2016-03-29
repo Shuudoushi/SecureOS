@@ -64,7 +64,7 @@ local function update(args, options)
   end
 
   if options.f or options.force then
-    meversions = 0
+    myversions = 0
   else
     myversions = myversions()
   end
