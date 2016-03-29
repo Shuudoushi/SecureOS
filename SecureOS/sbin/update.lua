@@ -63,7 +63,12 @@ local function update(args, options)
     return env.myversions
   end
 
-  local myversions = myversions()
+  if options.f or options.force then
+    meversions = "0"
+  else
+    myversions = myversions()
+  end
+
   local onlineVersions = onlineVersions()
 
 term.clear()

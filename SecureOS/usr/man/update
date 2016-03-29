@@ -11,6 +11,8 @@ DESCRIPTION
 OPTIONS
   -a
     Allows the program to remember your choice for next update.
+  -f --force
+    Force update all SecureOS files.
 
 EXAMPLES
   update
