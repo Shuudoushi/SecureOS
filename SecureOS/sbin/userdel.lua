@@ -6,7 +6,7 @@ local auth = require("auth")
 
 if not require("auth").isRoot() then
   io.stderr:write("not authorized")
-  return
+  return 1
 end
 
 local args = shell.parse(...)
@@ -14,7 +14,7 @@ local args = shell.parse(...)
 if #args ~= 0 then
   username = string.lower(args[1])
   auth.rmUser(username)
-  auth.userLog(username, "removed")
+  auth.userLog(os.getenv("USER"), "removed " .. username)
 
 --[[  if computer.users(username) == true then
     computer.removeUser(username)
@@ -34,7 +34,7 @@ elseif #args == 0 then
     username = string.lower(io.read())
 
   auth.rmUser(username)
-  auth.userLog(username, "removed")
+  auth.userLog(os.getenv("USER"), "removed " .. username)
 
 --[[  if computer.users(username) == true then
     computer.removeUser(username)
@@ -47,5 +47,5 @@ elseif #args == 0 then
   username = ""
 
 else
-  return
+  return 1
 end

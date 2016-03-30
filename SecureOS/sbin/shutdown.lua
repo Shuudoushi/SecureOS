@@ -4,6 +4,15 @@ local term = require("term")
 
 local args, options = shell.parse(...)
 
+local function usage()
+  print("shutdown [-rs] <time> [reason]")
+  print(" -r reboot")
+  print(" -s seconds")
+  print(" <time> in minutes unless -s or 'now'")
+  print(" [reason] reason for shutdown or reboot")
+  return 1
+end
+
 if options.r then
   timeType = " minutes "
   mode = "rebooting "
@@ -11,7 +20,7 @@ if options.r then
     args[1] = "0"
   end
   if args[1] == nil then
-    args[1] = "0"
+    usage()
   end
   time = tonumber(args[1]) * 60
 else
@@ -34,12 +43,7 @@ if #args >= 1 then
     message = "System " .. mode .. "in " .. tostring(args[1]) .. timeType .. "for " .. args[2] .. "."
   end
 else
-  print("shutdown [-rs] <time> [reason]")
-  print(" -r reboot")
-  print(" -s seconds")
-  print(" <time> in minutes unless -s or 'now'")
-  print(" [reason] reason for shutdown or reboot")
-  return
+  usage()
 end
 
 local function system()

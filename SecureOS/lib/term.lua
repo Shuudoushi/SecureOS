@@ -202,7 +202,6 @@ function term.readKeyboard(ops)
   local filter = ops.filter and function(i) return term.internal.filter(ops.filter,i) end or term.internal.nop
   local pwchar = ops.pwchar and function(i) return term.internal.mask(ops.pwchar,i) end or term.internal.nop
   local history,db,hints={list=ops,index=0},ops.dobreak,{handler=ops.hintHandler}
-  term.setCursorBlink(true)
   local w=W()
   local draw=io.stdin.tty and term.drawText or term.internal.nop
   local input={w=w,promptx=w.x,prompty=w.y,index=0,data="",mask=pwchar}

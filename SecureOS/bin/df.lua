@@ -43,6 +43,8 @@ end
 local function formatSize(size)
   if not options.h then
     return tostring(size)
+  elseif type(size) == "string" then
+    return size
   end
   local sizes = {"", "K", "M", "G"}
   local unit = 1
@@ -70,7 +72,7 @@ else
   end
 end
 
-local result = {{"Filesystem", "Used", "Available", "Use%", "Mounted on"}}
+local result = {{"Filesystem", "Used", "Available", "Use%", "Mounted on"}} -- Figure out how to keep stuff mounted in /media from showing up.
 for path, proxy in pairs(mounts) do
   local label = proxy.getLabel() or proxy.address
   local used, total = proxy.spaceUsed(), proxy.spaceTotal()
@@ -103,5 +105,5 @@ for _, row in ipairs(result) do
   for col, value in ipairs(row) do
     io.write(text.padRight(value, m[col] + 2))
   end
-  io.write("\n")
+  print()
 end

@@ -49,5 +49,6 @@ bin = {
 "/bin/uptime.lua /bin/uptime.lua",
 "/bin/which.lua /bin/which.lua",
 "/bin/whoami.lua /bin/whoami.lua",
-"/bin/yes.lua /bin/yes.lua"
+"/bin/yes.lua /bin/yes.lua",
+"/bin/sudo.lua /bin/sudo.lua"
 }

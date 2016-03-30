@@ -93,7 +93,7 @@ end
 
 local function blackList()
   local env = {}
-  local config = loadfile("/root/blacklist.dat", nil, env)
+  local config = loadfile("/etc/.blacklist.dat", nil, env)
   if config then
     pcall(config)
   end
