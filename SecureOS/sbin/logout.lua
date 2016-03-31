@@ -9,4 +9,4 @@ end
 require("auth").userLog(os.getenv("USER"), "logout")
 fs.remove("/tmp/.root")
 shell.setWorkingDirectory("/")
-shell.execute("/root/login.lua")
+shell.execute("/sbin/login.lua")

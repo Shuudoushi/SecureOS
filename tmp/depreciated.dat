@@ -15,5 +15,9 @@ depreciated = {
 "/usr/man/adduser",
 "/usr/man/deluser",
 "/boot/z_login.lua",
-"/root/su.lua"
+"/root/su.lua",
+"/root/sudo.lua",
+"/root/blacklist.dat",
+"/root/login.lua",
+"/.autorun.lua"
 }

@@ -2,7 +2,6 @@ local keyboard = require("keyboard")
 local computer = require("computer")
 local fs = require("filesystem")
 local event = require("event")
-local shell = require("shell")
 local auth = require("auth")
 local term = require("term")
 
@@ -26,6 +25,7 @@ while running do
 
   os.setenv("HOME", nil)
   os.setenv("USER", nil)
+  os.setenv("PATH", nil)
 
   term.clear()
   term.setCursor(1,1)
@@ -33,21 +33,23 @@ while running do
   term.write("User: ")
   username = string.lower(io.read())
   term.setCursor(1,3)
+  term.setCursorBlink(false)
   term.write("Password: ")
-  password = string.gsub(term.read(nil, nil, nil, ""), "\n", "")
+  password = string.gsub(term.read({pwchar=""}), "\n", "")
+  term.setCursorBlink(true)
 
   login = auth.validate(username, password)
 
   if login then
-    auth.userLog(username, "login_pass")
-    if not fs.get("/").isReadOnly() then
+    os.setenv("USER", username)
+    os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/".. username .."/bin:/root:.")
+    if not fs.get(os.getenv("TMPDIR")).isReadOnly() then
       hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
-       hn:write(username)
-        hn:close()
-      os.setenv("HOME", "/home/" .. username)
-      os.setenv("USER", username)
-      os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/".. username .."/bin:/root:.")
+      hn:write(username)
+      hn:close()
     end
+    auth.userLog(username, "login_pass")
+
     term.clear()
     term.setCursor(1,1)
     print("Welcome, " ..username)
@@ -64,14 +66,10 @@ while running do
       os.setenv("PS1", username .. "@" .. username .. "# ")
     end
 
-    shell.setWorkingDirectory("/home/" .. username .. "/")
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
-    if fs.isAutorunEnabled() == false then
-      fs.setAutorunEnabled(true)
-    end
     event.ignore("key_down", check)
     running = false
-    shell.execute("/.autorun.lua")
+    require("shell").getShell()()
   else
     auth.userLog(username, "login_fail")
     term.clear()

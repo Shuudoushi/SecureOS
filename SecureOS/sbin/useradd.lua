@@ -6,7 +6,7 @@ local auth = require("auth")
 
 if not require("auth").isRoot() then
   io.stderr:write("not authorized")
-  return
+  return 1
 end
 
 local args, options = shell.parse(...)
@@ -40,7 +40,7 @@ if #args >= 2 then
 
   auth.addUser(args[1], args[2], su)
   dirTree(username)
-  auth.userLog(username, "added")
+  auth.userLog(os.getenv("USER"), "added " .. username)
   print(username .. " added")
   username, password, su = ""
   return
@@ -53,7 +53,7 @@ else
     username = string.lower(io.read())
   term.setCursor(1,3)
   term.write("Password: ")
-    password = string.gsub(term.read(nil, nil, nil, ""), "\n", "")
+    password = string.gsub(term.read({pwchar=""}), "\n", "")
   term.setCursor(1,4)
   term.write("Root rights (Y/n): ")
     su = string.lower(io.read())
@@ -69,7 +69,7 @@ else
   elseif su == nil then
     su = false
   else io.stderr:write("Invalid.")
-    return
+    return 1
   end
 
 --[[  if system == "y" or system == "yes" then
@@ -89,6 +89,6 @@ else
   auth.addUser(username, password, su)
 
   dirTree(username)
-  auth.userLog(username, "added")
+  auth.userLog(os.getenv("USER"), "added " .. username)
   username, password, su = ""
 end
