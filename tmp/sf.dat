@@ -1,4 +1,4 @@
 sf = {
-"/etc/profile /etc/profile",
-"/home/.shrc /home/.shrc"
+"/etc/profile",
+"/home/.shrc"
 }

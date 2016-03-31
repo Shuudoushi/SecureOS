@@ -13,8 +13,6 @@ local args = shell.parse(...)
 
 if #args ~= 0 then
   username = string.lower(args[1])
-  auth.rmUser(username)
-  auth.userLog(os.getenv("USER"), "removed " .. username)
 
 --[[  if computer.users(username) == true then
     computer.removeUser(username)
@@ -23,6 +21,9 @@ if #args ~= 0 then
   if fs.exists("/home/" .. username .. "/") then
     fs.remove("/home/" .. username .. "/")
   end
+
+  auth.rmUser(username)
+  auth.userLog(os.getenv("USER"), "removed " .. username)
   print(username.. " removed")
   username = ""
 elseif #args == 0 then

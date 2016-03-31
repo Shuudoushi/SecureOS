@@ -17,6 +17,7 @@ local function dirTree(username)
     fs.makeDirectory("/home/" .. username .. "/bin/")
     fs.makeDirectory("/home/" .. username .. "/lib/")
     fs.makeDirectory("/home/" .. username .. "/var/")
+    os.execute("cp /home/.shrc /home/" .. username .. "/.shrc")
   end
 end
 
@@ -86,9 +87,8 @@ else
     computer.addUser(username)
   end]]
 
-  auth.addUser(username, password, su)
-
   dirTree(username)
+  auth.addUser(username, password, su)
   auth.userLog(os.getenv("USER"), "added " .. username)
   username, password, su = ""
 end
