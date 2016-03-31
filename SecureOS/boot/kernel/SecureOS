@@ -171,7 +171,7 @@ do
 end
 
 while true do
-  local result, reason = xpcall(require("shell").getShell(), function(msg)
+  local result, reason = xpcall(loadfile("/sbin/login.lua"), function(msg)
     return tostring(msg).."\n"..debug.traceback()
   end)
   if not result then

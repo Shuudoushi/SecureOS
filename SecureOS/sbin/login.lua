@@ -41,15 +41,15 @@ while running do
   login = auth.validate(username, password)
 
   if login then
-    auth.userLog(username, "login_pass")
-    if not fs.get("/").isReadOnly() then
-      hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
-       hn:write(username)
-        hn:close()
-    end
-    os.setenv("HOME", "/home/" .. username)
     os.setenv("USER", username)
     os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/".. username .."/bin:/root:.")
+    if not fs.get(os.getenv("TMPDIR")).isReadOnly() then
+      hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
+      hn:write(username)
+      hn:close()
+    end
+    auth.userLog(username, "login_pass")
+
     term.clear()
     term.setCursor(1,1)
     print("Welcome, " ..username)
@@ -67,12 +67,9 @@ while running do
     end
 
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
-    if fs.isAutorunEnabled() == false then
-      fs.setAutorunEnabled(true)
-    end
     event.ignore("key_down", check)
     running = false
-    os.execute("/.autorun.lua")
+    require("shell").getShell()()
   else
     auth.userLog(username, "login_fail")
     term.clear()

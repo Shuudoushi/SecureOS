@@ -10,7 +10,7 @@ local function usage()
   print(" -s seconds")
   print(" <time> in minutes unless -s or 'now'")
   print(" [reason] reason for shutdown or reboot")
-  return 1
+  os.exit(1)
 end
 
 if options.r then
