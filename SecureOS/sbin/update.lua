@@ -100,7 +100,7 @@ print("SecureOS will now update from " .. textu .. ".\n")
     print("Finished\n")
   end
 
-  print("Checking for missing directories")
+  print("Checking for missing directories.")
   shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/dirs.dat /tmp/dirs.dat")
 
   local function dirs()
@@ -118,7 +118,31 @@ print("SecureOS will now update from " .. textu .. ".\n")
     for i = 1, #dirs do
       local files = fs.makeDirectory(shell.resolve(dirs[i]))
       if files ~= nil then
-        print("Made missing directory: " .. dirs[i])
+        print("Created missing directory: " .. dirs[i])
+      end
+    end
+    print("Finished\n")
+  end
+
+  print("Checking for missing system files.")
+  shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/sf.dat /tmp/sf.dat")
+
+  local function sf()
+    local env = {}
+    local config = loadfile("/tmp/sf.dat", nil, env)
+    if config then
+      pcall(config)
+    end
+    return env.sf
+  end
+
+  local sf = sf()
+
+  if sf then
+    for i = 1, #sf do
+      local files = shell.execute("wget -q https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/SecureOS" .. sf[i])
+      if files ~= nil then
+        print("Created missing system file: " .. sf[i])
       end
     end
     print("Finished\n")

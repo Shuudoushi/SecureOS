@@ -1,0 +1,4 @@
+sf = {
+"/etc/profile /etc/profile",
+"/home/.shrc /home/.shrc"
+}
