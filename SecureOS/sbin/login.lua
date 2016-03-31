@@ -43,8 +43,9 @@ while running do
   if login then
     os.setenv("USER", username)
     os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/".. username .."/bin:/root:.")
-    if not fs.get(os.getenv("TMPDIR")).isReadOnly() then
-      hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
+    local tmpdir = os.getenv("TMPDIR")
+    if tmpdir and not fs.get(tmpdir).isReadOnly() then
+      hn = io.open(tmpdir .. "/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
       hn:write(username)
       hn:close()
     end
