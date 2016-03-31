@@ -27,11 +27,11 @@ if #args ~= 0 then
 else
   return 1 -- Too lazy to properly do this bit atm...
 end
-
+--[[
 if args[1] == "!!" then
   local index = getHistoryIndex()
-  os.execute("/root/sudo.lua " .. setHistoryIndex(index - 1))
-end
+  os.execute("/bin/sudo.lua " .. setHistoryIndex(index - 1))
+end]]
 
 term.setCursorBlink(false)
 term.write("[sudo] password for ".. texthn ..": ")

@@ -18,5 +18,6 @@ depreciated = {
 "/root/su.lua",
 "/root/sudo.lua",
 "/root/blacklist.dat",
-"/root/login.lua"
+"/root/login.lua",
+"/.autorun.lua"
 }

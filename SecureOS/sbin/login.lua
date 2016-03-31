@@ -46,10 +46,10 @@ while running do
       hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
        hn:write(username)
         hn:close()
-      os.setenv("HOME", "/home/" .. username)
-      os.setenv("USER", username)
-      os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/".. username .."/bin:/root:.")
     end
+    os.setenv("HOME", "/home/" .. username)
+    os.setenv("USER", username)
+    os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/".. username .."/bin:/root:.")
     term.clear()
     term.setCursor(1,1)
     print("Welcome, " ..username)
