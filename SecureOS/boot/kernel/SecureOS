@@ -1,5 +1,6 @@
 do
   _G._OSVERSION = "SecureOS 0.72"
+  _G._CODENAME = "shadow"
 
   local component = component
   local computer = computer
