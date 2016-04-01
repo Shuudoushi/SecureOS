@@ -61,10 +61,10 @@ while running do
     local file = io.open("/etc/hostname")
 
     if file then
-      os.setenv("PS1", username .. "@" .. file:read("*l") .. "# ")
+      os.setenv("PS1HOST", username .. "@" .. file:read("*l"):sub(1, 10) .. "# ")
       file:close()
     else
-      os.setenv("PS1", username .. "@" .. username .. "# ")
+      os.setenv("PS1HOST", username .. "@" .. username .. "# ")
     end
 
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
