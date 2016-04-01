@@ -1,4 +1,4 @@
-depreciated = {
+deprecated = {
 "/bin/usage.lua",
 "/boot/99_login.lua",
 "/root/.root.lua",

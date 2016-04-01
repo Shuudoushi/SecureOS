@@ -76,25 +76,25 @@ term.clear()
 term.setCursor(1,1)
 print("SecureOS will now update from " .. textu .. ".\n")
   os.sleep(1)
-  print("Checking for depreciated packages.")
-  shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/depreciated.dat /tmp/depreciated.dat")
+  print("Checking for deprecated packages.")
+  shell.execute("wget -fq https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/tmp/deprecated.dat /tmp/.dat")
 
-  local function depreciated()
+  local function deprecated()
     local env = {}
-    local config = loadfile("/tmp/depreciated.dat", nil, env)
+    local config = loadfile("/tmp/deprecated.dat", nil, env)
     if config then
       pcall(config)
     end
-    return env.depreciated
+    return env.deprecated
   end
 
-  local depreciated = depreciated()
+  local deprecated = deprecated()
 
-  if depreciated then
-    for i = 1, #depreciated do
-      local files = os.remove(shell.resolve(depreciated[i]))
+  if deprecated then
+    for i = 1, #deprecated do
+      local files = os.remove(shell.resolve(deprecated[i]))
       if files ~= nil then
-        print("Removed " .. depreciated[i] .. ": a depreciated package")
+        print("Removed " .. deprecated[i] .. ": a deprecated package")
       end
     end
     print("Finished\n")
