@@ -140,8 +140,7 @@ print("SecureOS will now update from " .. textu .. ".\n")
 
   if sf then
     for i = 1, #sf do
-      local files = shell.resolve(sf[i])
-      if files ~= nil then
+      if not fs.exists(sf[i]) then
         shell.execute("wget -q https://raw.githubusercontent.com/Shuudoushi/SecureOS/" .. textu .. "/SecureOS" .. sf[i] .. " " .. sf[i])
         print("Created missing system file: " .. sf[i])
       end
