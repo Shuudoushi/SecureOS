@@ -425,8 +425,8 @@ end
 function --[[@delayloaded-start@]] sh.internal.glob(glob_pattern)
   local segments = text.split(glob_pattern, {"/"}, true)
   local hiddens = tx.select(segments,function(e)return e:match("^%%%.")==nil end)
-  local function is_visible(s,i) 
-    return not hiddens[i] or s:match("^%.") == nil 
+  local function is_visible(s,i)
+    return not hiddens[i] or s:match("^%.") == nil
   end
 
   local function magical(s)
@@ -469,7 +469,7 @@ function --[[@delayloaded-start@]] sh.internal.glob(glob_pattern)
   end
   -- if no next_paths were hit here, the ENTIRE glob value is not a path
   return paths
-end --[[@delayloaded-end@]] 
+end --[[@delayloaded-end@]]
 
 function --[[@delayloaded-start@]] sh.getMatchingPrograms(baseName)
   local result = {}
@@ -482,7 +482,7 @@ function --[[@delayloaded-start@]] sh.getMatchingPrograms(baseName)
     baseName = "^(" .. text.escapeMagic(baseName) .. ".*)%.lua$"
   end
   for basePath in string.gmatch(os.getenv("PATH"), "[^:]+") do
-    for file in fs.list(basePath) do
+    for file in fs.list(shell.resolve(basePath)) do
       local match = file:match(baseName)
       if match and not result_keys[match] then
         table.insert(result, match)
@@ -491,7 +491,7 @@ function --[[@delayloaded-start@]] sh.getMatchingPrograms(baseName)
     end
   end
   return result
-end --[[@delayloaded-end@]] 
+end --[[@delayloaded-end@]]
 
 function --[[@delayloaded-start@]] sh.getMatchingFiles(basePath, name)
   local resolvedPath = shell.resolve(basePath)
@@ -520,7 +520,7 @@ function --[[@delayloaded-start@]] sh.getMatchingFiles(basePath, name)
     result[1] = result[1] .. "/"
   end
   return result
-end --[[@delayloaded-end@]] 
+end --[[@delayloaded-end@]]
 
 function --[[@delayloaded-start@]] sh.internal.hintHandlerSplit(line)
   if line:sub(-1):find("%s") then
@@ -536,7 +536,7 @@ function --[[@delayloaded-start@]] sh.internal.hintHandlerSplit(line)
   end
   local l = text.internal.normalize({splits[num_splits]})[1]
   return line:sub(1,-unicode.len(l)-1), l
-end --[[@delayloaded-end@]] 
+end --[[@delayloaded-end@]]
 
 function --[[@delayloaded-start@]] sh.internal.hintHandlerImpl(full_line, cursor)
   local line = unicode.sub(full_line, 1, cursor - 1)
@@ -563,8 +563,8 @@ function --[[@delayloaded-start@]] sh.internal.hintHandlerImpl(full_line, cursor
   local resultSuffix = suffix
   if #result > 0 and unicode.sub(result[1], -1) ~= "/" and
      not suffix:sub(1,1):find('%s') and
-     (#result == 1 or searchInPath or not prefix) then 
-    resultSuffix  = " " .. resultSuffix 
+     (#result == 1 or searchInPath or not prefix) then
+    resultSuffix  = " " .. resultSuffix
   end
   prefix = prev .. (prefix or "")
   table.sort(result)
@@ -572,7 +572,7 @@ function --[[@delayloaded-start@]] sh.internal.hintHandlerImpl(full_line, cursor
     result[i] = prefix .. result[i] .. resultSuffix
   end
   return result
-end --[[@delayloaded-end@]] 
+end --[[@delayloaded-end@]]
 
 -- verifies that no pipes are doubled up nor at the start nor end of words
 function --[[@delayloaded-start@]] sh.internal.hasValidPiping(words, pipes)
@@ -680,7 +680,7 @@ function --[[@delayloaded-start@]] sh.internal.splitStatements(words, semicolon)
   checkArg(1, words, "table")
   checkArg(2, semicolon, "string", "nil")
   semicolon = semicolon or ";"
-  
+
   return tx.partition(words, function(g, i, t)
     if isWord(g,semicolon) then
       return i, i
@@ -703,7 +703,7 @@ end --[[@delayloaded-end@]]
 function --[[@delayloaded-start@]] sh.internal.groupChains(s)
   checkArg(1,s,"table")
   return tx.partition(s,function(w)return isWordOf(w,{"&&","||"})end)
-end --[[@delayloaded-end@]] 
+end --[[@delayloaded-end@]]
 
 function --[[@delayloaded-start@]] sh.internal.remove_negation(chain)
   if isWord(chain[1],"!") then
@@ -711,7 +711,7 @@ function --[[@delayloaded-start@]] sh.internal.remove_negation(chain)
     return true and not sh.internal.remove_negation(chain)
   end
   return false
-end --[[@delayloaded-end@]] 
+end --[[@delayloaded-end@]]
 
 function --[[@delayloaded-start@]] sh.internal.newMemoryStream()
   local memoryStream = {}
