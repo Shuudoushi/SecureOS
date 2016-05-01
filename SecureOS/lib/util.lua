@@ -5,11 +5,11 @@ local util = {}
 
 local prefixes = {
         [0] = "",
-        [3] = "K",
-        [6] = "M",
-        [9] = "G",
-        [12] = "T",
-        [15] = "P",
+        [1] = "K",
+        [2] = "M",
+        [3] = "G",
+        [4] = "T",
+        [5] = "P",
 }
 
 local function round(n)
@@ -21,11 +21,8 @@ function util.readableNumber(n)
 
         if not n then error("Not a number", 2) end
         -- Get the log
-        local l = ((n == 0) and 0) or math.floor(math.log(n, 10))
-        -- Make it a multiple of 3, rounding down
-        l = l - (l % 3)
-
-        return round(n / math.pow(10, l))..prefixes[l]
+        local l = ((n == 0) and 0) or math.floor(math.log(n, 1000))
+        return round(n / math.pow(1000, l))..prefixes[l]
 end
 
 function util.round(num, idp)
