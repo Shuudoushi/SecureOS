@@ -7,6 +7,8 @@ local term = require("term")
 
 local running = true
 
+event.pull("term_available")
+
 local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
  if keyboard.isControlDown() then
   io.stderr:write("( ͡° ͜ʖ ͡°)")
@@ -31,21 +33,21 @@ while running do
   term.setCursor(1,1)
   print(_OSVERSION .. " " .. os.date("%F %X"))
   term.write("User: ")
-  username = string.lower(io.read())
+  local username = string.lower(io.read())
   term.setCursor(1,3)
   term.setCursorBlink(false)
   term.write("Password: ")
-  password = string.gsub(term.read({pwchar=""}), "\n", "")
+  local password = string.gsub(term.read({pwchar=""}), "\n", "")
   term.setCursorBlink(true)
 
-  login = auth.validate(username, password)
+  local login = auth.validate(username, password)
 
   if login then
     os.setenv("USER", username)
     os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/".. username .."/bin:/root:.")
     local tmpdir = os.getenv("TMPDIR")
     if tmpdir and not fs.get(tmpdir).isReadOnly() then
-      hn = io.open(tmpdir .. "/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
+      local hn = io.open(tmpdir .. "/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
       hn:write(username)
       hn:close()
     end
