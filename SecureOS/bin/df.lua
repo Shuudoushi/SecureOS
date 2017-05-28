@@ -43,6 +43,8 @@ end
 local function formatSize(size)
   if not options.h then
     return tostring(size)
+  elseif type(size) == "string" then
+    return size
   end
   local sizes = {"", "K", "M", "G"}
   local unit = 1
@@ -57,21 +59,23 @@ end
 local mounts = {}
 if #args == 0 then
   for proxy, path in fs.mounts() do
-    mounts[path] = proxy
+    if not mounts[proxy] or mounts[proxy]:len() > path:len() then
+      mounts[proxy] = path
+    end
   end
 else
   for i = 1, #args do
-    local proxy, path = fs.get(args[i])
+    local proxy, path = fs.get(shell.resolve(args[i]))
     if not proxy then
       io.stderr:write(args[i], ": no such file or directory\n")
     else
-      mounts[path] = proxy
+      mounts[proxy] = path
     end
   end
 end
 
 local result = {{"Filesystem", "Used", "Available", "Use%", "Mounted on"}}
-for path, proxy in pairs(mounts) do
+for proxy, path in pairs(mounts) do
   local label = proxy.getLabel() or proxy.address
   local used, total = proxy.spaceUsed(), proxy.spaceTotal()
   local available, percent
@@ -101,7 +105,8 @@ end
 
 for _, row in ipairs(result) do
   for col, value in ipairs(row) do
-    io.write(text.padRight(value, m[col] + 2))
+    local padding = col == #row and 0 or 2
+    io.write(text.padRight(value, m[col] + padding))
   end
-  io.write("\n")
+  print()
 end

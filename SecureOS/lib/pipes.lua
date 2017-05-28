@@ -15,16 +15,14 @@ function pipeStream.new(pm)
   return setmetatable(stream, metatable)
 end
 function pipeStream:resume()
-  local yield_args = table.pack(self.pm.pco.resume_all(table.unpack(self.pm.args)))
+  local yield_args = table.pack(self.pm.pco.resume_all())
   if not yield_args[1] then
-    self.pm.args = {false}
     self.pm.dead = true
 
     if not yield_args[1] and yield_args[2] then
       io.stderr:write(tostring(yield_args[2]) .. "\n")
     end
   end
-  self.pm.args = {true}
   return table.unpack(yield_args)
 end
 function pipeStream:close()
@@ -49,7 +47,7 @@ function pipeStream:close()
   local pco_root = self.pm.threads[1]
   if co.status(pco_root) == "dead" then
     -- I would have liked the pco stack to unwind itself for dead coroutines
-    -- maybe I haven't handled aborts corrects
+    -- maybe I haven't handled aborts correctly
     return
   end
 
@@ -128,15 +126,15 @@ function plib.internal.redirectRead(pm)
   return reader
 end
 
-function plib.internal.create(fp)
+function plib.internal.create(fp, init, name)
   local _co = process.info().data.coroutine_handler
 
   local pco = setmetatable(
   {
     stack = {},
-    args = {},
-    next = nil,
+    next = false,
     create = _co.create,
+    wrap = _co.wrap,
     previous_handler = _co
   }, {__index=_co})
 
@@ -163,19 +161,19 @@ function plib.internal.create(fp)
     return _co.yield(...)
   end
   function pco.set_unwind(from)
-    pco.next = nil
+    pco.next = false
     if from then
       local index = pco.index_of(from)
       if index then
         pco.stack = tx.sub(pco.stack, 1, index-1)
-        pco.next = pco.stack[index-1]
+        pco.next = pco.stack[index-1] or false
       end
     end
   end
   function pco.resume_all(...)
     local base = pco.stack[1]
     local top = pco.top()
-    if type(base) ~= "thread" or _co.status(base) ~= "suspended" or 
+    if type(base) ~= "thread" or _co.status(base) ~= "suspended" or
        type(top) ~= "thread" or _co.status(top) ~= "suspended" then
       return false
     end
@@ -195,7 +193,7 @@ function plib.internal.create(fp)
     checkArg(1, thread, "thread")
     local status = pco.status(thread)
     if status ~= "suspended" then
-      local msg = string.format("cannot resume %s coroutine", 
+      local msg = string.format("cannot resume %s coroutine",
         status == "dead" and "dead" or "non-suspended")
       return false, msg
     end
@@ -214,7 +212,7 @@ function plib.internal.create(fp)
       return true, _co.yield(...) -- pass args to resume next
     else
       -- the stack is not running
-      pco.next = nil
+      pco.next = false
       local yield_args = table.pack(_co.resume(thread, ...))
       if #pco.stack > 0 then
         -- thread may have crashed (crash unwinds as well)
@@ -228,7 +226,7 @@ function plib.internal.create(fp)
           -- in such a case, yield out first, then resume where we left off
         if pco.next and pco.next ~= thread then
           local next = pco.next
-          pco.next = nil
+          pco.next = false
           return pco.resume(next, table.unpack(yield_args,2,yield_args.n))
         end
       end
@@ -251,18 +249,9 @@ function plib.internal.create(fp)
 
     return _co.status(thread)
   end
-  function pco.wrap(f)
-    local thread = coroutine.create(f)
-    return function(...)
-      local result_pack = table.pack(pco.resume(thread, ...))
-      local result, reason = result_pack[1], result_pack[2]
-      assert(result, reason)
-      return select(2, table.unpack(result_pack))
-    end
-  end
 
   if fp then
-    pco.stack = {process.load(fp,nil,nil--[[init]],"pco root")}
+    pco.stack = {process.load(fp,nil,init,name or "pco root")}
     process.info(pco.stack[1]).data.coroutine_handler = pco
   end
 
@@ -279,7 +268,7 @@ function pipeManager.reader(pm,...)
 
     -- if we are a reader pipe, we leave the buffer alone and yield to previous
     if pm.pco.status(pm.threads[pm.prog_id]) ~= "dead" then
-      pm.pco.yield()
+      pm.pco.yield(...)
     end
   end
   pm.dead = true
@@ -319,54 +308,42 @@ function pipeManager.new(prog, mode, env)
     return nil, "bad argument #2: invalid mode " .. tostring(mode) .. " must be r or w"
   end
 
-  local shellPath = os.getenv("SHELL") or "/bin/sh"
-  local shellPath, reason = shell.resolve(shellPath, "lua")
+  local shellPath, reason = shell.resolve(os.getenv("SHELL") or "/bin/sh", "lua")
   if not shellPath then
     return nil, reason
   end
 
   local pm = setmetatable(
-    {dead=false,closed=false,args={},prog=prog,mode=mode,env=env},
+    {dead=false,closed=false,prog=prog,mode=mode,env=env},
     {__index=pipeManager}
   )
   pm.prog_id = pm.mode == "r" and 1 or 2
   pm.self_id = pm.mode == "r" and 2 or 1
-  pm.handler = pm.mode == "r" and 
+  pm.handler = pm.mode == "r" and
     function()return pipeManager.reader(pm)end or
     function()pm.dead=true end
 
   pm.commands = {}
-  pm.commands[pm.prog_id] = {shellPath, sh.internal.buildCommandRedirects({})}
-  pm.commands[pm.self_id] = {pm.handler, sh.internal.buildCommandRedirects({})}
+  pm.commands[pm.prog_id] = {shellPath, {}}
+  pm.commands[pm.self_id] = {pm.handler, {}}
 
   pm.root = function()
     local reason
-    pm.threads, reason, pm.inputs, pm.outputs = 
-      sh.internal.buildPipeStream(pm.commands, pm.env)
+    pm.threads, reason = sh.internal.createThreads(pm.commands, pm.env, {[pm.prog_id]=table.pack(pm.env,pm.prog)})
 
     if not pm.threads then
       pm.dead = true
-      return false, reason -- 2nd return is reason, not pipes, on error :)
+      return false, reason
     end
-    pm.pipe = reason[1] -- an array of pipes of length 1
 
-    local startup_args = {}
+    pm.pipe = process.info(pm.threads[1]).data.io[1]
+
     -- if we are the writer, we need args to resume prog
     if pm.mode == "w" then
-      pm.pipe.stream.args = {pm.env,pm.prog,n=2}
-      startup_args = {true,n=1}
-      -- also, if we are the writer, we need to intercept the reader
-      pm.pipe.stream.redirect.read = plib.internal.redirectRead(pm)
-    else
-      startup_args = {true,pm.env,pm.prog,n=3}
+      pm.pipe.stream.redirect[0] = plib.internal.redirectRead(pm)
     end
 
-    return sh.internal.executePipeStream(
-      pm.threads,
-      {pm.pipe},
-      pm.inputs,
-      pm.outputs,
-      startup_args)
+    return sh.internal.runThreads(pm.threads)
   end
 
   return pm
@@ -383,15 +360,22 @@ function plib.popen(prog, mode, env)
     return false, reason
   end
 
-  pm.pco=plib.internal.create(pm.root)
-  
+  pm.pco = plib.internal.create(pm.root)
+
   local pfd = require("buffer").new(mode, pipeStream.new(pm))
-  pfd:setvbuf("no", nil) -- 2nd are to read chunk size
+  pfd:setvbuf("no", 0) -- 2nd are to read chunk size
 
   -- popen processes start on create (which is LAME :P)
   pfd.stream:resume()
 
   return pfd
+end
+
+function plib.create(fp, name)
+  checkArg(1, fp, "function")
+  checkArg(2, name, "string", "nil")
+  local pco = plib.internal.create(fp, nil, name)
+  return pco.stack[1]
 end
 
 return plib

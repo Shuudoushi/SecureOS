@@ -8,13 +8,13 @@ https://raw.githubusercontent.com/OpenPrograms/Wobbo-Programs/master/grep/grep.l
 
 local fs = require("filesystem")
 local shell = require("shell")
-local term = require("term")
+local tty = require("tty")
 
 -- Process the command line arguments
 
 local args, options = shell.parse(...)
 
-local gpu = term.gpu()
+local gpu = tty.gpu()
 
 local function printUsage(ostream, msg)
   local s = ostream or io.stdout
@@ -106,7 +106,7 @@ local m_only = pop('o','only-matching')
 local quiet = pop('q','quiet','silent')
 
 local print_count = pop('c','count')
-local colorize = pop('color','colour') and io.output().tty and term.isAvailable()
+local colorize = pop('color','colour') and io.output().tty and tty.isAvailable()
 
 local noop = function(...)return ...;end
 local setc = colorize and gpu.setForeground or noop
@@ -195,7 +195,7 @@ local function readLines()
         meta.label = file
         local file, reason = resolve(file)
         if fs.exists(file) then
-          curHand = io.open(file, 'r')
+          curHand, reason = io.open(file, 'r')
           if not curHand then
             local msg = string.format("failed to read from %s: %s", meta.label, reason)
             stderr:write("grep: ",msg,"\n")
@@ -265,7 +265,7 @@ local function test(m,p)
     if max_matches == 0 then os.exit(1) end
     any_hit_ec = 0
     m.hits, hit_value = m.hits + hit_value, 0
-    if max_matches == m.hits or f_only or no_only then
+    if f_only or no_only then
       m.close = true
     end
     if flush or quiet then return end
@@ -279,11 +279,11 @@ local function test(m,p)
       write(':', COLON_COLOR)
       needs_line_num = nil
     end
-    local p=m_only and '' or m.line:sub(last_index,(i or 0)-1)
+    local s=m_only and '' or m.line:sub(last_index,(i or 0)-1)
     local g=i and m.line:sub(i,j) or ''
-    if i==1 then g=trim_front(g) elseif last_index==1 then p=trim_front(p) end
-    if j==slen then g=trim_back(g) elseif not i then p=trim_back(p) end
-    write(p)
+    if i==1 then g=trim_front(g) elseif last_index==1 then s=trim_front(s) end
+    if j==slen then g=trim_back(g) elseif not i then s=trim_back(s) end
+    write(s)
     write(g, MATCH_COLOR)
     empty_line = false
     last_index = (j or slen)+1
@@ -291,9 +291,12 @@ local function test(m,p)
       write("\n")
       empty_line = true
       needs_filename, needs_line_num = include_filename, print_line_num
-    end
+    elseif p:find("^^") and not plain then p="^$" end
   end
   if not empty_line then write("\n") end
+  if max_matches ~= math.huge and max_matches >= m.hits then
+    m.close = true
+  end
 end
 for meta,status in readLines() do
   if not meta then

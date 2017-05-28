@@ -31,23 +31,25 @@ while running do
   term.setCursor(1,1)
   print(_OSVERSION .. " " .. os.date("%F %X"))
   term.write("User: ")
-  username = string.lower(io.read())
+  local username = string.lower(io.read())
   term.setCursor(1,3)
   term.write("Password: ")
-  password = string.gsub(term.read(nil, nil, nil, ""), "\n", "")
+  local password = string.gsub(term.read(nil, nil, nil, ""), "\n", "")
 
-  login = auth.validate(username, password)
+  local login = auth.validate(username, password)
 
   if login then
     auth.userLog(username, "login_pass")
     if not fs.get("/").isReadOnly() then
-      hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
-       hn:write(username)
+      local hn = io.open("/tmp/.hostname.dat", "w") -- Writes the user inputted username to file for future use.
+      if hn then
+        hn:write(username)
         hn:close()
-      os.setenv("HOME", "/home/" .. username)
-      os.setenv("USER", username)
-      os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/".. username .."/bin:/root:.")
+      end
     end
+    os.setenv("HOME", "/home/" .. username)
+    os.setenv("USER", username)
+    os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/".. username .."/bin:/root:.")
     term.clear()
     term.setCursor(1,1)
     print("Welcome, " ..username)
