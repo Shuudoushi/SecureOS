@@ -19,9 +19,6 @@ package.loaded = loaded
 local preload = {}
 package.preload = preload
 
-local delayed = {}
-package.delayed = delayed
-
 package.searchers = {}
 
 function package.searchpath(name, path, sep, rep)
@@ -39,7 +36,7 @@ function package.searchpath(name, path, sep, rep)
       subPath = fs.concat(os.getenv("PWD") or "/", subPath)
     end
     if fs.exists(subPath) then
-      local file = io.open(subPath, "r")
+      local file = fs.open(subPath, "r")
       if file then
         file:close()
         return subPath
@@ -58,32 +55,6 @@ local function preloadSearcher(module)
   end
 end
 
-local delay_data = {}
-local delay_tools = setmetatable({},{__mode="v"})
-
-package.delay_data = delay_data
-
-function delay_data.__index(tbl,key)
-  local lookup = delay_tools.lookup or loadfile("/lib/tools/delayLookup.lua")
-  delay_tools.lookup = lookup
-  return lookup(delay_data, tbl, key)
-end
-delay_data.__pairs = delay_data.__index -- nil key acts like pairs
-
-function delaySearcher(module)
-  if not delayed[module] then
-    return "\tno field package.delayed['" .. module .. "']"
-  end
-  local filepath, reason = package.searchpath(module, package.path)
-  if not filepath then
-    return reason
-  end
-  local parser = delay_tools.parser or loadfile("/lib/tools/delayParse.lua")
-  delay_tools.parser = parser
-  local loader, reason = parser(filepath,delay_data)
-  return loader, reason
-end
-
 local function pathSearcher(module)
   local filepath, reason = package.searchpath(module, package.path)
   if filepath then
@@ -99,7 +70,6 @@ local function pathSearcher(module)
 end
 
 table.insert(package.searchers, preloadSearcher)
-table.insert(package.searchers, delaySearcher)
 table.insert(package.searchers, pathSearcher)
 
 function require(module)
@@ -113,7 +83,7 @@ function require(module)
       -- the pcall is mostly for out of memory errors
       local ok, f, extra = pcall(package.searchers[i], module)
       if not ok then
-        table.insert(errorMsg, "\t" .. f)
+        table.insert(errorMsg, "\t" .. (f or "nil"))
       elseif f and type(f) ~= "string" then
         loader = f
         value = extra
@@ -139,7 +109,7 @@ function require(module)
       error(table.concat(errorMsg, "\n"), 2)
     end
   else
-    error("already loading: " .. module .. debug.traceback(), 2)
+    error("already loading: " .. module .. "\n" .. debug.traceback(), 2)
   end
 end
 

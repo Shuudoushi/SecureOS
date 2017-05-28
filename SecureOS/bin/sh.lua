@@ -1,6 +1,6 @@
 local event = require("event")
 local shell = require("shell")
-local term = require("term")
+local tty = require("tty")
 local text = require("text")
 local sh = require("sh")
 local fs = require("filesystem")
@@ -11,30 +11,33 @@ if input[2] then
   table.insert(args, 1, input[2])
 end
 
-local history = {}
+local history = {hint = sh.hintHandler}
 shell.prime()
 
 if #args == 0 and (io.stdin.tty or options.i) and not options.c then
   -- interactive shell.
   -- source profile
-  if not term.isAvailable() then event.pull("term_available") end
+  if not tty.isAvailable() then event.pull("term_available") end
   loadfile(shell.resolve("source","lua"))("/etc/profile")
   while true do
-    if not term.isAvailable() then -- don't clear unless we lost the term
-      while not term.isAvailable() do
+    if not tty.isAvailable() then -- don't clear unless we lost the term
+      while not tty.isAvailable() do
         event.pull("term_available")
       end
-      term.clear()
+      tty.clear()
     end
-    local gpu = term.gpu()
-    while term.isAvailable() do
+    local gpu = tty.gpu()
+    while tty.isAvailable() do
       local foreground = gpu.setForeground(0xFF0000)
-      term.write(sh.expand(os.getenv("PS1") or "$ "))
+      tty.write(sh.expand(os.getenv("PS1") or "$ "))
       gpu.setForeground(foreground)
-      term.setCursorBlink(true)
-      local command = term.read(history, nil, sh.hintHandler)
+      tty.setCursorBlink(true)
+      local command = tty.read(history)
       if not command then
-        io.write("exit\n")
+        if command == false then
+          break -- soft interrupt
+        end
+        io.write("exit\n") -- pipe closed
         return -- eof
       end
       command = text.trim(command)
@@ -52,8 +55,8 @@ if #args == 0 and (io.stdin.tty or options.i) and not options.c then
           end
         return
       elseif command ~= "" then
-        local result, reason = os.execute(command)
-        if term.getCursor() > 1 then
+        local result, reason = sh.execute(_ENV, command)
+        if tty.getCursor() > 1 then
           print()
         end
         if not result then

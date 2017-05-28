@@ -1,8 +1,7 @@
-local event = require("event")
 local fs = require("filesystem")
 local keyboard = require("keyboard")
 local shell = require("shell")
-local term = require("term")
+local term = require("term") -- TODO use tty and cursor position instead of global area and gpu
 local text = require("text")
 local unicode = require("unicode")
 
@@ -17,17 +16,21 @@ if #args == 0 then
 end
 
 local filename = shell.resolve(args[1])
+local file_parentpath = fs.path(filename)
+
+if fs.exists(file_parentpath) and not fs.isDirectory(file_parentpath) then
+  io.stderr:write(string.format("Not a directory: %s\n", file_parentpath))
+  return 1
+end
 
 local readonly = options.r or fs.get(filename) == nil or fs.get(filename).isReadOnly()
 
-if not fs.exists(filename) then
-  if fs.isDirectory(filename) then
-    io.stderr:write("file is a directory\n")
-    return 1
-  elseif readonly then
-    io.stderr:write("file system is read only\n")
-    return 1
-  end
+if fs.isDirectory(filename) then
+  io.stderr:write("file is a directory\n")
+  return 1
+elseif not fs.exists(filename) and readonly then
+  io.stderr:write("file system is read only\n")
+  return 1
 end
 
 local function loadConfig()
@@ -430,7 +433,7 @@ local function find()
     setStatus("Find: " .. findText)
 
     local _, address, char, code = term.pull("key_down")
-    if address == term.keyboard().address then
+    if address == term.keyboard() then
       local handler, name = getKeyBindHandler(code)
       highlight(cbx, cby, unicode.wlen(findText), false)
       if name == "newline" then
@@ -504,6 +507,9 @@ local keyBindHandlers = {
       end
       fs.copy(filename, backup)
     end
+    if not fs.exists(file_parentpath) then
+      fs.makeDirectory(file_parentpath)
+    end
     local f, reason = io.open(filename, "w")
     if f then
       local chars, firstLine = 0, true
@@ -557,7 +563,7 @@ getKeyBindHandler = function(code)
             elseif value == "shift" then shift = true
             else key = value end
           end
-          local keyboardAddress = term.keyboard().address
+          local keyboardAddress = term.keyboard()
           if (not alt or keyboard.isAltDown(keyboardAddress)) and
              (not control or keyboard.isControlDown(keyboardAddress)) and
              (not shift or keyboard.isShiftDown(keyboardAddress)) and
@@ -656,7 +662,7 @@ end
 
 while running do
   local event, address, arg1, arg2, arg3 = term.pull()
-  if address == term.keyboard().address or address == term.screen().address then
+  if address == term.keyboard() or address == term.screen() then
     local blink = true
     if event == "key_down" then
       onKeyDown(arg1, arg2)

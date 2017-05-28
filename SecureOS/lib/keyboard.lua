@@ -27,6 +27,9 @@ keyboard.keys = {
   tab             = 0x0F,
   up              = 0xC8,
   ["end"]         = 0xCF,
+  enter           = 0x1C,
+  tab             = 0x0F,
+  numpadenter     = 0x9C,
 }
 
 -- Create inverse mapping for name lookup.
@@ -34,7 +37,7 @@ setmetatable(keyboard.keys,
 {
   __index = function(tbl, k)
     getmetatable(keyboard.keys).__index = nil -- to be safe
-    loadfile("/lib/tools/keyboard_full.lua","t",setmetatable({keyboard=keyboard},{__index=_G}))()
+    loadfile(package.searchpath("tools/keyboard_full", package.path), "t", setmetatable({keyboard=keyboard},{__index=_G}))()
     return tbl[k]
   end
 })
@@ -42,14 +45,7 @@ setmetatable(keyboard.keys,
 -------------------------------------------------------------------------------
 
 local function getKeyboardAddress(address)
-  if address then
-    return address
-  else
-    local primary = component.isAvailable("keyboard") and component.getPrimary("keyboard")
-    if primary then
-      return primary.address
-    end
-  end
+  return address or require("tty").keyboard()
 end
 
 local function getPressedCodes(address)
