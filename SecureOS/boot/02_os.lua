@@ -2,7 +2,6 @@ local computer = require("computer")
 local event = require("event")
 local fs = require("filesystem")
 local shell = require("shell")
-local unicode = require("unicode")
 local process = require("process")
 
 local function env()
@@ -21,37 +20,26 @@ function os.exit(code)
 end
 
 function os.getenv(varname)
-  if varname == '#' then
-    return #env()
-  elseif varname ~= nil then
-    return env()[varname]
-  else
-    return env()
+  local env = env()
+  if not varname then
+    return env
+  elseif varname == '#' then
+    return #env
   end
+  return env[varname]
 end
 
 function os.setenv(varname, value)
   checkArg(1, varname, "string", "number")
-  if value == nil then
-    env()[varname] = nil
-  else
-    local success, val = pcall(tostring, value)
-    if success then
-      env()[varname] = val
-      return env()[varname]
-    else
-      return nil, val
-    end
+  if value ~= nil then
+    value = tostring(value)
   end
+  env()[varname] = value
+  return value
 end
 
-function os.remove(...)
-  return fs.remove(...)
-end
-
-function os.rename(...)
-  return fs.rename(...)
-end
+os.remove = fs.remove
+os.rename = fs.rename
 
 function os.sleep(timeout)
   checkArg(1, timeout, "number", "nil")

@@ -20,7 +20,6 @@ function process.findProcess(co)
 end
 
 -------------------------------------------------------------------------------
-
 function process.load(path, env, init, name)
   checkArg(1, path, "string", "function")
   checkArg(2, env, "table", "nil")
@@ -28,40 +27,42 @@ function process.load(path, env, init, name)
   checkArg(4, name, "string", "nil")
 
   assert(type(path) == "string" or env == nil, "process cannot load function environemnts")
+  name = name or ""
 
   local p = process.findProcess()
-  if p then
-    env = env or p.env
-  end
-  env = setmetatable({}, {__index=env or _G})
-
-  local code = nil
+  env = env or p.env
+  local code
   if type(path) == 'string' then
-    local f, reason = io.open(path)
-    if not f then
-      return nil, reason
-    end
-    local reason
-    if f:read(2) == "#!" then
-      local command = f:read()
-      if require("text").trim(command) == "" then
-        reason = "no exec command"
-      else
-        code = function()
-          local result = table.pack(require("shell").execute(command, env, path))
-          if not result[1] then
-            error(result[2], 0)
-          else
-            return table.unpack(result, 1, result.n)
-          end
+    code = function(...)
+      local fs, shell = require("filesystem"), require("shell")
+      local program, reason = shell.resolve(path, 'lua')
+      if not program then
+        if fs.isDirectory(shell.resolve(path)) then
+          io.stderr:write(path .. ": is a directory\n")
+          return 126
+        end
+        local handler = require("tools/programLocations")
+        handler.reportNotFound(path, reason)
+        return 127
+      end
+      os.setenv("_", program)
+      local f = fs.open(program)
+      if f then
+        local shebang = f:read(1024):match("^#!([^\n]+)")
+        f:close()
+        if shebang then
+          local result = table.pack(shell.execute(shebang:gsub("%s",""), env, program, ...))
+          assert(result[1], result[2])
+          return table.unpack(result)
         end
       end
-    else
-      code, reason = loadfile(path, "t", env)
-    end
-    f:close()
-    if not code then
-      return nil, reason
+      local command
+      command, reason = loadfile(program, "bt", env)
+      if not command then
+        io.stderr:write(program..(reason or ""):gsub("^[^:]*", "").."\n")
+        return 128
+      end
+      return command(...)
     end
   else -- path is code
     code = path
@@ -69,43 +70,53 @@ function process.load(path, env, init, name)
 
   local thread = nil
   thread = coroutine.create(function(...)
-    if init then
-      init()
-    end
     -- pcall code so that we can remove it from the process list on exit
     local result =
     {
-      xpcall(code, function(msg)
-        if type(msg) == 'table' then return msg end
-        local stack = debug.traceback():gsub('^([^\n]*\n)[^\n]*\n[^\n]*\n','%1')
-        return string.format('%s:\n%s', msg or '', stack)
-      end, ...)
+      xpcall(function(...)
+          os.setenv("_", name)
+          init = init or function(...) return ... end
+          return code(init(...))
+        end,
+        function(msg)
+          -- msg can be a custom error object
+          if type(msg) == 'table' then
+            if msg.reason ~= "terminated" then
+              io.stderr:write(msg.reason.."\n")
+            end
+            return msg.code or 0
+          end
+          local stack = debug.traceback():gsub('^([^\n]*\n)[^\n]*\n[^\n]*\n','%1')
+          io.stderr:write(string.format('%s:\n%s', msg or '', stack))
+          return 128 -- syserr
+        end, ...)
     }
-    process.list[thread] = nil
-    if not result[1] then
-      -- msg can be a custom error object
-      local msg = result[2]
-      if type(msg) == 'table' then
-        if msg.reason~="terminated" then error(msg.reason,2) end
-        result={0,msg.code}
-      else
-        error(msg,2)
-      end
+    process.internal.close(thread)
+    --result[1] is false if the exception handler also crashed
+    if not result[1] and type(result[2]) ~= "number" then
+      require("event").onError(string.format("process library exception handler crashed: %s", tostring(result[2])))
     end
-    return select(2,table.unpack(result))
-  end,true)
-  process.list[thread] = {
+    return select(2, table.unpack(result))
+  end, true)
+  local new_proc =
+  {
     path = path,
     command = name,
     env = env,
-    data = setmetatable(
+    data =
     {
-      io = setmetatable({}, {__index=p and p.data and p.data.io or nil}),
-      coroutine_handler = setmetatable({}, {__index=p and p.data and p.data.coroutine_handler or nil}),
-    }, {__index=p and p.data or nil}),
+      handles = {},
+      io = {},
+      coroutine_handler = {}
+    },
     parent = p,
-    instances = setmetatable({}, {__mode="v"})
+    instances = setmetatable({}, {__mode="v"}),
   }
+  setmetatable(new_proc.data.io, {__index=p.data.io})
+  setmetatable(new_proc.data.coroutine_handler, {__index=p.data.coroutine_handler})
+  setmetatable(new_proc.data, {__index=p.data})
+  process.list[thread] = new_proc
+
   return thread
 end
 
@@ -131,6 +142,18 @@ function process.info(levelOrThread)
   if p then
     return {path=p.path, env=p.env, command=p.command, data=p.data}
   end
+end
+
+--table of undocumented api subject to change and intended for internal use
+process.internal = {}
+--this is a future stub for a more complete method to kill a process
+function process.internal.close(thread)
+  checkArg(1,thread,"thread")
+  local pdata = process.info(thread).data
+  for k,v in pairs(pdata.handles) do
+    v:close()
+  end
+  process.list[thread] = nil
 end
 
 return process

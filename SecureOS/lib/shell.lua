@@ -1,5 +1,4 @@
 local fs = require("filesystem")
-local text = require("text")
 local unicode = require("unicode")
 local process = require("process")
 
@@ -19,7 +18,7 @@ function shell.getShell()
   if shells[shellName] then
     return shells[shellName]
   end
-  local sh, reason = loadfile(shellName, "t", env)
+  local sh, reason = loadfile(shellName, "t")
   if sh then
     shells[shellName] = sh
   end
@@ -35,12 +34,12 @@ local function findFile(name, ext)
     dir = fs.concat(fs.concat(dir, name), "..")
     local name = fs.name(name)
     local list = fs.list(dir)
-    if list then
+    if list and name then
       local files = {}
       for file in list do
         files[file] = true
       end
-      if ext and unicode.sub(name, -(1 + unicode.len(ext))) == "." .. ext then
+      if ext and name:sub(-(1 + ext:len())) == "." .. ext then
         -- Name already contains extension, prioritize.
         if files[name] then
           return true, fs.concat(dir, name)
@@ -58,10 +57,10 @@ local function findFile(name, ext)
     end
     return false
   end
-  if unicode.sub(name, 1, 1) == "/" then
+  if name:sub(1, 1) == "/" then
     local found, where = findIn("/")
     if found then return where end
-  elseif unicode.sub(name, 1, 2) == "./" then
+  elseif name:sub(1, 2) == "./" then
     local found, where = findIn(shell.getWorkingDirectory())
     if found then return where end
   else
@@ -107,33 +106,16 @@ function shell.aliases()
   return pairs(process.info().data.aliases)
 end
 
-function shell.resolveAlias(command, args)
-  checkArg(1, command, "string")
-  checkArg(2, args, "table", "nil")
-  args = args or {}
-  local program, lastProgram = command, nil
-  while true do
-    local tokens = text.tokenize(shell.getAlias(program) or program)
-    program = tokens[1]
-    if program == lastProgram then
-      break
-    end
-    lastProgram = program
-    for i = #tokens, 2, -1 do
-      table.insert(args, 1, tokens[i])
-    end
-  end
-  return program, args
-end
-
 function shell.getWorkingDirectory()
-  return os.getenv("PWD")
+  -- if no env PWD default to /
+  return os.getenv("PWD") or "/"
 end
 
 function shell.setWorkingDirectory(dir)
   checkArg(1, dir, "string")
-  dir = fs.canonical(dir) .. "/"
-  if dir == "//" then dir = "/" end
+  -- ensure at least /
+  -- and remove trailing /
+  dir = fs.canonical(dir):gsub("^$", "/"):gsub("(.)/$", "%1")
   if fs.isDirectory(dir) then
     os.setenv("PWD", dir)
     return true
@@ -160,10 +142,8 @@ function shell.resolve(path, ext)
       return nil, "file not found"
     end
   else
-    if unicode.sub(path, 1, 1) == "/" then
+    if path:sub(1, 1) == "/" then
       return fs.canonical(path)
-    elseif unicode.sub(path, 1, 1) == "~" then
-      return fs.concat(os.getenv('HOME'), unicode.sub(path, 2))
     else
       return fs.concat(shell.getWorkingDirectory(), path)
     end
@@ -175,7 +155,9 @@ function shell.execute(command, env, ...)
   if not sh then
     return false, reason
   end
-  local result = table.pack(pcall(sh, env, command, ...))
+  local result = table.pack(coroutine.resume(process.load(function(...)
+    return sh(...)
+  end), env, command, ...))
   if not result[1] and type(result[2]) == "table" and result[2].reason == "terminated" then
     if result[2].code then
       return true
@@ -196,13 +178,13 @@ function shell.parse(...)
     if not doneWithOptions and type(param) == "string" then
       if param == "--" then
         doneWithOptions = true -- stop processing options at `--`
-      elseif unicode.sub(param, 1, 2) == "--" then
+      elseif param:sub(1, 2) == "--" then
         if param:match("%-%-(.-)=") ~= nil then
           options[param:match("%-%-(.-)=")] = param:match("=(.*)")
         else
-          options[unicode.sub(param, 3)] = true
+          options[param:sub(3)] = true
         end
-      elseif unicode.sub(param, 1, 1) == "-" and param ~= "-" then
+      elseif param:sub(1, 1) == "-" and param ~= "-" then
         for j = 2, unicode.len(param) do
           options[unicode.sub(param, j, j)] = true
         end

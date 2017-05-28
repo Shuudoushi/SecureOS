@@ -23,34 +23,48 @@ for key,value in pairs(_coroutine) do
   end
 end
 
+local kernel_load = _G.load
+local intercept_load
+intercept_load = function(source, label, mode, env)
+  if env then
+    env.load = kernel_load([[
+      local source, label, mode, env = ...
+      return load(source, label, mode, env or fenv)
+    ]], "=load", "t", {fenv=env, load=intercept_load})
+  end
+  return kernel_load(source, label, mode, env or process.info().env)
+end
+_G.load = intercept_load
+
 local kernel_create = _coroutine.create
-local function install(path, name)
-  _coroutine.create = function(f,standAlone)
-    local co = kernel_create(f)
-    if not standAlone then
-      table.insert(process.findProcess().instances, co)
-    end
-    return co
+_coroutine.create = function(f,standAlone)
+  local co = kernel_create(f)
+  if not standAlone then
+    table.insert(process.findProcess().instances, co)
   end
-  local load = load
-  _G.load = function(ld, source, mode, env)
-    env = env or select(2, process.running())
-    return load(ld, source, mode, env)
-  end
-  local thread = _coroutine.running()
-  process.list[thread] = {
-    path = path,
-    command = name,
-    env = _ENV,
-    data =
-    {
-      vars={},
-      io={}, --init will populate this
-      coroutine_handler=setmetatable({}, {__index=_coroutine})
-    },
-    instances = setmetatable({}, {__mode="v"})
-  }
+  return co
 end
 
-install("/init.lua", "init")
+_coroutine.wrap = function(f)
+  local thread = coroutine.create(f)
+  return function(...)
+    local result_pack = table.pack(coroutine.resume(thread, ...))
+    local result, reason = result_pack[1], result_pack[2]
+    assert(result, reason)
+    return select(2, table.unpack(result_pack))
+  end
+end
 
+local init_thread = _coroutine.running()
+process.list[init_thread] = {
+  path = "/init.lua",
+  command = "init",
+  env = _ENV,
+  data =
+  {
+    vars={},
+    io={}, --init will populate this
+    coroutine_handler=setmetatable({}, {__index=_coroutine})
+  },
+  instances = setmetatable({}, {__mode="v"})
+}

@@ -1,38 +1,33 @@
-local fs = require("filesystem")
 local shell = require("shell")
-local sh = require("sh")
+local transfer = require("tools/transfer")
 
 local args, options = shell.parse(...)
-if #args < 2 then
-  io.write("Usage: mv [-f] <from> <to>\n")
-  io.write(" -f: overwrite file if it already exists.\n")
-  return 1
+options.h = options.h or options.help
+if #args < 2 or options.h then
+  io.write([[Usage: mv [OPTIONS] <from> <to>
+  -f         overwrite without prompt
+  -i         prompt before overwriting
+             unless -f
+  -v         verbose
+  -n         do not overwrite an existing file
+  --skip=P   ignore paths matching lua regex P
+  -h, --help show this help
+]])
+  return not not options.h
 end
 
-local from = shell.resolve(args[1])
-local to = shell.resolve(args[2])
-if fs.isDirectory(to) then
-  to = to .. "/" .. fs.name(from)
-end
-if fs.exists(to) then
-  if not options.f then
-    io.stderr:write("target file exists\n")
-    return 1
-  end
-  fs.remove(to)
-end
+-- clean options for move (as opposed to copy)
+options = 
+{
+  cmd = "mv",
+  f = options.f,
+  i = options.i,
+  v = options.v,
+  n = options.n, -- no clobber
+  skip = options.skip,
+  P = true, -- move operations always preserve
+  r = true, -- move is allowed to move entire dirs
+  x = true, -- cannot move mount points
+}
 
-local result, reason
-if fs.get(from) == fs.get(to) then -- same filesystem
-  result, reason = os.rename(from, to)
-else
-  result, reason = sh.execute(nil, shell.resolve("cp","lua"), "-r", from, to)
-  if result then
-    result, reason = sh.execute(nil, shell.resolve("rm","lua"), "-r", from)
-  end
-end
-
-if not result then
-  io.stderr:write((reason or "unknown error")..'\n')
-  return 1
-end
+return transfer.batch(args, options)
