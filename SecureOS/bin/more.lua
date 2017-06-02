@@ -1,8 +1,12 @@
 local keyboard = require("keyboard")
 local shell = require("shell")
-local term = require("term")
+local term = require("term") -- TODO use tty and cursor position instead of global area and gpu
 local text = require("text")
 local unicode = require("unicode")
+
+if not io.output().tty then
+  return loadfile(shell.resolve("cat", "lua"), "bt", _G)(...)
+end
 
 local args = shell.parse(...)
 if #args > 1 then
