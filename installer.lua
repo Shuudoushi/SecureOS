@@ -29,15 +29,19 @@ local function downLoad()
   end
 
   if not fs.exists("/tmp/.install") then
-    in = io.open("/tmp/.install", "w")
-      in:write(os.date())
-        in:close()
+    ins = io.open("/tmp/.install", "w")
+      ins:write(os.date())
+        ins:close()
   end
 
   if not fs.exists("/etc/update.cfg") then
     c = io.open("/etc/update.cfg", "w")
      c:write("release")
       c:close()
+  end
+
+  if not fs.isDirectory("/sbin") then
+  	fs.makeDirectory("/sbin")
   end
 
   term.write("Please wait while the files are downloaded and installed.")
