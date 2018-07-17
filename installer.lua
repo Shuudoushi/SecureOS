@@ -29,9 +29,9 @@ local function downLoad()
   end
 
   if not fs.exists("/tmp/.install") then
-    in = io.open("/tmp/.install", "w")
-      in:write(os.date())
-        in:close()
+    input = io.open("/tmp/.install", "w")
+      input:write(os.date())
+        input:close()
   end
 
   if not fs.exists("/etc/update.cfg") then
