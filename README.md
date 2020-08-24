@@ -1,3 +1,10 @@
+# Support Warning
+This project is no longer under active development, and it is not being maintained by anyone.  
+
+It no longer works on modern versions of OpenComputers, and it is not included in OpenSecurity anymore.  
+
+Unless somebody decides to start updating it, this project should be considered dead.
+
 # SecureOS
 Hello and thank you for looking into this little project of mine and 'official' operating system of [OpenSecurity](https://github.com/PC-Logix/OpenSecurity).
 
