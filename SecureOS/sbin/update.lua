@@ -4,9 +4,11 @@ local fs = require("filesystem")
 local shell = require("shell")
 local term = require("term")
 
-if not require("auth").isRoot() then
-  io.stderr:write("not authorized")
-  return 1
+if not fs.exists("/tmp/.install") then
+  if not require("auth").isRoot() then
+    io.stderr:write("not authorized")
+    return 1
+  end
 end
 
 local args, options = shell.parse(...)
@@ -368,7 +370,11 @@ os.remove("/tmp/system.dat")
 os.remove("/tmp/usr.dat")
 os.remove("/tmp/depreciated.dat")
 os.remove("/tmp/dirs.dat")
-require("auth").userLog(os.getenv("USER"), "update")
+
+if not fs.exists("/tmp/.install") then
+  require("auth").userLog(os.getenv("USER"), "update")
+end
+
 term.clear()
 term.setCursor(1,1)
   if not fs.exists("/tmp/.hold") and not fs.exists("/tmp/.install") then
