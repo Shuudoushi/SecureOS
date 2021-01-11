@@ -1,10 +1,7 @@
--- Big thanks to gamax92 for the help.
-
 local component = require("component")
 local unicode = require("unicode")
 
-local filesystem, fileStream = {}, {}
-local isAutorunEnabled = nil
+local filesystem = {}
 local mtab = {name="", children={}, links={}}
 local fstab = {}
 
@@ -21,18 +18,6 @@ local function segments(path)
     end
   end
   return parts
-end
-
-local function saveConfig()
-  local root = filesystem.get("/")
-  if root and not root.isReadOnly() then
-    filesystem.makeDirectory("/etc")
-    local f = filesystem.open("/etc/filesystem.cfg", "w")
-    if f then
-      f:write("autorun="..tostring(isAutorunEnabled))
-      f:close()
-    end
-  end
 end
 
 local function findNode(path, create, resolve_links)
@@ -95,62 +80,7 @@ local function findNode(path, create, resolve_links)
   return node, rest, vnode, vrest
 end
 
-local function blackList()
-  local env = {}
-  local config = loadfile("/etc/.blacklist.dat", nil, env)
-  if config then
-    pcall(config)
-  end
-  return env.blacklist
-end
-
-local function root()
-  local root = false
-  if filesystem.exists("/tmp/.root") then
-    local r = io.open("/tmp/.root", "r")
-     root = r:read()
-      r:close()
-  end
-  return root
-end
-
-local function authorized(path)
-  if root() then
-    return true
-  end
-  path = filesystem.realPath(path) or filesystem.canonical(path) -- 'or' because it may not exist
-  for _,no in ipairs(blackList()) do
-    if path == no or (path.."/") == (no:sub(1, #path + 1)) then
-      return false
-    end
-  end
-  return true
-end
-
 -------------------------------------------------------------------------------
-
-function filesystem.isAutorunEnabled()
-  if isAutorunEnabled == nil then
-    local env = {}
-    local config = loadfile("/etc/filesystem.cfg", nil, env)
-    if config then
-      pcall(config)
-      isAutorunEnabled = not not env.autorun
-    else
-      isAutorunEnabled = true
-    end
-    saveConfig()
-  end
-  return isAutorunEnabled
-end
-
-function filesystem.setAutorunEnabled(value)
-  checkArg(1, value, "boolean")
-  isAutorunEnabled = value
-  saveConfig()
-end
-
-filesystem.segments = segments
 
 function filesystem.canonical(path)
   local result = table.concat(segments(path), "/")
@@ -170,7 +100,7 @@ function filesystem.concat(...)
 end
 
 function filesystem.get(path)
-  local node, rest = findNode(path)
+  local node = findNode(path)
   if node.fs then
     local proxy = node.fs
     path = ""
@@ -189,7 +119,7 @@ end
 
 function filesystem.realPath(path)
   checkArg(1, path, "string")
-  local node, rest, vnode, vrest = findNode(path, false, true)
+  local node, rest = findNode(path, false, true)
   if not node then return nil, rest end
   local parts = {rest or nil}
   repeat
@@ -197,45 +127,6 @@ function filesystem.realPath(path)
     node = node.parent
   until not node
   return table.concat(parts, "/")
-end
-
-function filesystem.isLink(path)
-  local name = filesystem.name(path)
-  local node, rest, vnode, vrest = findNode(filesystem.path(path), false, true)
-  if not node then return nil, rest end
-  local target = vnode.links[name]
-  -- having vrest here indicates we are not at the
-  -- owning vnode due to a mount point above this point
-  -- but we can have a target when there is a link at
-  -- the mount point root, with the same name
-  if not vrest and target ~= nil then
-    return true, target
-  end
-  return false
-end
-
-function filesystem.link(target, linkpath)
-  checkArg(1, target, "string")
-  checkArg(2, linkpath, "string")
-
-  if filesystem.exists(linkpath) then
-    return nil, "file already exists"
-  end
-  local linkpath_parent = filesystem.path(linkpath)
-  if not filesystem.exists(linkpath_parent) then
-    return nil, "no such directory"
-  end
-  local linkpath_real, reason = filesystem.realPath(linkpath_parent)
-  if not linkpath_real then
-    return nil, reason
-  end
-  if not filesystem.isDirectory(linkpath_real) then
-    return nil, "not a directory"
-  end
-
-  local node, rest, vnode, vrest = findNode(linkpath_real, true)
-  vnode.links[filesystem.name(linkpath)] = target
-  return true
 end
 
 function filesystem.mount(fs, path)
@@ -260,8 +151,8 @@ function filesystem.mount(fs, path)
       return nil, why
     end
 
-    if filesystem.exists(real) then
-      return nil, "file already exists"
+    if filesystem.exists(real) and not filesystem.isDirectory(real) then
+      return nil, "mount point is not a directory"
     end
   end
 
@@ -269,7 +160,7 @@ function filesystem.mount(fs, path)
   if fstab[real] then
     return nil, "another filesystem is already mounted here"
   end
-  for path,node in pairs(fstab) do
+  for _,node in pairs(fstab) do
     if node.fs.address == fs.address then
       fsnode = node
       break
@@ -294,17 +185,6 @@ function filesystem.mount(fs, path)
   return true
 end
 
-function filesystem.mounts()
-  local tmp = {}
-  for path,node in pairs(fstab) do
-    table.insert(tmp, {node.fs,path})
-  end
-  return function()
-    local next = table.remove(tmp)
-    if next then return table.unpack(next) end
-  end
-end
-
 function filesystem.path(path)
   local parts = segments(path)
   local result = table.concat(parts, "/", 1, #parts - 1) .. "/"
@@ -316,54 +196,18 @@ function filesystem.path(path)
 end
 
 function filesystem.name(path)
+  checkArg(1, path, "string")
   local parts = segments(path)
   return parts[#parts]
 end
 
-function filesystem.proxy(filter)
+function filesystem.proxy(filter, options)
   checkArg(1, filter, "string")
-  local address
-  for c in component.list("filesystem", true) do
-    if component.invoke(c, "getLabel") == filter then
-      address = c
-      break
-    end
-    if c:sub(1, filter:len()) == filter then
-      address = c
-      break
-    end
+  if not component.list("filesystem")[filter] or next(options or {}) then
+    -- if not, load fs full library, it has a smarter proxy that also supports options
+    return filesystem.internal.proxy(filter, options)
   end
-  if not address then
-    return nil, "no such file system"
-  end
-  return component.proxy(address)
-end
-
-function filesystem.umount(fsOrPath)
-  checkArg(1, fsOrPath, "string", "table")
-  local real
-  local fs
-  local addr
-  if type(fsOrPath) == "string" then
-    real = filesystem.realPath(fsOrPath)
-    addr = fsOrPath
-  else -- table
-    fs = fsOrPath
-  end
-
-  local paths = {}
-  for path,node in pairs(fstab) do
-    if real == path or addr == node.fs.address or fs == node.fs then
-      table.insert(paths, path)
-    end
-  end
-  for _,path in ipairs(paths) do
-    local node = fstab[path]
-    fstab[path] = nil
-    node.fs = nil
-    node.parent.children[node.name] = nil
-  end
-  return #paths > 0
+  return component.proxy(filter) -- it might be a perfect match
 end
 
 function filesystem.exists(path)
@@ -379,17 +223,6 @@ function filesystem.exists(path)
   return false
 end
 
-function filesystem.size(path)
-  local node, rest, vnode, vrest = findNode(path, false, true)
-  if not node or not vnode.fs and (not vrest or vnode.links[vrest]) then
-    return 0 -- virtual directory or symlink
-  end
-  if node.fs and rest then
-    return node.fs.size(rest)
-  end
-  return 0 -- no such file or directory
-end
-
 function filesystem.isDirectory(path)
   local real, reason = filesystem.realPath(path)
   if not real then return nil, reason end
@@ -401,17 +234,6 @@ function filesystem.isDirectory(path)
     return not rest or node.fs.isDirectory(rest)
   end
   return false
-end
-
-function filesystem.lastModified(path)
-  local node, rest, vnode, vrest = findNode(path, false, true)
-  if not node or not vnode.fs and not vrest then
-    return 0 -- virtual directory
-  end
-  if node.fs and rest then
-    return node.fs.lastModified(rest)
-  end
-  return 0 -- no such file or directory
 end
 
 function filesystem.list(path)
@@ -443,137 +265,6 @@ function filesystem.list(path)
   end
 end
 
-function filesystem.makeDirectory(path)
-  if filesystem.exists(path) then
-    return nil, "file or directory with that name already exists"
-  end
-  local node, rest = findNode(path)
-  if node.fs and rest then
-    local success, reason = node.fs.makeDirectory(rest)
-    if not success and not reason and node.fs.isReadOnly() then
-      reason = "filesystem is readonly"
-    end
-    return success, reason
-  end
-  if node.fs then
-    return nil, "virtual directory with that name already exists"
-  end
-  return nil, "cannot create a directory in a virtual directory"
-end
-
-function filesystem.remove(path)
-  if not authorized(path) then return nil, "not authorized" end
-  local function removeVirtual()
-    local node, rest, vnode, vrest = findNode(filesystem.path(path), false, true)
-    -- vrest represents the remaining path beyond vnode
-    -- vrest is nil if vnode reaches the full path
-    -- thus, if vrest is NOT NIL, then we SHOULD NOT remove children nor links
-    if not vrest then
-      local name = filesystem.name(path)
-      if vnode.children[name] or vnode.links[name] then
-        vnode.children[name] = nil
-        vnode.links[name] = nil
-        while vnode and vnode.parent and not vnode.fs and not next(vnode.children) and not next(vnode.links) do
-          vnode.parent.children[vnode.name] = nil
-          vnode = vnode.parent
-        end
-        return true
-      end
-    end
-    -- return false even if vrest is nil because this means it was a expected
-    -- to be a real file
-    return false
-  end
-  local function removePhysical()
-    local node, rest = findNode(path)
-    if node.fs and rest then
-      return node.fs.remove(rest)
-    end
-    return false
-  end
-  local success = removeVirtual()
-  success = removePhysical() or success -- Always run.
-  if success then return true
-  else return nil, "no such file or directory"
-  end
-end
-
-function filesystem.rename(oldPath, newPath)
-  if not authorized(path) then return nil, "not authorized" end
-  if filesystem.isLink(oldPath) then
-    local node, rest, vnode, vrest = findNode(filesystem.path(oldPath))
-    local target = vnode.links[filesystem.name(oldPath)]
-    local result, reason = filesystem.link(target, newPath)
-    if result then
-      filesystem.remove(oldPath)
-    end
-    return result, reason
-  else
-    local oldNode, oldRest = findNode(oldPath)
-    local newNode, newRest = findNode(newPath)
-    if oldNode.fs and oldRest and newNode.fs and newRest then
-      if oldNode.fs.address == newNode.fs.address then
-        return oldNode.fs.rename(oldRest, newRest)
-      else
-        local result, reason = filesystem.copy(oldPath, newPath)
-        if result then
-          return filesystem.remove(oldPath)
-        else
-          return nil, reason
-        end
-      end
-    end
-    return nil, "trying to read from or write to virtual directory"
-  end
-end
-
-function filesystem.copy(fromPath, toPath)
-  local data
-  local input, reason = filesystem.open(fromPath, "rb")
-  if input then
-    local output, reason = filesystem.open(toPath, "wb")
-    if output then
-      repeat
-        data, reason = input:read(1024)
-        if not data then break end
-        data, reason = output:write(data)
-        if not data then data, reason = false, "failed to write" end
-      until not data
-      output:close()
-    end
-    input:close()
-  end
-  return data == nil, reason
-end
-
-function fileStream:close()
-  if self.handle then
-    self.fs.close(self.handle)
-    self.handle = nil
-  end
-end
-
-function fileStream:read(n)
-  if not self.handle then
-    return nil, "file is closed"
-  end
-  return self.fs.read(self.handle, n)
-end
-
-function fileStream:seek(whence, offset)
-  if not self.handle then
-    return nil, "file is closed"
-  end
-  return self.fs.seek(self.handle, whence, offset)
-end
-
-function fileStream:write(str)
-  if not self.handle then
-    return nil, "file is closed"
-  end
-  return self.fs.write(self.handle, str)
-end
-
 function filesystem.open(path, mode)
   checkArg(1, path, "string")
   mode = tostring(mode or "r")
@@ -590,23 +281,32 @@ function filesystem.open(path, mode)
     return nil, "file not found"
   end
 
-  -- only check authorized for write
-  -- else inf recursion
-  if ({w=true, wb=true, a=true, ab=true})[mode] then
-    if not authorized(path) then return nil, "not authorized" end
-  end
-
   local handle, reason = node.fs.open(rest, mode)
   if not handle then
     return nil, reason
   end
 
-  local stream = {fs = node.fs, handle = handle}
-
-  local metatable = {__index = fileStream,
-                     __metatable = "filestream"}
-  return setmetatable(stream, metatable)
+  return setmetatable({
+    fs = node.fs,
+    handle = handle,
+  }, {__index = function(tbl, key)
+    if not tbl.fs[key] then return end
+    if not tbl.handle then
+      return nil, "file is closed"
+    end
+    return function(self, ...)
+      local h = self.handle
+      if key == "close" then
+        self.handle = nil
+      end
+      return self.fs[key](h, ...)
+    end
+  end})
 end
+
+filesystem.findNode = findNode
+filesystem.segments = segments
+filesystem.fstab = fstab
 
 -------------------------------------------------------------------------------
 

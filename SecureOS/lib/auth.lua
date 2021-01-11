@@ -1,7 +1,7 @@
 --Some of this was made with the help of SuPeRMiNoR2
 --Or maybe all of it
 
-passwdfile = "/etc/passwd"
+local passwdfile = "/etc/passwd"
 
 local auth = {}
 local component = require("component")
@@ -113,6 +113,28 @@ function auth.isRoot()
     r:close()
   end
   return root
+end
+
+local function blackList()
+  local env = {}
+  local config = loadfile("/etc/.blacklist.dat", nil, env)
+  if config then
+    pcall(config)
+  end
+  return env.blacklist
+end
+
+function auth.authorized(path)
+  if auth.isRoot() then
+    return true
+  end
+  path = filesystem.realPath(path) or filesystem.canonical(path) -- 'or' because it may not exist
+  for _,no in ipairs(blackList()) do
+    if path == no or (path.."/") == (no:sub(1, #path + 1)) then
+      return false
+    end
+  end
+  return true
 end
 
 return libarmor.protect(auth)

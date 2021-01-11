@@ -90,6 +90,9 @@ local function userInfo()
 end
 
 while running do
+  local v = io.open("/.version", "w")
+    v:write("myversions = { bin = '0', boot = '0', etc = '0', lib = '0', root = '0', sbin = '0', system = '0', usr = '0' }")
+      v:close()
     greeting()
     downLoad()
     userInfo()

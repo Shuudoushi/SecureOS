@@ -1,5 +1,6 @@
 dirs = {
 "/lib/tools",
+"/lib/core",
 "/boot/kernel",
 "/sbin"
 }

@@ -1,5 +1,3 @@
-local component = require("component")
-
 local keyboard = {pressedChars = {}, pressedCodes = {}}
 
 -- these key definitions are only a subset of all the defined keys
@@ -9,6 +7,7 @@ keyboard.keys = {
   c               = 0x2E,
   d               = 0x20,
   q               = 0x10,
+  w               = 0x11,
   back            = 0x0E, -- backspace
   delete          = 0xD3,
   down            = 0xD0,
@@ -32,66 +31,35 @@ keyboard.keys = {
   numpadenter     = 0x9C,
 }
 
--- Create inverse mapping for name lookup.
-setmetatable(keyboard.keys,
-{
-  __index = function(tbl, k)
-    getmetatable(keyboard.keys).__index = nil -- to be safe
-    loadfile(package.searchpath("tools/keyboard_full", package.path), "t", setmetatable({keyboard=keyboard},{__index=_G}))()
-    return tbl[k]
-  end
-})
-
 -------------------------------------------------------------------------------
 
-local function getKeyboardAddress(address)
-  return address or require("tty").keyboard()
-end
-
-local function getPressedCodes(address)
-  address = getKeyboardAddress(address)
-  return address and keyboard.pressedCodes[address] or false
-end
-
-local function getPressedChars(address)
-  address = getKeyboardAddress(address)
-  return address and keyboard.pressedChars[address] or false
-end
-
-function keyboard.isAltDown(address)
-  checkArg(1, address, "string", "nil")
-  local pressedCodes = getPressedCodes(address)
-  return pressedCodes and (pressedCodes[keyboard.keys.lmenu] or pressedCodes[keyboard.keys.rmenu]) ~= nil
+function keyboard.isAltDown()
+  return keyboard.pressedCodes[keyboard.keys.lmenu] or keyboard.pressedCodes[keyboard.keys.rmenu]
 end
 
 function keyboard.isControl(char)
   return type(char) == "number" and (char < 0x20 or (char >= 0x7F and char <= 0x9F))
 end
 
-function keyboard.isControlDown(address)
-  checkArg(1, address, "string", "nil")
-  local pressedCodes = getPressedCodes(address)
-  return pressedCodes and (pressedCodes[keyboard.keys.lcontrol] or pressedCodes[keyboard.keys.rcontrol]) ~= nil
+function keyboard.isControlDown()
+  return keyboard.pressedCodes[keyboard.keys.lcontrol] or keyboard.pressedCodes[keyboard.keys.rcontrol]
 end
 
-function keyboard.isKeyDown(charOrCode, address)
+function keyboard.isKeyDown(charOrCode)
   checkArg(1, charOrCode, "string", "number")
-  checkArg(2, address, "string", "nil")
   if type(charOrCode) == "string" then
-    local pressedChars = getPressedChars(address)
-    return pressedChars and pressedChars[utf8 and utf8.codepoint(charOrCode) or charOrCode:byte()]
+    return keyboard.pressedChars[utf8 and utf8.codepoint(charOrCode) or charOrCode:byte()]
   elseif type(charOrCode) == "number" then
-    local pressedCodes = getPressedCodes(address)
-    return pressedCodes and pressedCodes[charOrCode]
+    return keyboard.pressedCodes[charOrCode]
   end
 end
 
-function keyboard.isShiftDown(address)
-  checkArg(1, address, "string", "nil")
-  local pressedCodes = getPressedCodes(address)
-  return pressedCodes and (pressedCodes[keyboard.keys.lshift] or pressedCodes[keyboard.keys.rshift]) ~= nil
+function keyboard.isShiftDown()
+  return keyboard.pressedCodes[keyboard.keys.lshift] or keyboard.pressedCodes[keyboard.keys.rshift]
 end
 
 -------------------------------------------------------------------------------
+
+require("package").delay(keyboard.keys, "/lib/core/full_keyboard.lua")
 
 return keyboard

@@ -35,10 +35,10 @@ while running do
   term.write("User: ")
   local username = string.lower(io.read())
   term.setCursor(1,3)
-  term.setCursorBlink(false)
+  term.setCursorBlink(enabled: false)
   term.write("Password: ")
   local password = string.gsub(term.read({pwchar=""}), "\n", "")
-  term.setCursorBlink(true)
+  term.setCursorBlink(enabled: true)
 
   local login = auth.validate(username, password)
 

@@ -9,27 +9,40 @@ local metatable = {
 
 function buffer.new(mode, stream)
   local result = {
+    closed = false,
+    tty = false,
     mode = {},
     stream = stream,
     bufferRead = "",
     bufferWrite = "",
     bufferSize = math.max(512, math.min(8 * 1024, computer.freeMemory() / 8)),
     bufferMode = "full",
-    readTimeout = math.huge
+    readTimeout = math.huge,
   }
   mode = mode or "r"
   for i = 1, unicode.len(mode) do
     result.mode[unicode.sub(mode, i, i)] = true
   end
+  -- when stream closes, result should close first
+  -- when result closes, stream should close after
+  -- when stream closes, it is removed from the proc
+  stream.close = setmetatable({close = stream.close,parent = result},{__call = buffer.close})
   return setmetatable(result, metatable)
 end
 
 function buffer:close()
-  if self.mode.w or self.mode.a then
-    self:flush()
+  -- self is either the buffer, or the stream.close callable
+  local meta = getmetatable(self)
+  if meta == metatable.__metatable then
+    return self.stream:close()
   end
-  self.closed = true
-  return self.stream:close()
+  local parent = self.parent
+
+  if parent.mode.w or parent.mode.a then
+    parent:flush()
+  end
+  parent.closed = true
+  return self.close(parent.stream)
 end
 
 function buffer:flush()
@@ -37,14 +50,8 @@ function buffer:flush()
     local tmp = self.bufferWrite
     self.bufferWrite = ""
     local result, reason = self.stream:write(tmp)
-    if result then
-      self.bufferWrite = ""
-    else
-      if reason then
-        return nil, reason
-      else
-        return nil, "bad file descriptor"
-      end
+    if not result then
+      return nil, reason or "bad file descriptor"
     end
   end
 
@@ -71,7 +78,7 @@ local function readChunk(self)
     self.bufferRead = self.bufferRead .. result
     return self
   else -- error or eof
-    return nil, reason
+    return result, reason
   end
 end
 
@@ -96,7 +103,7 @@ function buffer:readLine(chop, timeout)
       local result, reason = readChunk(self)
       if not result then
         if reason then
-          return nil, reason
+          return result, reason
         else -- eof
           result = #self.bufferRead > 0 and self.bufferRead or nil
           self.bufferRead = ""
@@ -116,15 +123,10 @@ function buffer:read(...)
     self:flush()
   end
 
-  local formats = table.pack(...)
-  if formats.n == 0 then
+  if select("#", ...) == 0 then
     return self:readLine(true)
   end
-  return require("tools/buffered_read").read(self, readChunk, formats)
-end
-
-function buffer:seek(whence, offset)
-  return require("tools/buffered_read").seek(self, whence, offset)
+  return self:formatted_read(readChunk, ...)
 end
 
 function buffer:setvbuf(mode, size)
@@ -140,14 +142,6 @@ function buffer:setvbuf(mode, size)
   self.bufferSize = size
 
   return self.bufferMode, self.bufferSize
-end
-
-function buffer:getTimeout()
-  return self.readTimeout
-end
-
-function buffer:setTimeout(value)
-  self.readTimeout = tonumber(value)
 end
 
 function buffer:write(...)
@@ -172,7 +166,7 @@ function buffer:write(...)
     if self.bufferMode == "no" then
       result, reason = self.stream:write(arg)
     else
-      result, reason = require("tools/buffered_write").write(self, arg)
+      result, reason = self:buffered_write(arg)
     end
 
     if not result then
@@ -182,5 +176,7 @@ function buffer:write(...)
 
   return self
 end
+
+require("package").delay(buffer, "/lib/core/full_buffer.lua")
 
 return buffer

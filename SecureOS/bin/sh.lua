@@ -1,97 +1,42 @@
-local event = require("event")
 local shell = require("shell")
 local tty = require("tty")
 local text = require("text")
 local sh = require("sh")
-local fs = require("filesystem")
 
-local input = table.pack(...)
-local args, options = shell.parse(select(3,table.unpack(input)))
-if input[2] then
-  table.insert(args, 1, input[2])
-end
+local args = shell.parse(...)
 
-local history = {hint = sh.hintHandler}
 shell.prime()
 
-if #args == 0 and (io.stdin.tty or options.i) and not options.c then
-  -- interactive shell.
-  -- source profile
-  if not tty.isAvailable() then event.pull("term_available") end
-  loadfile(shell.resolve("source","lua"))("/etc/profile")
+if #args == 0 then
+  local has_profile
+  local input_handler = {hint = sh.hintHandler}
   while true do
-    if not tty.isAvailable() then -- don't clear unless we lost the term
-      while not tty.isAvailable() do
-        event.pull("term_available")
+    if io.stdin.tty and io.stdout.tty then
+      if not has_profile then -- first time run AND interactive
+        has_profile = true
+        dofile("/etc/profile.lua")
       end
-      tty.clear()
-    end
-    local gpu = tty.gpu()
-    while tty.isAvailable() do
-      local foreground = gpu.setForeground(0xFF0000)
+      if tty.getCursor() > 1 then
+        io.write("\n")
+      end
       io.write(sh.expand(os.getenv("PS1") or "$ "))
-      gpu.setForeground(foreground)
-      term.setCursorBlink(enabled: true)
-      local command = tty.read(history)
-      if not command then
-        if command == false then
-          break -- soft interrupt
-        end
-        io.write("exit\n") -- pipe closed
-        return -- eof
-      end
+    end
+    tty.window.cursor = input_handler
+    local command = io.stdin:readLine(false)
+    tty.window.cursor = nil
+    if command then
       command = text.trim(command)
       if command == "exit" then
-        local hn = io.open("/tmp/.hostname.dat", "r") -- Reads the hostname file.
-         texthn = hn:read()
-          hn:close()
-
-          shell.setWorkingDirectory("/home/" .. texthn .. "/")
-          os.setenv("HOME", "/home/" .. texthn)
-          os.setenv("USER", texthn)
-          if fs.exists("/tmp/.root") then
-            fs.remove("/tmp/.root")
-            os.setenv("PS1", texthn .. "@" .. texthn .. "# ") -- Sets the user environment.
-          end
         return
       elseif command ~= "" then
+        --luacheck: globals _ENV
         local result, reason = sh.execute(_ENV, command)
-        if tty.getCursor() > 1 then
-          print()
-        end
         if not result then
           io.stderr:write((reason and tostring(reason) or "unknown error") .. "\n")
         end
       end
-    end
-  end
-elseif #args == 0 and not io.stdin.tty then
-  while true do
-    io.write(sh.expand(os.getenv("PS1") or "$ "))
-    local command = io.read("*l")
-    if not command then
-      command = "exit"
-      io.write(command,"\n")
-    end
-    command = text.trim(command)
-    if command == "exit" then
-      local hn = io.open("/tmp/.hostname.dat", "r") -- Reads the hostname file.
-      texthn = hn:read()
-      hn:close()
-
-      shell.setWorkingDirectory("/home/" .. texthn .. "/")
-      os.setenv("HOME", "/home/" .. texthn)
-      os.setenv("USER", texthn)
-      if fs.exists("/tmp/.root") then
-        fs.remove("/tmp/.root")
-        os.setenv("PS1", texthn .. "@" .. texthn .. "# ") -- Sets the user environment.
-      end
-      return
-    elseif command ~= "" then
-      local result, reason = os.execute(command)
-      if not result then
-        io.stderr:write((reason and tostring(reason) or "unknown error") .. "\n")
-      end
+    elseif command == nil then -- false only means the input was interrupted
+      return -- eof
     end
   end
 else

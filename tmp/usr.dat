@@ -2,7 +2,5 @@ usr = {
 "/usr/man/update /usr/man/update",
 "/usr/man/passwd /usr/man/passwd",
 "/usr/misc/greetings.txt /usr/misc/greetings.txt",
-"/usr/man/uname /usr/man/uname",
-"/usr/man/head /usr/man/head",
-"/usr/man/grep /usr/man/grep"
+"/usr/man/uname /usr/man/uname"
 }

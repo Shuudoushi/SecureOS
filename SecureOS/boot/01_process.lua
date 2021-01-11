@@ -1,38 +1,41 @@
 local process = require("process")
+local fs = require("filesystem")
 
 --Initialize coroutine library--
 local _coroutine = coroutine -- real coroutine backend
 
-_G.coroutine = {}
-package.loaded.coroutine = _G.coroutine
-
-for key,value in pairs(_coroutine) do
-  if type(value) == "function" and value ~= "running" and value ~= "create" then
-    _G.coroutine[key] = function(...)
-      local thread = _coroutine.running()
-      local info = process.info(thread)
-      -- note the gc thread does not have a process info
-      assert(info,"process not found for " .. tostring(thread))
-      local data = info.data
-      local co = data.coroutine_handler
-      local handler = co[key]
-      return handler(...)
+_G.coroutine = setmetatable(
+  {
+    resume = function(co, ...)
+      local proc = process.info(co)
+      -- proc is nil if the process closed, natural resume will likely complain the coroutine is dead
+      -- but if proc is dead and an orphan coroutine is alive, it doesn't have any proc data like stack info
+      -- if the user really wants to resume it, let them
+      return (proc and proc.data.coroutine_handler.resume or _coroutine.resume)(co, ...)
     end
-  else
-    _G.coroutine[key] = value
-  end
-end
+  },
+  {
+    __index = function(_, key)
+      return assert(process.info(_coroutine.running()), "thread has no proc").data.coroutine_handler[key]
+    end
+  }
+)
+
+package.loaded.coroutine = _G.coroutine
 
 local kernel_load = _G.load
 local intercept_load
 intercept_load = function(source, label, mode, env)
-  if env then
-    env.load = kernel_load([[
-      local source, label, mode, env = ...
-      return load(source, label, mode, env or fenv)
-    ]], "=load", "t", {fenv=env, load=intercept_load})
-  end
-  return kernel_load(source, label, mode, env or process.info().env)
+  local prev_load = env and env.load or _G.load
+  local e = env and setmetatable({
+    load = function(_source, _label, _mode, _env)
+      return prev_load(_source, _label, _mode, _env or env)
+    end}, {
+      __index = env,
+      __pairs = function(...) return pairs(env, ...) end,
+      __newindex = function(_, key, value) env[key] = value end,
+  })
+  return kernel_load(source, label, mode, e or process.info().env)
 end
 _G.load = intercept_load
 
@@ -48,10 +51,7 @@ end
 _coroutine.wrap = function(f)
   local thread = coroutine.create(f)
   return function(...)
-    local result_pack = table.pack(coroutine.resume(thread, ...))
-    local result, reason = result_pack[1], result_pack[2]
-    assert(result, reason)
-    return select(2, table.unpack(result_pack))
+    return select(2, coroutine.resume(thread, ...))
   end
 end
 
@@ -63,8 +63,21 @@ process.list[init_thread] = {
   data =
   {
     vars={},
+    handles={},
     io={}, --init will populate this
-    coroutine_handler=setmetatable({}, {__index=_coroutine})
+    coroutine_handler = _coroutine,
+    signal = error
   },
   instances = setmetatable({}, {__mode="v"})
 }
+
+-- intercept fs open
+local fs_open = fs.open 
+fs.open = function(...)
+  local fs_open_result = table.pack(fs_open(...))
+  if fs_open_result[1] then
+    process.closeOnExit(fs_open_result[1])
+  end
+  return table.unpack(fs_open_result, 1, fs_open_result.n)
+end
+

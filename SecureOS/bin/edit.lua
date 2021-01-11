@@ -59,7 +59,9 @@ local function loadConfig()
     save = {{"control", "s"}},
     close = {{"control", "w"}},
     find = {{"control", "f"}},
-    findnext = {{"control", "g"}, {"control", "n"}, {"f3"}}
+    findnext = {{"control", "g"}, {"control", "n"}, {"f3"}},
+    cut = {{"control", "k"}},
+    uncut = {{"control", "u"}}
   }
   -- Generate config file if it didn't exist.
   if not config then
@@ -87,6 +89,11 @@ local buffer = {}
 local scrollX, scrollY = 0, 0
 local config = loadConfig()
 
+local cutBuffer = {}
+-- cutting is true while we're in a cutting operation and set to false when cursor changes lines
+-- basically, whenever you change lines, the cutting operation ends, so the next time you cut a new buffer will be created
+local cutting = false
+
 local getKeyBindHandler -- forward declaration for refind()
 
 local function helpStatusText()
@@ -110,7 +117,9 @@ local function helpStatusText()
   end
   return prettifyKeybind("Save", "save") ..
          prettifyKeybind("Close", "close") ..
-         prettifyKeybind("Find", "find")
+         prettifyKeybind("Find", "find") ..
+         prettifyKeybind("Cut", "cut") ..
+         prettifyKeybind("Uncut", "uncut")
 end
 
 -------------------------------------------------------------------------------
@@ -178,8 +187,8 @@ local function getCursor()
 end
 
 local function line()
-  local cbx, cby = getCursor()
-  return buffer[cby]
+  local _, cby = getCursor()
+  return buffer[cby] or ""
 end
 
 local function getNormalizedCursor()
@@ -240,7 +249,12 @@ local function setCursor(nbx, nby)
   term.setCursor(nbx - scrollX, nby - scrollY)
   --update with term lib
   nbx, nby = getCursor()
-  gpu.set(x + w - 10, y + h, text.padLeft(string.format("%d,%d", nby, nbx), 10))
+  local locstring = string.format("%d,%d", nby, nbx)
+  if #cutBuffer > 0 then
+    locstring = string.format("(#%d) %s", #cutBuffer, locstring)
+  end
+  locstring = text.padLeft(locstring, 10)
+  gpu.set(x + w - #locstring, y + h, locstring)
 end
 
 local function highlight(bx, by, length, enabled)
@@ -269,12 +283,12 @@ local function highlight(bx, by, length, enabled)
 end
 
 local function home()
-  local cbx, cby = getCursor()
+  local _, cby = getCursor()
   setCursor(1, cby)
 end
 
 local function ende()
-  local cbx, cby = getCursor()
+  local _, cby = getCursor()
   setCursor(unicode.wlen(line()) + 1, cby)
 end
 
@@ -299,8 +313,8 @@ local function right(n)
   n = n or 1
   local cbx, cby = getNormalizedCursor()
   local be = unicode.wlen(line()) + 1
-  local wide, right = isWideAtPosition(line(), cbx + n)
-  if wide and right then
+  local wide, isRight = isWideAtPosition(line(), cbx + n)
+  if wide and isRight then
     n = n + 1
   end
   if cbx + n <= be then
@@ -316,6 +330,7 @@ local function up(n)
   if cby > 1 then
     setCursor(cbx, cby - n)
   end
+  cutting = false
 end
 
 local function down(n)
@@ -324,10 +339,11 @@ local function down(n)
   if cby < #buffer then
     setCursor(cbx, cby + n)
   end
+  cutting = false
 end
 
 local function delete(fullRow)
-  local cx, cy = term.getCursor()
+  local _, cy = term.getCursor()
   local cbx, cby = getCursor()
   local x, y, w, h = getArea()
   local function deleteRow(row)
@@ -370,7 +386,6 @@ local function insert(value)
     return
   end
   term.setCursorBlink(false)
-  local cx, cy = term.getCursor()
   local cbx, cby = getCursor()
   local x, y, w, h = getArea()
   local index = lengthToChars(line(), cbx)
@@ -384,7 +399,7 @@ end
 
 local function enter()
   term.setCursorBlink(false)
-  local cx, cy = term.getCursor()
+  local _, cy = term.getCursor()
   local cbx, cby = getCursor()
   local x, y, w, h = getArea()
   local index = lengthToChars(line(), cbx)
@@ -399,13 +414,13 @@ local function enter()
   end
   setCursor(1, cby + 1)
   setStatus(helpStatusText())
+  cutting = false
 end
 
 local findText = ""
 
 local function find()
-  local x, y, w, h = getArea()
-  local cx, cy = term.getCursor()
+  local _, _, _, h = getArea()
   local cbx, cby = getCursor()
   local ibx, iby = cbx, cby
   while running do
@@ -454,6 +469,25 @@ local function find()
   setStatus(helpStatusText())
 end
 
+local function cut()
+  if not cutting then
+    cutBuffer = {}
+  end
+  local cbx, cby = getCursor()
+  table.insert(cutBuffer, buffer[cby])
+  delete(true)
+  cutting = true
+  home()
+end
+
+local function uncut()
+  home()
+  for _, line in ipairs(cutBuffer) do
+    insert(line)
+    enter()
+  end 
+end
+
 -------------------------------------------------------------------------------
 
 local keyBindHandlers = {
@@ -464,11 +498,11 @@ local keyBindHandlers = {
   home = home,
   eol = ende,
   pageUp = function()
-    local x, y, w, h = getArea()
+    local _, _, _, h = getArea()
     up(h - 1)
   end,
   pageDown = function()
-    local x, y, w, h = getArea()
+    local _, _, _, h = getArea()
     down(h - 1)
   end,
 
@@ -513,13 +547,13 @@ local keyBindHandlers = {
     local f, reason = io.open(filename, "w")
     if f then
       local chars, firstLine = 0, true
-      for _, line in ipairs(buffer) do
+      for _, bline in ipairs(buffer) do
         if not firstLine then
-          line = "\n" .. line
+          bline = "\n" .. bline
         end
         firstLine = false
-        f:write(line)
-        chars = chars + unicode.len(line)
+        f:write(bline)
+        chars = chars + unicode.len(bline)
       end
       f:close()
       local format
@@ -544,7 +578,9 @@ local keyBindHandlers = {
     findText = ""
     find()
   end,
-  findnext = find
+  findnext = find,
+  cut = cut,
+  uncut = uncut
 }
 
 getKeyBindHandler = function(code)
@@ -556,7 +592,7 @@ getKeyBindHandler = function(code)
     if type(keybinds) == "table" and keyBindHandlers[command] then
       for _, keybind in ipairs(keybinds) do
         if type(keybind) == "table" then
-          local alt, control, shift, key
+          local alt, control, shift, key = false, false, false
           for _, value in ipairs(keybind) do
             if value == "alt" then alt = true
             elseif value == "control" then control = true
@@ -564,9 +600,9 @@ getKeyBindHandler = function(code)
             else key = value end
           end
           local keyboardAddress = term.keyboard()
-          if (not alt or keyboard.isAltDown(keyboardAddress)) and
-             (not control or keyboard.isControlDown(keyboardAddress)) and
-             (not shift or keyboard.isShiftDown(keyboardAddress)) and
+          if (alt     == not not keyboard.isAltDown(keyboardAddress)) and
+             (control == not not keyboard.isControlDown(keyboardAddress)) and
+             (shift   == not not keyboard.isShiftDown(keyboardAddress)) and
              code == keyboard.keys[key] and
              #keybind > resultWeight
           then
@@ -600,14 +636,13 @@ end
 
 local function onClipboard(value)
   value = value:gsub("\r\n", "\n")
-  local cbx, cby = getCursor()
   local start = 1
   local l = value:find("\n", 1, true)
   if l then
     repeat
-      local line = string.sub(value, start, l - 1)
-      line = text.detab(line, 2)
-      insert(line)
+      local next_line = string.sub(value, start, l - 1)
+      next_line = text.detab(next_line, 2)
+      insert(next_line)
       enter()
       start = l + 1
       l = value:find("\n", start, true)
@@ -632,12 +667,9 @@ do
   if f then
     local x, y, w, h = getArea()
     local chars = 0
-    for line in f:lines() do
-      if line:sub(-1) == "\r" then
-        line = line:sub(1, -2)
-      end
-      table.insert(buffer, line)
-      chars = chars + unicode.len(line)
+    for fline in f:lines() do
+      table.insert(buffer, fline)
+      chars = chars + unicode.len(fline)
       if #buffer <= h then
         drawLine(x, y, w, h, #buffer)
       end
@@ -687,4 +719,4 @@ while running do
 end
 
 term.clear()
-term.setCursorBlink(false)
+term.setCursorBlink(true)
