@@ -6,7 +6,7 @@ local passwdfile = "/etc/passwd"
 local auth = {}
 local component = require("component")
 local fs = require("filesystem")
-local sha = require("sha256")
+local sha = require("sha2")
 local libarmor = require("libarmor")
 
 
@@ -59,7 +59,7 @@ function auth.addUser(username, password, su)
   if su == true then sub = "1" end
   if su == false then sub = "0" end
 
-  users[username] = {password=sha.sha256(password), su=sub}
+  users[username] = {passwordE=sha.sha256(password), su=sub}
   saveDB(users)
 end
 

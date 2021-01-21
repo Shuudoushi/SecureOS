@@ -27,7 +27,7 @@ lib = {
 "/lib/core/devfs/02_utils.lua /lib/core/devfs/02_utils.lua",
 "/lib/tools/programLocations.lua /lib/tools/programLocations.lua",
 "/lib/tools/transfer.lua /lib/tools/transfer.lua",
-"/lib/sha256.lua /lib/sha256.lua",
+"/lib/sha2.lua /lib/sha2.lua",
 "/lib/auth.lua /lib/auth.lua",
 "/lib/filesystem.lua /lib/filesystem.lua",
 "/lib/shell.lua /lib/shell.lua",
