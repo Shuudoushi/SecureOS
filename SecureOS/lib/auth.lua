@@ -35,7 +35,7 @@ local function buildDB()
     local temp = split(raw, "\n")
 
     for _,data in pairs(temp) do
-      t = split(data, ":")
+      t = split(data, "‡")
       users[t[1]] = {password=t[2], su=t[3]}
     end
 
@@ -47,7 +47,7 @@ end
 local function saveDB(db)
   local buff = ""
   for u, d in pairs(db) do
-    buff = buff .. u .. ":" .. d["password"].. ":" .. d["su"] .. "\n"
+    buff = buff .. u .. "‡" .. d["password"] .. "‡" .. d["su"] .. "\n"
   end
   f = io.open(passwdfile, "w")
   f:write(buff)
@@ -59,7 +59,7 @@ function auth.addUser(username, password, su)
   if su == true then sub = "1" end
   if su == false then sub = "0" end
 
-  users[username] = {passwordE=sha.sha256(password), su=sub}
+  users[username] = {password=sha.sha256(password), su=sub}
   saveDB(users)
 end
 

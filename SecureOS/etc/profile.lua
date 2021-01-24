@@ -31,11 +31,10 @@ shell.setAlias("reboot", "shutdown -r")
 
 os.setenv("EDITOR", "/bin/edit")
 os.setenv("HISTSIZE", "10")
-os.setenv("HOME", "/home/"$USER)
+os.setenv("HOME", "/home/" .. os.getenv("USER"))
 os.setenv("IFS", " ")
 os.setenv("MANPATH", "/usr/man:.")
 os.setenv("PAGER", "less")
-os.setenv("PS1", "\27[40m\27[31m$HOSTNAME$HOSTNAME_SEPARATOR$PWD # \27[37m")
 os.setenv("LS_COLORS", "di=0;36:fi=0:ln=0;33:*.lua=0;32")
 
 shell.setWorkingDirectory(os.getenv("HOME"))

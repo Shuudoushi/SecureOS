@@ -1,7 +1,7 @@
 -- called from /init.lua
 local raw_loadfile = ...
 
-_G._OSVERSION = "OpenOS 1.7.5"
+_G._OSVERSION = "SecureOS 0.0.1"
 
 -- luacheck: globals component computer unicode _OSVERSION
 local component = component
@@ -146,4 +146,5 @@ status("Initializing system...")
 
 computer.pushSignal("init") -- so libs know components are initialized.
 require("event").pull(1, "init") -- Allow init processing.
+os.execute("/sbin/login.lua")
 _G.runlevel = 1

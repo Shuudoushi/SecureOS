@@ -22,8 +22,8 @@ local function dirTree(username)
 end
 
 if #args >= 2 then
-  username = args[1]
-  password = args[2]
+  local username = args[1]
+  local password = args[2]
 
   if args[3] == "true" then
     su = true
@@ -51,10 +51,10 @@ else
   term.write("Please enter a username and password to add to the system.")
   term.setCursor(1,2)
   term.write("Username: ")
-    username = string.lower(io.read())
+    local username = string.lower(io.read())
   term.setCursor(1,3)
   term.write("Password: ")
-    password = string.gsub(term.read({pwchar=""}), "\n", "")
+    local password = string.gsub(term.read({pwchar=""}), "\n", "")
   term.setCursor(1,4)
   term.write("Root rights (Y/n): ")
     su = string.lower(io.read())
@@ -90,5 +90,4 @@ else
   dirTree(username)
   auth.addUser(username, password, su)
   auth.userLog(os.getenv("USER"), "added " .. username)
-  username, password, su = ""
 end

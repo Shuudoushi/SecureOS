@@ -7,7 +7,7 @@ local term = require("term")
 
 local running = true
 
-event.pull("term_available")
+--event.pull("term_available")
 
 local function check() -- Prevents "ctrl+alt+c" and "ctrl+c".
  if keyboard.isControlDown() then
@@ -35,10 +35,10 @@ while running do
   term.write("User: ")
   local username = string.lower(io.read())
   term.setCursor(1,3)
-  term.setCursorBlink(enabled: false)
+  term.setCursorBlink(false)
   term.write("Password: ")
   local password = string.gsub(term.read({pwchar=""}), "\n", "")
-  term.setCursorBlink(enabled: true)
+  term.setCursorBlink(true)
 
   local login = auth.validate(username, password)
 

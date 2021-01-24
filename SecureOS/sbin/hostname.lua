@@ -1,3 +1,7 @@
+local shell = require("shell")
+local args, ops = shell.parse(...)
+local hostname = args[1]
+
 if not require("auth").isRoot() then
   io.stderr:write("not authorized")
   return

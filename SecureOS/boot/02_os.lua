@@ -30,7 +30,7 @@ function os.sleep(timeout)
   until computer.uptime() >= deadline
 end
 
-os.setenv("PATH", "/bin:/usr/bin:/home/bin:.")
+os.setenv("PATH", "/bin:/sbin:/usr/bin:/home/bin:.")
 os.setenv("TMP", "/tmp") -- Deprecated
 os.setenv("TMPDIR", "/tmp")
 

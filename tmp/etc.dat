@@ -1,4 +1,5 @@
 etc = {
 "/etc/motd /etc/motd",
-"/etc/.blacklist.dat /etc/.blacklist.dat"
+"/etc/.blacklist.dat /etc/.blacklist.dat",
+"/etc/profile.lua /etc/profile.lua"
 }
