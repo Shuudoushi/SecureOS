@@ -10,5 +10,5 @@ boot = {
 "/boot/91_gpu.lua /boot/91_gpu.lua",
 "/boot/92_keyboard.lua /boot/92_keyboard.lua",
 "/boot/93_term.lua /boot/93_term.lua",
-"/boot/94_shell.lua /boot/94_shell.lua"
+"/boot/94_shell.lua /boot/94_shell.lua",
 }

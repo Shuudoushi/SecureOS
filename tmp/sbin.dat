@@ -5,5 +5,5 @@ sbin = {
 "/sbin/update.lua /sbin/update.lua",
 "/sbin/hostname.lua /sbin/hostname.lua",
 "/sbin/shutdown.lua /sbin/shutdown.lua",
-"/sbin/login.lua /sbin/login.lua"
+"/sbin/login.lua /sbin/login.lua",
 }

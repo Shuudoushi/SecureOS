@@ -1,4 +1,4 @@
 system = {
 "/init.lua /init.lua",
-"/.osprop /.osprop"
+"/.osprop /.osprop",
 }

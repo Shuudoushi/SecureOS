@@ -58,5 +58,5 @@ lib = {
 "/lib/uuid.lua /lib/uuid.lua",
 "/lib/tty.lua /lib/tty.lua",
 "/lib/internet.lua /lib/internet.lua",
-"/lib/devfs.lua /lib/devfs.lua"
+"/lib/devfs.lua /lib/devfs.lua",
 }

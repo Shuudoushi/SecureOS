@@ -34,7 +34,7 @@ if args[1] == "!!" then
 end]]
 
 term.setCursorBlink(enabled: false)
-term.write("[sudo] password for ".. texthn ..": ")
+io.write("[sudo] password for ".. texthn ..": ", "\n")
 local password = string.gsub(term.read({pwchar=""}), "\n", "")
 term.setCursorBlink(enabled: true)
 

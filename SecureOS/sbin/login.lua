@@ -25,18 +25,20 @@ while running do
     end
   end
 
+  term.setCursorBlink(true)
+
   os.setenv("HOME", nil)
   os.setenv("USER", nil)
   os.setenv("PATH", nil)
 
   term.clear()
   term.setCursor(1,1)
-  print(_OSVERSION .. " " .. os.date("%F %X"))
-  term.write("User: ")
+  io.write(_OSVERSION .. " " .. os.date("%F %X"), "\n")
+  io.write("User: ")
   local username = string.lower(io.read())
   term.setCursor(1,3)
   term.setCursorBlink(false)
-  term.write("Password: ")
+  io.write("Password: ")
   local password = string.gsub(term.read({pwchar=""}), "\n", "")
   term.setCursorBlink(true)
 
@@ -63,10 +65,10 @@ while running do
     local file = io.open("/etc/hostname")
 
     if file then
-      os.setenv("PS1HOST", username .. "@" .. file:read("*l"):sub(1, 10) .. "# ")
+      os.setenv("PS1", username .. "@" .. os.getenv("HOSTNAME") .. "# ")
       file:close()
     else
-      os.setenv("PS1HOST", username .. "@" .. username .. "# ")
+      os.setenv("PS1", username .. "@" .. username .. "# ")
     end
 
     username, password = "" -- This is just a "bandaid fix" till I find a better way of doing it.
